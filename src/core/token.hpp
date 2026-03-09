@@ -1,0 +1,85 @@
+#pragma once
+#include <string>
+
+enum class TokenType {
+
+END,
+
+IDENT,
+INTEGER,
+FLOAT,
+STRING,
+
+MODULE,
+USE,
+FN,
+STRUCT,
+ENUM,
+TRAIT,
+CONST,
+PUB,
+
+IF,
+ELSE,
+WHILE,
+FOR,
+IN,
+MATCH,
+RETURN,
+BREAK,
+CONTINUE,
+REGION,
+
+TRUE,
+FALSE,
+
+PLUS,
+MINUS,
+STAR,
+SLASH,
+MOD,
+
+PLUS_EQ,
+MINUS_EQ,
+STAR_EQ,
+SLASH_EQ,
+MOD_EQ,
+
+EQ,
+EQEQ,
+NOTEQ,
+
+LT,
+GT,
+LE,
+GE,
+
+AND_AND,
+OR_OR,
+BANG,
+
+DOT,
+DOT_DOT,
+DOT_DOT_EQ,
+
+COMMA,
+COLON,
+
+LPAREN,
+RPAREN,
+LBRACE,
+RBRACE,
+LBRACKET,
+RBRACKET
+
+};
+
+struct Token {
+
+TokenType type;
+std::string lexeme;
+
+int line;
+int column;
+
+};

@@ -1,0 +1,331 @@
+(* ================================================= *)
+(* SysP Programming Language Grammar                 *)
+(* EBNF ISO-14977                                    *)
+(* ================================================= *)
+
+program =
+      module_decl
+      { use_decl }
+      { declaration } ;
+
+(* ================= MODULES ================= *)
+
+module_decl =
+      "module" identifier ;
+
+use_decl =
+      "use" module_path ;
+
+module_path =
+      identifier { "." identifier } ;
+
+(* ================= DECLARATIONS ================= *)
+
+declaration =
+      function_decl
+    | struct_decl
+    | enum_decl
+    | trait_decl
+    | const_decl
+    | var_decl ;
+
+(* ================= VARIABLES ================= *)
+
+var_decl =
+      identifier ":" type "=" expression
+    | identifier "=" expression ;
+
+const_decl =
+      "const" identifier [ ":" type ] "=" expression ;
+
+assignment =
+      assignable assign_op expression ;
+
+assignable =
+      postfix_expr ;
+
+assign_op =
+      "="
+    | "+="
+    | "-="
+    | "*="
+    | "/="
+    | "%=" ;
+
+(* ================= TYPES ================= *)
+
+type =
+      primitive_type
+    | identifier
+    | pointer_type
+    | reference_type
+    | array_type
+    | slice_type
+    | generic_type ;
+
+primitive_type =
+      "i8" | "i16" | "i32" | "i64"
+    | "u8" | "u16" | "u32" | "u64"
+    | "f32" | "f64"
+    | "bool"
+    | "string" ;
+
+pointer_type =
+      "*" type ;
+
+reference_type =
+      "ref" type ;
+
+array_type =
+      "[" integer "]" type ;
+
+slice_type =
+      "[" "]" type ;
+
+generic_type =
+      identifier "<" type { "," type } ">" ;
+
+(* ================= STRUCT ================= *)
+
+struct_decl =
+      [ "pub" ]
+      "struct" identifier
+      [ generic_params ]
+      "{"
+      { struct_field }
+      "}" ;
+
+struct_field =
+      identifier type ;
+
+(* ================= ENUM ================= *)
+
+enum_decl =
+      [ "pub" ]
+      "enum" identifier
+      "{"
+      enum_variant { "," enum_variant }
+      "}" ;
+
+enum_variant =
+      identifier
+    | identifier "(" type { "," type } ")" ;
+
+(* ================= TRAIT ================= *)
+
+trait_decl =
+      "trait" identifier
+      "{"
+      { trait_method }
+      "}" ;
+
+trait_method =
+      "fn" identifier
+      "(" parameter_list ")"
+      [ "->" type ] ;
+
+(* ================= FUNCTIONS ================= *)
+
+function_decl =
+      [ "pub" ]
+      "fn" identifier
+      [ generic_params ]
+      "(" parameter_list ")"
+      [ "->" type ]
+      block ;
+
+generic_params =
+      "<" identifier { "," identifier } ">" ;
+
+(* ================= PARAMETERS ================= *)
+
+parameter_list =
+      [ parameter { "," parameter } ] ;
+
+parameter =
+      identifier type
+    | identifier "ref" type ;
+
+(* ================= BLOCK ================= *)
+
+block =
+      "{"
+      { statement }
+      "}" ;
+
+statement =
+      var_decl
+    | assignment
+    | if_stmt
+    | while_stmt
+    | for_stmt
+    | match_stmt
+    | return_stmt
+    | break_stmt
+    | continue_stmt
+    | expression_stmt
+    | region_stmt ;
+
+expression_stmt =
+      expression ;
+
+(* ================= CONTROL FLOW ================= *)
+
+if_stmt =
+      "if" expression block
+      [ "else" block ] ;
+
+while_stmt =
+      "while" expression block ;
+
+for_stmt =
+      "for" identifier "in" range_expr block ;
+
+range_expr =
+      expression ".." expression
+    | expression "..=" expression ;
+
+(* ================= MATCH ================= *)
+
+match_stmt =
+      "match" expression
+      "{"
+      match_arm { "," match_arm } [ "," ]
+      "}" ;
+
+match_arm =
+      pattern "=>" statement ;
+
+pattern =
+      literal
+    | identifier
+    | "_"
+    | identifier "(" pattern_list ")" ;
+
+pattern_list =
+      pattern { "," pattern } ;
+
+(* ================= RETURN ================= *)
+
+return_stmt =
+      "return" [ expression ] ;
+
+break_stmt =
+      "break" ;
+
+continue_stmt =
+      "continue" ;
+
+(* ================= REGION ================= *)
+
+region_stmt =
+      "region" identifier block ;
+
+(* ================= EXPRESSIONS ================= *)
+
+expression =
+      logical_or ;
+
+logical_or =
+      logical_and
+      { "||" logical_and } ;
+
+logical_and =
+      equality_expr
+      { "&&" equality_expr } ;
+
+equality_expr =
+      relational_expr
+      { ( "==" | "!=" ) relational_expr } ;
+
+relational_expr =
+      additive_expr
+      { ( "<" | ">" | "<=" | ">=" ) additive_expr } ;
+
+additive_expr =
+      multiplicative_expr
+      { ( "+" | "-" ) multiplicative_expr } ;
+
+multiplicative_expr =
+      unary_expr
+      { ( "*" | "/" | "%" ) unary_expr } ;
+
+unary_expr =
+      { "-" | "!" | "*" | "&" } postfix_expr ;
+
+(* ================= POSTFIX ================= *)
+
+postfix_expr =
+      primary_expr
+      { postfix_op } ;
+
+postfix_op =
+      member_expr
+    | function_call
+    | array_access
+    | slice_expr ;
+
+member_expr =
+      "." identifier [ function_call ] ;
+
+(* ================= PRIMARY ================= *)
+
+primary_expr =
+      literal
+    | identifier
+    | lambda_expr
+    | "(" expression ")" ;
+
+(* ================= LAMBDA ================= *)
+
+lambda_expr =
+      "fn"
+      "(" parameter_list ")"
+      block ;
+
+(* ================= LITERALS ================= *)
+
+literal =
+      integer
+    | float
+    | string_literal
+    | "true"
+    | "false" ;
+
+(* ================= IDENTIFIERS ================= *)
+
+identifier =
+      ( letter | "_" ) { letter | digit | "_" } ;
+
+(* ================= NUMBERS ================= *)
+
+integer =
+      digit { digit } ;
+
+float =
+      digit { digit } "." digit { digit } ;
+
+(* ================= STRINGS ================= *)
+
+string_literal =
+      '"' { string_char } '"' ;
+
+string_char =
+      ? any UTF-8 character except '"' ? ;
+
+(* ================= CHARACTERS ================= *)
+
+letter =
+      "A" | "B" | "C" | "D" | "E" | "F" | "G"
+    | "H" | "I" | "J" | "K" | "L" | "M" | "N"
+    | "O" | "P" | "Q" | "R" | "S" | "T" | "U"
+    | "V" | "W" | "X" | "Y" | "Z"
+    | "a" | "b" | "c" | "d" | "e" | "f" | "g"
+    | "h" | "i" | "j" | "k" | "l" | "m" | "n"
+    | "o" | "p" | "q" | "r" | "s" | "t" | "u"
+    | "v" | "w" | "x" | "y" | "z" ;
+
+digit =
+      "0" | "1" | "2" | "3" | "4"
+    | "5" | "6" | "7" | "8" | "9" ;
+
