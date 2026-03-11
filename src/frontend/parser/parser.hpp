@@ -1,27 +1,36 @@
 #pragma once
 
-#include "pratt_parser.hpp"
-#include "../ast/stmt.hpp"
-#include "../ast/ast.hpp"
-#include "../../core/token.hpp"
+#include <memory>
 
-#include <vector>
+#include "../ast/stmt.hpp"
+#include "../ast/expr.hpp"
+
+namespace sysp::parser {
 
 class Parser {
 
 public:
 
-    Parser(const std::vector<Token>& tokens);
+    Parser();
 
-    ASTNodePtr parse();
+    std::unique_ptr<sysp::ast::Stmt> parse_statement();
 
-    Stmt* parse_statement();
+    std::unique_ptr<sysp::ast::ExpressionStmt> parse_expression_stmt();
 
-private:
+    std::unique_ptr<sysp::ast::VarDeclStmt> parse_var();
 
-    std::vector<Token> tokens;
-    size_t pos = 0;
-    PrattParser pratt;
+    std::unique_ptr<sysp::ast::ConstDeclStmt> parse_const();
+
+    std::unique_ptr<sysp::ast::AssignStmt> parse_assignment();
+
+    std::unique_ptr<sysp::ast::ReturnStmt> parse_return();
+
+    std::unique_ptr<sysp::ast::IfStmt> parse_if();
+
+    std::unique_ptr<sysp::ast::WhileStmt> parse_while();
+
+    std::unique_ptr<sysp::ast::ForStmt> parse_for();
 
 };
 
+}

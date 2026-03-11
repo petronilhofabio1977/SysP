@@ -1,17 +1,28 @@
 #pragma once
 
-#include "metatron_node.hpp"
 #include <vector>
+#include <memory>
 
-class MetatronGraph {
+#include "metatron_node.hpp"
+
+namespace sysp::metatron {
+
+class Graph {
 
 public:
 
-    NodeId add_node(NodeKind kind, const std::vector<NodeId>& inputs);
+    Graph();
 
-    const std::vector<Node>& get_nodes() const;
+    Node* create_node(sysp::ir::Opcode op);
+
+    const std::vector<std::unique_ptr<Node>>& nodes() const;
 
 private:
 
-    std::vector<Node> nodes;
+    int next_id;
+
+    std::vector<std::unique_ptr<Node>> node_list;
+
 };
+
+}

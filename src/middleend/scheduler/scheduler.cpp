@@ -1,13 +1,45 @@
 #include "scheduler.hpp"
 
-std::vector<NodeId> Scheduler::schedule(const MetatronGraph& graph) {
+#include <unordered_set>
 
-    std::vector<NodeId> order;
+namespace sysp::scheduler {
 
-    const auto& nodes = graph.get_nodes();
+using sysp::metatron::Graph;
+using sysp::metatron::Node;
 
-    for(const auto& n : nodes)
-        order.push_back(n.id);
+Scheduler::Scheduler()
+{}
+
+static void visit(
+    Node* node,
+    std::unordered_set<Node*>& visited,
+    std::vector<Node*>& order
+)
+{
+    if (!node)
+        return;
+
+    if (visited.count(node))
+        return;
+
+    visited.insert(node);
+
+    for (auto input : node->inputs)
+        visit(input, visited, order);
+
+    order.push_back(node);
+}
+
+std::vector<Node*> Scheduler::schedule(const Graph& graph)
+{
+    std::vector<Node*> order;
+    std::unordered_set<Node*> visited;
+
+    for (auto& n : graph.nodes()) {
+        visit(n.get(), visited, order);
+    }
 
     return order;
+}
+
 }

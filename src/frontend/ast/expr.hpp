@@ -2,46 +2,56 @@
 
 #include <string>
 #include <vector>
+#include <memory>
+
+namespace sysp::ast {
+
+struct BlockStmt;
 
 struct Expr {
     virtual ~Expr() = default;
 };
 
 struct LiteralExpr : Expr {
-
     std::string value;
 };
 
 struct IdentifierExpr : Expr {
-
     std::string name;
-};
-
-struct AssignExpr : Expr {
-
-    std::string name;
-    Expr* value;
 };
 
 struct BinaryExpr : Expr {
 
+    std::unique_ptr<Expr> left;
+
     std::string op;
 
-    Expr* left;
-    Expr* right;
+    std::unique_ptr<Expr> right;
+
 };
 
 struct UnaryExpr : Expr {
 
     std::string op;
 
-    Expr* expr;
+    std::unique_ptr<Expr> operand;
+
 };
 
 struct CallExpr : Expr {
 
-    std::string callee;
+    std::unique_ptr<Expr> callee;
 
-    std::vector<Expr*> args;
+    std::vector<std::unique_ptr<Expr>> arguments;
+
 };
 
+struct LambdaExpr : Expr {
+
+    std::vector<std::string> parameters;
+
+    std::unique_ptr<BlockStmt> body;
+
+};
+
+}

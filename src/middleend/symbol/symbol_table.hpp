@@ -15,4 +15,3 @@ private:
     int next_slot = 0;
 
 };
-

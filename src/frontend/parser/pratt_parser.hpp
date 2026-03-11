@@ -1,28 +1,28 @@
 #pragma once
 
-#include <vector>
+#include <unordered_map>
 
-#include "frontend/ast/expr.hpp"
-#include "core/token.hpp"
+#include "../../core/token.hpp"
+#include "../ast/expr.hpp"
+
+namespace sysp::parser {
+
+using sysp::ast::Expr;
 
 class PrattParser {
 
 public:
 
-    PrattParser(const std::vector<Token>& tokens);
+    PrattParser();
 
     Expr* parse_expression(int precedence = 0);
 
 private:
 
-    const std::vector<Token>& tokens;
-    size_t pos;
-
-    Token peek();
-    Token advance();
-
     Expr* parse_prefix();
+
     Expr* parse_infix(Expr* left, Token op);
 
-    int get_precedence(TokenType type);
 };
+
+}

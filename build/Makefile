@@ -117,24 +117,24 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named sy
+# Target rules for targets named sysp
 
 # Build rule for target.
-sy: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 sy
-.PHONY : sy
+sysp: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 sysp
+.PHONY : sysp
 
 # fast build rule for target.
-sy/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sy.dir/build.make CMakeFiles/sy.dir/build
-.PHONY : sy/fast
+sysp/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sysp.dir/build.make CMakeFiles/sysp.dir/build
+.PHONY : sysp/fast
 
 src/backend/arm/arm_backend.o: src/backend/arm/arm_backend.cpp.o
 .PHONY : src/backend/arm/arm_backend.o
 
 # target to build an object file
 src/backend/arm/arm_backend.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sy.dir/build.make CMakeFiles/sy.dir/src/backend/arm/arm_backend.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sysp.dir/build.make CMakeFiles/sysp.dir/src/backend/arm/arm_backend.cpp.o
 .PHONY : src/backend/arm/arm_backend.cpp.o
 
 src/backend/arm/arm_backend.i: src/backend/arm/arm_backend.cpp.i
@@ -142,7 +142,7 @@ src/backend/arm/arm_backend.i: src/backend/arm/arm_backend.cpp.i
 
 # target to preprocess a source file
 src/backend/arm/arm_backend.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sy.dir/build.make CMakeFiles/sy.dir/src/backend/arm/arm_backend.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sysp.dir/build.make CMakeFiles/sysp.dir/src/backend/arm/arm_backend.cpp.i
 .PHONY : src/backend/arm/arm_backend.cpp.i
 
 src/backend/arm/arm_backend.s: src/backend/arm/arm_backend.cpp.s
@@ -150,7 +150,7 @@ src/backend/arm/arm_backend.s: src/backend/arm/arm_backend.cpp.s
 
 # target to generate assembly for a file
 src/backend/arm/arm_backend.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sy.dir/build.make CMakeFiles/sy.dir/src/backend/arm/arm_backend.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sysp.dir/build.make CMakeFiles/sysp.dir/src/backend/arm/arm_backend.cpp.s
 .PHONY : src/backend/arm/arm_backend.cpp.s
 
 src/backend/x86/x86_backend.o: src/backend/x86/x86_backend.cpp.o
@@ -158,7 +158,7 @@ src/backend/x86/x86_backend.o: src/backend/x86/x86_backend.cpp.o
 
 # target to build an object file
 src/backend/x86/x86_backend.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sy.dir/build.make CMakeFiles/sy.dir/src/backend/x86/x86_backend.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sysp.dir/build.make CMakeFiles/sysp.dir/src/backend/x86/x86_backend.cpp.o
 .PHONY : src/backend/x86/x86_backend.cpp.o
 
 src/backend/x86/x86_backend.i: src/backend/x86/x86_backend.cpp.i
@@ -166,7 +166,7 @@ src/backend/x86/x86_backend.i: src/backend/x86/x86_backend.cpp.i
 
 # target to preprocess a source file
 src/backend/x86/x86_backend.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sy.dir/build.make CMakeFiles/sy.dir/src/backend/x86/x86_backend.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sysp.dir/build.make CMakeFiles/sysp.dir/src/backend/x86/x86_backend.cpp.i
 .PHONY : src/backend/x86/x86_backend.cpp.i
 
 src/backend/x86/x86_backend.s: src/backend/x86/x86_backend.cpp.s
@@ -174,7 +174,7 @@ src/backend/x86/x86_backend.s: src/backend/x86/x86_backend.cpp.s
 
 # target to generate assembly for a file
 src/backend/x86/x86_backend.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sy.dir/build.make CMakeFiles/sy.dir/src/backend/x86/x86_backend.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sysp.dir/build.make CMakeFiles/sysp.dir/src/backend/x86/x86_backend.cpp.s
 .PHONY : src/backend/x86/x86_backend.cpp.s
 
 src/cli/cli.o: src/cli/cli.cpp.o
@@ -182,7 +182,7 @@ src/cli/cli.o: src/cli/cli.cpp.o
 
 # target to build an object file
 src/cli/cli.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sy.dir/build.make CMakeFiles/sy.dir/src/cli/cli.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sysp.dir/build.make CMakeFiles/sysp.dir/src/cli/cli.cpp.o
 .PHONY : src/cli/cli.cpp.o
 
 src/cli/cli.i: src/cli/cli.cpp.i
@@ -190,7 +190,7 @@ src/cli/cli.i: src/cli/cli.cpp.i
 
 # target to preprocess a source file
 src/cli/cli.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sy.dir/build.make CMakeFiles/sy.dir/src/cli/cli.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sysp.dir/build.make CMakeFiles/sysp.dir/src/cli/cli.cpp.i
 .PHONY : src/cli/cli.cpp.i
 
 src/cli/cli.s: src/cli/cli.cpp.s
@@ -198,7 +198,7 @@ src/cli/cli.s: src/cli/cli.cpp.s
 
 # target to generate assembly for a file
 src/cli/cli.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sy.dir/build.make CMakeFiles/sy.dir/src/cli/cli.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sysp.dir/build.make CMakeFiles/sysp.dir/src/cli/cli.cpp.s
 .PHONY : src/cli/cli.cpp.s
 
 src/driver/compiler.o: src/driver/compiler.cpp.o
@@ -206,7 +206,7 @@ src/driver/compiler.o: src/driver/compiler.cpp.o
 
 # target to build an object file
 src/driver/compiler.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sy.dir/build.make CMakeFiles/sy.dir/src/driver/compiler.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sysp.dir/build.make CMakeFiles/sysp.dir/src/driver/compiler.cpp.o
 .PHONY : src/driver/compiler.cpp.o
 
 src/driver/compiler.i: src/driver/compiler.cpp.i
@@ -214,7 +214,7 @@ src/driver/compiler.i: src/driver/compiler.cpp.i
 
 # target to preprocess a source file
 src/driver/compiler.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sy.dir/build.make CMakeFiles/sy.dir/src/driver/compiler.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sysp.dir/build.make CMakeFiles/sysp.dir/src/driver/compiler.cpp.i
 .PHONY : src/driver/compiler.cpp.i
 
 src/driver/compiler.s: src/driver/compiler.cpp.s
@@ -222,7 +222,7 @@ src/driver/compiler.s: src/driver/compiler.cpp.s
 
 # target to generate assembly for a file
 src/driver/compiler.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sy.dir/build.make CMakeFiles/sy.dir/src/driver/compiler.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sysp.dir/build.make CMakeFiles/sysp.dir/src/driver/compiler.cpp.s
 .PHONY : src/driver/compiler.cpp.s
 
 src/frontend/ast/ast.o: src/frontend/ast/ast.cpp.o
@@ -230,7 +230,7 @@ src/frontend/ast/ast.o: src/frontend/ast/ast.cpp.o
 
 # target to build an object file
 src/frontend/ast/ast.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sy.dir/build.make CMakeFiles/sy.dir/src/frontend/ast/ast.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sysp.dir/build.make CMakeFiles/sysp.dir/src/frontend/ast/ast.cpp.o
 .PHONY : src/frontend/ast/ast.cpp.o
 
 src/frontend/ast/ast.i: src/frontend/ast/ast.cpp.i
@@ -238,7 +238,7 @@ src/frontend/ast/ast.i: src/frontend/ast/ast.cpp.i
 
 # target to preprocess a source file
 src/frontend/ast/ast.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sy.dir/build.make CMakeFiles/sy.dir/src/frontend/ast/ast.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sysp.dir/build.make CMakeFiles/sysp.dir/src/frontend/ast/ast.cpp.i
 .PHONY : src/frontend/ast/ast.cpp.i
 
 src/frontend/ast/ast.s: src/frontend/ast/ast.cpp.s
@@ -246,7 +246,7 @@ src/frontend/ast/ast.s: src/frontend/ast/ast.cpp.s
 
 # target to generate assembly for a file
 src/frontend/ast/ast.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sy.dir/build.make CMakeFiles/sy.dir/src/frontend/ast/ast.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sysp.dir/build.make CMakeFiles/sysp.dir/src/frontend/ast/ast.cpp.s
 .PHONY : src/frontend/ast/ast.cpp.s
 
 src/frontend/lexer/lexer.o: src/frontend/lexer/lexer.cpp.o
@@ -254,7 +254,7 @@ src/frontend/lexer/lexer.o: src/frontend/lexer/lexer.cpp.o
 
 # target to build an object file
 src/frontend/lexer/lexer.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sy.dir/build.make CMakeFiles/sy.dir/src/frontend/lexer/lexer.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sysp.dir/build.make CMakeFiles/sysp.dir/src/frontend/lexer/lexer.cpp.o
 .PHONY : src/frontend/lexer/lexer.cpp.o
 
 src/frontend/lexer/lexer.i: src/frontend/lexer/lexer.cpp.i
@@ -262,7 +262,7 @@ src/frontend/lexer/lexer.i: src/frontend/lexer/lexer.cpp.i
 
 # target to preprocess a source file
 src/frontend/lexer/lexer.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sy.dir/build.make CMakeFiles/sy.dir/src/frontend/lexer/lexer.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sysp.dir/build.make CMakeFiles/sysp.dir/src/frontend/lexer/lexer.cpp.i
 .PHONY : src/frontend/lexer/lexer.cpp.i
 
 src/frontend/lexer/lexer.s: src/frontend/lexer/lexer.cpp.s
@@ -270,7 +270,7 @@ src/frontend/lexer/lexer.s: src/frontend/lexer/lexer.cpp.s
 
 # target to generate assembly for a file
 src/frontend/lexer/lexer.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sy.dir/build.make CMakeFiles/sy.dir/src/frontend/lexer/lexer.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sysp.dir/build.make CMakeFiles/sysp.dir/src/frontend/lexer/lexer.cpp.s
 .PHONY : src/frontend/lexer/lexer.cpp.s
 
 src/frontend/parser/parser.o: src/frontend/parser/parser.cpp.o
@@ -278,7 +278,7 @@ src/frontend/parser/parser.o: src/frontend/parser/parser.cpp.o
 
 # target to build an object file
 src/frontend/parser/parser.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sy.dir/build.make CMakeFiles/sy.dir/src/frontend/parser/parser.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sysp.dir/build.make CMakeFiles/sysp.dir/src/frontend/parser/parser.cpp.o
 .PHONY : src/frontend/parser/parser.cpp.o
 
 src/frontend/parser/parser.i: src/frontend/parser/parser.cpp.i
@@ -286,7 +286,7 @@ src/frontend/parser/parser.i: src/frontend/parser/parser.cpp.i
 
 # target to preprocess a source file
 src/frontend/parser/parser.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sy.dir/build.make CMakeFiles/sy.dir/src/frontend/parser/parser.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sysp.dir/build.make CMakeFiles/sysp.dir/src/frontend/parser/parser.cpp.i
 .PHONY : src/frontend/parser/parser.cpp.i
 
 src/frontend/parser/parser.s: src/frontend/parser/parser.cpp.s
@@ -294,7 +294,7 @@ src/frontend/parser/parser.s: src/frontend/parser/parser.cpp.s
 
 # target to generate assembly for a file
 src/frontend/parser/parser.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sy.dir/build.make CMakeFiles/sy.dir/src/frontend/parser/parser.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sysp.dir/build.make CMakeFiles/sysp.dir/src/frontend/parser/parser.cpp.s
 .PHONY : src/frontend/parser/parser.cpp.s
 
 src/frontend/parser/pratt_parser.o: src/frontend/parser/pratt_parser.cpp.o
@@ -302,7 +302,7 @@ src/frontend/parser/pratt_parser.o: src/frontend/parser/pratt_parser.cpp.o
 
 # target to build an object file
 src/frontend/parser/pratt_parser.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sy.dir/build.make CMakeFiles/sy.dir/src/frontend/parser/pratt_parser.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sysp.dir/build.make CMakeFiles/sysp.dir/src/frontend/parser/pratt_parser.cpp.o
 .PHONY : src/frontend/parser/pratt_parser.cpp.o
 
 src/frontend/parser/pratt_parser.i: src/frontend/parser/pratt_parser.cpp.i
@@ -310,7 +310,7 @@ src/frontend/parser/pratt_parser.i: src/frontend/parser/pratt_parser.cpp.i
 
 # target to preprocess a source file
 src/frontend/parser/pratt_parser.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sy.dir/build.make CMakeFiles/sy.dir/src/frontend/parser/pratt_parser.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sysp.dir/build.make CMakeFiles/sysp.dir/src/frontend/parser/pratt_parser.cpp.i
 .PHONY : src/frontend/parser/pratt_parser.cpp.i
 
 src/frontend/parser/pratt_parser.s: src/frontend/parser/pratt_parser.cpp.s
@@ -318,7 +318,7 @@ src/frontend/parser/pratt_parser.s: src/frontend/parser/pratt_parser.cpp.s
 
 # target to generate assembly for a file
 src/frontend/parser/pratt_parser.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sy.dir/build.make CMakeFiles/sy.dir/src/frontend/parser/pratt_parser.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sysp.dir/build.make CMakeFiles/sysp.dir/src/frontend/parser/pratt_parser.cpp.s
 .PHONY : src/frontend/parser/pratt_parser.cpp.s
 
 src/middleend/ast_to_metatron/ast_to_metatron.o: src/middleend/ast_to_metatron/ast_to_metatron.cpp.o
@@ -326,7 +326,7 @@ src/middleend/ast_to_metatron/ast_to_metatron.o: src/middleend/ast_to_metatron/a
 
 # target to build an object file
 src/middleend/ast_to_metatron/ast_to_metatron.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sy.dir/build.make CMakeFiles/sy.dir/src/middleend/ast_to_metatron/ast_to_metatron.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sysp.dir/build.make CMakeFiles/sysp.dir/src/middleend/ast_to_metatron/ast_to_metatron.cpp.o
 .PHONY : src/middleend/ast_to_metatron/ast_to_metatron.cpp.o
 
 src/middleend/ast_to_metatron/ast_to_metatron.i: src/middleend/ast_to_metatron/ast_to_metatron.cpp.i
@@ -334,7 +334,7 @@ src/middleend/ast_to_metatron/ast_to_metatron.i: src/middleend/ast_to_metatron/a
 
 # target to preprocess a source file
 src/middleend/ast_to_metatron/ast_to_metatron.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sy.dir/build.make CMakeFiles/sy.dir/src/middleend/ast_to_metatron/ast_to_metatron.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sysp.dir/build.make CMakeFiles/sysp.dir/src/middleend/ast_to_metatron/ast_to_metatron.cpp.i
 .PHONY : src/middleend/ast_to_metatron/ast_to_metatron.cpp.i
 
 src/middleend/ast_to_metatron/ast_to_metatron.s: src/middleend/ast_to_metatron/ast_to_metatron.cpp.s
@@ -342,7 +342,7 @@ src/middleend/ast_to_metatron/ast_to_metatron.s: src/middleend/ast_to_metatron/a
 
 # target to generate assembly for a file
 src/middleend/ast_to_metatron/ast_to_metatron.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sy.dir/build.make CMakeFiles/sy.dir/src/middleend/ast_to_metatron/ast_to_metatron.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sysp.dir/build.make CMakeFiles/sysp.dir/src/middleend/ast_to_metatron/ast_to_metatron.cpp.s
 .PHONY : src/middleend/ast_to_metatron/ast_to_metatron.cpp.s
 
 src/middleend/cfg/cfg.o: src/middleend/cfg/cfg.cpp.o
@@ -350,7 +350,7 @@ src/middleend/cfg/cfg.o: src/middleend/cfg/cfg.cpp.o
 
 # target to build an object file
 src/middleend/cfg/cfg.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sy.dir/build.make CMakeFiles/sy.dir/src/middleend/cfg/cfg.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sysp.dir/build.make CMakeFiles/sysp.dir/src/middleend/cfg/cfg.cpp.o
 .PHONY : src/middleend/cfg/cfg.cpp.o
 
 src/middleend/cfg/cfg.i: src/middleend/cfg/cfg.cpp.i
@@ -358,7 +358,7 @@ src/middleend/cfg/cfg.i: src/middleend/cfg/cfg.cpp.i
 
 # target to preprocess a source file
 src/middleend/cfg/cfg.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sy.dir/build.make CMakeFiles/sy.dir/src/middleend/cfg/cfg.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sysp.dir/build.make CMakeFiles/sysp.dir/src/middleend/cfg/cfg.cpp.i
 .PHONY : src/middleend/cfg/cfg.cpp.i
 
 src/middleend/cfg/cfg.s: src/middleend/cfg/cfg.cpp.s
@@ -366,7 +366,7 @@ src/middleend/cfg/cfg.s: src/middleend/cfg/cfg.cpp.s
 
 # target to generate assembly for a file
 src/middleend/cfg/cfg.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sy.dir/build.make CMakeFiles/sy.dir/src/middleend/cfg/cfg.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sysp.dir/build.make CMakeFiles/sysp.dir/src/middleend/cfg/cfg.cpp.s
 .PHONY : src/middleend/cfg/cfg.cpp.s
 
 src/middleend/ir/ir.o: src/middleend/ir/ir.cpp.o
@@ -374,7 +374,7 @@ src/middleend/ir/ir.o: src/middleend/ir/ir.cpp.o
 
 # target to build an object file
 src/middleend/ir/ir.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sy.dir/build.make CMakeFiles/sy.dir/src/middleend/ir/ir.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sysp.dir/build.make CMakeFiles/sysp.dir/src/middleend/ir/ir.cpp.o
 .PHONY : src/middleend/ir/ir.cpp.o
 
 src/middleend/ir/ir.i: src/middleend/ir/ir.cpp.i
@@ -382,7 +382,7 @@ src/middleend/ir/ir.i: src/middleend/ir/ir.cpp.i
 
 # target to preprocess a source file
 src/middleend/ir/ir.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sy.dir/build.make CMakeFiles/sy.dir/src/middleend/ir/ir.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sysp.dir/build.make CMakeFiles/sysp.dir/src/middleend/ir/ir.cpp.i
 .PHONY : src/middleend/ir/ir.cpp.i
 
 src/middleend/ir/ir.s: src/middleend/ir/ir.cpp.s
@@ -390,63 +390,15 @@ src/middleend/ir/ir.s: src/middleend/ir/ir.cpp.s
 
 # target to generate assembly for a file
 src/middleend/ir/ir.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sy.dir/build.make CMakeFiles/sy.dir/src/middleend/ir/ir.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sysp.dir/build.make CMakeFiles/sysp.dir/src/middleend/ir/ir.cpp.s
 .PHONY : src/middleend/ir/ir.cpp.s
-
-src/middleend/metatron/ir/ast_to_metatron.o: src/middleend/metatron/ir/ast_to_metatron.cpp.o
-.PHONY : src/middleend/metatron/ir/ast_to_metatron.o
-
-# target to build an object file
-src/middleend/metatron/ir/ast_to_metatron.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sy.dir/build.make CMakeFiles/sy.dir/src/middleend/metatron/ir/ast_to_metatron.cpp.o
-.PHONY : src/middleend/metatron/ir/ast_to_metatron.cpp.o
-
-src/middleend/metatron/ir/ast_to_metatron.i: src/middleend/metatron/ir/ast_to_metatron.cpp.i
-.PHONY : src/middleend/metatron/ir/ast_to_metatron.i
-
-# target to preprocess a source file
-src/middleend/metatron/ir/ast_to_metatron.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sy.dir/build.make CMakeFiles/sy.dir/src/middleend/metatron/ir/ast_to_metatron.cpp.i
-.PHONY : src/middleend/metatron/ir/ast_to_metatron.cpp.i
-
-src/middleend/metatron/ir/ast_to_metatron.s: src/middleend/metatron/ir/ast_to_metatron.cpp.s
-.PHONY : src/middleend/metatron/ir/ast_to_metatron.s
-
-# target to generate assembly for a file
-src/middleend/metatron/ir/ast_to_metatron.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sy.dir/build.make CMakeFiles/sy.dir/src/middleend/metatron/ir/ast_to_metatron.cpp.s
-.PHONY : src/middleend/metatron/ir/ast_to_metatron.cpp.s
-
-src/middleend/metatron/metatron_graph.o: src/middleend/metatron/metatron_graph.cpp.o
-.PHONY : src/middleend/metatron/metatron_graph.o
-
-# target to build an object file
-src/middleend/metatron/metatron_graph.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sy.dir/build.make CMakeFiles/sy.dir/src/middleend/metatron/metatron_graph.cpp.o
-.PHONY : src/middleend/metatron/metatron_graph.cpp.o
-
-src/middleend/metatron/metatron_graph.i: src/middleend/metatron/metatron_graph.cpp.i
-.PHONY : src/middleend/metatron/metatron_graph.i
-
-# target to preprocess a source file
-src/middleend/metatron/metatron_graph.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sy.dir/build.make CMakeFiles/sy.dir/src/middleend/metatron/metatron_graph.cpp.i
-.PHONY : src/middleend/metatron/metatron_graph.cpp.i
-
-src/middleend/metatron/metatron_graph.s: src/middleend/metatron/metatron_graph.cpp.s
-.PHONY : src/middleend/metatron/metatron_graph.s
-
-# target to generate assembly for a file
-src/middleend/metatron/metatron_graph.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sy.dir/build.make CMakeFiles/sy.dir/src/middleend/metatron/metatron_graph.cpp.s
-.PHONY : src/middleend/metatron/metatron_graph.cpp.s
 
 src/middleend/metatron_graph/metatron_graph.o: src/middleend/metatron_graph/metatron_graph.cpp.o
 .PHONY : src/middleend/metatron_graph/metatron_graph.o
 
 # target to build an object file
 src/middleend/metatron_graph/metatron_graph.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sy.dir/build.make CMakeFiles/sy.dir/src/middleend/metatron_graph/metatron_graph.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sysp.dir/build.make CMakeFiles/sysp.dir/src/middleend/metatron_graph/metatron_graph.cpp.o
 .PHONY : src/middleend/metatron_graph/metatron_graph.cpp.o
 
 src/middleend/metatron_graph/metatron_graph.i: src/middleend/metatron_graph/metatron_graph.cpp.i
@@ -454,7 +406,7 @@ src/middleend/metatron_graph/metatron_graph.i: src/middleend/metatron_graph/meta
 
 # target to preprocess a source file
 src/middleend/metatron_graph/metatron_graph.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sy.dir/build.make CMakeFiles/sy.dir/src/middleend/metatron_graph/metatron_graph.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sysp.dir/build.make CMakeFiles/sysp.dir/src/middleend/metatron_graph/metatron_graph.cpp.i
 .PHONY : src/middleend/metatron_graph/metatron_graph.cpp.i
 
 src/middleend/metatron_graph/metatron_graph.s: src/middleend/metatron_graph/metatron_graph.cpp.s
@@ -462,7 +414,7 @@ src/middleend/metatron_graph/metatron_graph.s: src/middleend/metatron_graph/meta
 
 # target to generate assembly for a file
 src/middleend/metatron_graph/metatron_graph.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sy.dir/build.make CMakeFiles/sy.dir/src/middleend/metatron_graph/metatron_graph.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sysp.dir/build.make CMakeFiles/sysp.dir/src/middleend/metatron_graph/metatron_graph.cpp.s
 .PHONY : src/middleend/metatron_graph/metatron_graph.cpp.s
 
 src/middleend/optimizer/optimizer.o: src/middleend/optimizer/optimizer.cpp.o
@@ -470,7 +422,7 @@ src/middleend/optimizer/optimizer.o: src/middleend/optimizer/optimizer.cpp.o
 
 # target to build an object file
 src/middleend/optimizer/optimizer.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sy.dir/build.make CMakeFiles/sy.dir/src/middleend/optimizer/optimizer.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sysp.dir/build.make CMakeFiles/sysp.dir/src/middleend/optimizer/optimizer.cpp.o
 .PHONY : src/middleend/optimizer/optimizer.cpp.o
 
 src/middleend/optimizer/optimizer.i: src/middleend/optimizer/optimizer.cpp.i
@@ -478,7 +430,7 @@ src/middleend/optimizer/optimizer.i: src/middleend/optimizer/optimizer.cpp.i
 
 # target to preprocess a source file
 src/middleend/optimizer/optimizer.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sy.dir/build.make CMakeFiles/sy.dir/src/middleend/optimizer/optimizer.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sysp.dir/build.make CMakeFiles/sysp.dir/src/middleend/optimizer/optimizer.cpp.i
 .PHONY : src/middleend/optimizer/optimizer.cpp.i
 
 src/middleend/optimizer/optimizer.s: src/middleend/optimizer/optimizer.cpp.s
@@ -486,7 +438,7 @@ src/middleend/optimizer/optimizer.s: src/middleend/optimizer/optimizer.cpp.s
 
 # target to generate assembly for a file
 src/middleend/optimizer/optimizer.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sy.dir/build.make CMakeFiles/sy.dir/src/middleend/optimizer/optimizer.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sysp.dir/build.make CMakeFiles/sysp.dir/src/middleend/optimizer/optimizer.cpp.s
 .PHONY : src/middleend/optimizer/optimizer.cpp.s
 
 src/middleend/scheduler/scheduler.o: src/middleend/scheduler/scheduler.cpp.o
@@ -494,7 +446,7 @@ src/middleend/scheduler/scheduler.o: src/middleend/scheduler/scheduler.cpp.o
 
 # target to build an object file
 src/middleend/scheduler/scheduler.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sy.dir/build.make CMakeFiles/sy.dir/src/middleend/scheduler/scheduler.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sysp.dir/build.make CMakeFiles/sysp.dir/src/middleend/scheduler/scheduler.cpp.o
 .PHONY : src/middleend/scheduler/scheduler.cpp.o
 
 src/middleend/scheduler/scheduler.i: src/middleend/scheduler/scheduler.cpp.i
@@ -502,7 +454,7 @@ src/middleend/scheduler/scheduler.i: src/middleend/scheduler/scheduler.cpp.i
 
 # target to preprocess a source file
 src/middleend/scheduler/scheduler.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sy.dir/build.make CMakeFiles/sy.dir/src/middleend/scheduler/scheduler.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sysp.dir/build.make CMakeFiles/sysp.dir/src/middleend/scheduler/scheduler.cpp.i
 .PHONY : src/middleend/scheduler/scheduler.cpp.i
 
 src/middleend/scheduler/scheduler.s: src/middleend/scheduler/scheduler.cpp.s
@@ -510,7 +462,7 @@ src/middleend/scheduler/scheduler.s: src/middleend/scheduler/scheduler.cpp.s
 
 # target to generate assembly for a file
 src/middleend/scheduler/scheduler.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sy.dir/build.make CMakeFiles/sy.dir/src/middleend/scheduler/scheduler.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sysp.dir/build.make CMakeFiles/sysp.dir/src/middleend/scheduler/scheduler.cpp.s
 .PHONY : src/middleend/scheduler/scheduler.cpp.s
 
 src/middleend/symbol/symbol_table.o: src/middleend/symbol/symbol_table.cpp.o
@@ -518,7 +470,7 @@ src/middleend/symbol/symbol_table.o: src/middleend/symbol/symbol_table.cpp.o
 
 # target to build an object file
 src/middleend/symbol/symbol_table.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sy.dir/build.make CMakeFiles/sy.dir/src/middleend/symbol/symbol_table.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sysp.dir/build.make CMakeFiles/sysp.dir/src/middleend/symbol/symbol_table.cpp.o
 .PHONY : src/middleend/symbol/symbol_table.cpp.o
 
 src/middleend/symbol/symbol_table.i: src/middleend/symbol/symbol_table.cpp.i
@@ -526,7 +478,7 @@ src/middleend/symbol/symbol_table.i: src/middleend/symbol/symbol_table.cpp.i
 
 # target to preprocess a source file
 src/middleend/symbol/symbol_table.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sy.dir/build.make CMakeFiles/sy.dir/src/middleend/symbol/symbol_table.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sysp.dir/build.make CMakeFiles/sysp.dir/src/middleend/symbol/symbol_table.cpp.i
 .PHONY : src/middleend/symbol/symbol_table.cpp.i
 
 src/middleend/symbol/symbol_table.s: src/middleend/symbol/symbol_table.cpp.s
@@ -534,7 +486,7 @@ src/middleend/symbol/symbol_table.s: src/middleend/symbol/symbol_table.cpp.s
 
 # target to generate assembly for a file
 src/middleend/symbol/symbol_table.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sy.dir/build.make CMakeFiles/sy.dir/src/middleend/symbol/symbol_table.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sysp.dir/build.make CMakeFiles/sysp.dir/src/middleend/symbol/symbol_table.cpp.s
 .PHONY : src/middleend/symbol/symbol_table.cpp.s
 
 src/middleend/types/types.o: src/middleend/types/types.cpp.o
@@ -542,7 +494,7 @@ src/middleend/types/types.o: src/middleend/types/types.cpp.o
 
 # target to build an object file
 src/middleend/types/types.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sy.dir/build.make CMakeFiles/sy.dir/src/middleend/types/types.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sysp.dir/build.make CMakeFiles/sysp.dir/src/middleend/types/types.cpp.o
 .PHONY : src/middleend/types/types.cpp.o
 
 src/middleend/types/types.i: src/middleend/types/types.cpp.i
@@ -550,7 +502,7 @@ src/middleend/types/types.i: src/middleend/types/types.cpp.i
 
 # target to preprocess a source file
 src/middleend/types/types.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sy.dir/build.make CMakeFiles/sy.dir/src/middleend/types/types.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sysp.dir/build.make CMakeFiles/sysp.dir/src/middleend/types/types.cpp.i
 .PHONY : src/middleend/types/types.cpp.i
 
 src/middleend/types/types.s: src/middleend/types/types.cpp.s
@@ -558,7 +510,7 @@ src/middleend/types/types.s: src/middleend/types/types.cpp.s
 
 # target to generate assembly for a file
 src/middleend/types/types.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sy.dir/build.make CMakeFiles/sy.dir/src/middleend/types/types.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sysp.dir/build.make CMakeFiles/sysp.dir/src/middleend/types/types.cpp.s
 .PHONY : src/middleend/types/types.cpp.s
 
 src/middleend/typesystem/type_system.o: src/middleend/typesystem/type_system.cpp.o
@@ -566,7 +518,7 @@ src/middleend/typesystem/type_system.o: src/middleend/typesystem/type_system.cpp
 
 # target to build an object file
 src/middleend/typesystem/type_system.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sy.dir/build.make CMakeFiles/sy.dir/src/middleend/typesystem/type_system.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sysp.dir/build.make CMakeFiles/sysp.dir/src/middleend/typesystem/type_system.cpp.o
 .PHONY : src/middleend/typesystem/type_system.cpp.o
 
 src/middleend/typesystem/type_system.i: src/middleend/typesystem/type_system.cpp.i
@@ -574,7 +526,7 @@ src/middleend/typesystem/type_system.i: src/middleend/typesystem/type_system.cpp
 
 # target to preprocess a source file
 src/middleend/typesystem/type_system.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sy.dir/build.make CMakeFiles/sy.dir/src/middleend/typesystem/type_system.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sysp.dir/build.make CMakeFiles/sysp.dir/src/middleend/typesystem/type_system.cpp.i
 .PHONY : src/middleend/typesystem/type_system.cpp.i
 
 src/middleend/typesystem/type_system.s: src/middleend/typesystem/type_system.cpp.s
@@ -582,7 +534,7 @@ src/middleend/typesystem/type_system.s: src/middleend/typesystem/type_system.cpp
 
 # target to generate assembly for a file
 src/middleend/typesystem/type_system.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sy.dir/build.make CMakeFiles/sy.dir/src/middleend/typesystem/type_system.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sysp.dir/build.make CMakeFiles/sysp.dir/src/middleend/typesystem/type_system.cpp.s
 .PHONY : src/middleend/typesystem/type_system.cpp.s
 
 src/runtime/runtime.o: src/runtime/runtime.cpp.o
@@ -590,7 +542,7 @@ src/runtime/runtime.o: src/runtime/runtime.cpp.o
 
 # target to build an object file
 src/runtime/runtime.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sy.dir/build.make CMakeFiles/sy.dir/src/runtime/runtime.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sysp.dir/build.make CMakeFiles/sysp.dir/src/runtime/runtime.cpp.o
 .PHONY : src/runtime/runtime.cpp.o
 
 src/runtime/runtime.i: src/runtime/runtime.cpp.i
@@ -598,7 +550,7 @@ src/runtime/runtime.i: src/runtime/runtime.cpp.i
 
 # target to preprocess a source file
 src/runtime/runtime.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sy.dir/build.make CMakeFiles/sy.dir/src/runtime/runtime.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sysp.dir/build.make CMakeFiles/sysp.dir/src/runtime/runtime.cpp.i
 .PHONY : src/runtime/runtime.cpp.i
 
 src/runtime/runtime.s: src/runtime/runtime.cpp.s
@@ -606,7 +558,7 @@ src/runtime/runtime.s: src/runtime/runtime.cpp.s
 
 # target to generate assembly for a file
 src/runtime/runtime.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sy.dir/build.make CMakeFiles/sy.dir/src/runtime/runtime.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sysp.dir/build.make CMakeFiles/sysp.dir/src/runtime/runtime.cpp.s
 .PHONY : src/runtime/runtime.cpp.s
 
 # Help Target
@@ -617,7 +569,7 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... sy"
+	@echo "... sysp"
 	@echo "... src/backend/arm/arm_backend.o"
 	@echo "... src/backend/arm/arm_backend.i"
 	@echo "... src/backend/arm/arm_backend.s"
@@ -651,12 +603,6 @@ help:
 	@echo "... src/middleend/ir/ir.o"
 	@echo "... src/middleend/ir/ir.i"
 	@echo "... src/middleend/ir/ir.s"
-	@echo "... src/middleend/metatron/ir/ast_to_metatron.o"
-	@echo "... src/middleend/metatron/ir/ast_to_metatron.i"
-	@echo "... src/middleend/metatron/ir/ast_to_metatron.s"
-	@echo "... src/middleend/metatron/metatron_graph.o"
-	@echo "... src/middleend/metatron/metatron_graph.i"
-	@echo "... src/middleend/metatron/metatron_graph.s"
 	@echo "... src/middleend/metatron_graph/metatron_graph.o"
 	@echo "... src/middleend/metatron_graph/metatron_graph.i"
 	@echo "... src/middleend/metatron_graph/metatron_graph.s"

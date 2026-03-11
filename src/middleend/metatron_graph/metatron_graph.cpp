@@ -1,20 +1,24 @@
 #include "metatron_graph.hpp"
 
-NodeId MetatronGraph::add_node(NodeKind kind, const std::vector<NodeId>& inputs) {
+namespace sysp::metatron {
 
-    NodeId id = nodes.size();
+Graph::Graph()
+    : next_id(0)
+{}
 
-    Node node;
+Node* Graph::create_node(sysp::ir::Opcode op)
+{
+    auto node = std::make_unique<Node>(next_id++, op);
+    Node* ptr = node.get();
 
-    node.id = id;
-    node.kind = kind;
-    node.inputs = inputs;
+    node_list.push_back(std::move(node));
 
-    nodes.push_back(node);
-
-    return id;
+    return ptr;
 }
 
-const std::vector<Node>& MetatronGraph::get_nodes() const {
-    return nodes;
+const std::vector<std::unique_ptr<Node>>& Graph::nodes() const
+{
+    return node_list;
+}
+
 }

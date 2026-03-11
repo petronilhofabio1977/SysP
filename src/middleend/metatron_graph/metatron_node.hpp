@@ -1,38 +1,24 @@
 #pragma once
 
 #include <vector>
-#include <cstdint>
+#include <memory>
 
-using NodeId = uint32_t;
+#include "../ir/opcode.hpp"
 
-enum class NodeKind {
-
-    Const,
-    Add,
-    Sub,
-    Mul,
-    Div,
-
-    Load,
-    Store,
-
-    Call,
-
-    Return,
-
-    Branch,
-    Jump,
-
-    Phi
-};
+namespace sysp::metatron {
 
 struct Node {
 
-    NodeId id;
+    int id;
 
-    NodeKind kind;
+    sysp::ir::Opcode opcode;
 
-    std::vector<NodeId> inputs;
+    std::vector<Node*> inputs;
 
-    std::vector<NodeId> users;
+    Node(int node_id, sysp::ir::Opcode op)
+        : id(node_id), opcode(op)
+    {}
+
 };
+
+}

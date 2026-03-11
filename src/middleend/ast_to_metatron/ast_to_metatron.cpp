@@ -1,38 +1,73 @@
-#include "../metatron_graph/metatron_graph.hpp"
 #include "ast_to_metatron.hpp"
 
-ASTToMetatron::ASTToMetatron(MetatronGraph& graph)
-: graph(graph) {}
+#include "../ir/opcode.hpp"
 
-NodeId ASTToMetatron::emit_expr(Expr* expr) {
+namespace sysp::middleend {
 
-    if(auto bin = dynamic_cast<BinaryExpr*>(expr)) {
+static int node_counter = 0;
 
-        NodeId left = emit_expr(bin->left);
-        NodeId right = emit_expr(bin->right);
+ASTToMetatron::ASTToMetatron()
+{
+}
 
-        if(bin->op == "+")
-            return graph.add_node(NodeKind::Add,{left,right});
+sysp::metatron::Node* ASTToMetatron::convert_stmt(const sysp::ast::Stmt* stmt)
+{
+    if (auto s = dynamic_cast<const sysp::ast::IfStmt*>(stmt))
+        return convert_if(s);
 
-        if(bin->op == "-")
-            return graph.add_node(NodeKind::Sub,{left,right});
+    if (auto s = dynamic_cast<const sysp::ast::WhileStmt*>(stmt))
+        return convert_while(s);
 
-        if(bin->op == "*")
-            return graph.add_node(NodeKind::Mul,{left,right});
+    if (auto s = dynamic_cast<const sysp::ast::ReturnStmt*>(stmt))
+        return convert_return(s);
 
-        if(bin->op == "/")
-            return graph.add_node(NodeKind::Div,{left,right});
-    }
+    if (auto s = dynamic_cast<const sysp::ast::BreakStmt*>(stmt))
+        return convert_break(s);
 
-    if(auto lit = dynamic_cast<LiteralExpr*>(expr)) {
+    if (auto s = dynamic_cast<const sysp::ast::ContinueStmt*>(stmt))
+        return convert_continue(s);
 
-        return graph.add_node(NodeKind::Const,{});
-    }
+    return nullptr;
+}
 
-    if(auto id = dynamic_cast<IdentifierExpr*>(expr)) {
+sysp::metatron::Node* ASTToMetatron::convert_if(const sysp::ast::IfStmt*)
+{
+    return new sysp::metatron::Node(
+        node_counter++,
+        sysp::ir::Opcode::Branch
+    );
+}
 
-        return graph.add_node(NodeKind::Load,{});
-    }
+sysp::metatron::Node* ASTToMetatron::convert_while(const sysp::ast::WhileStmt*)
+{
+    return new sysp::metatron::Node(
+        node_counter++,
+        sysp::ir::Opcode::Branch
+    );
+}
 
-    return graph.add_node(NodeKind::Const,{});
+sysp::metatron::Node* ASTToMetatron::convert_return(const sysp::ast::ReturnStmt*)
+{
+    return new sysp::metatron::Node(
+        node_counter++,
+        sysp::ir::Opcode::Return
+    );
+}
+
+sysp::metatron::Node* ASTToMetatron::convert_break(const sysp::ast::BreakStmt*)
+{
+    return new sysp::metatron::Node(
+        node_counter++,
+        sysp::ir::Opcode::Jump
+    );
+}
+
+sysp::metatron::Node* ASTToMetatron::convert_continue(const sysp::ast::ContinueStmt*)
+{
+    return new sysp::metatron::Node(
+        node_counter++,
+        sysp::ir::Opcode::Jump
+    );
+}
+
 }

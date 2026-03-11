@@ -63,11 +63,11 @@ CMAKE_BINARY_DIR = /home/techmaster/SysP/build
 # Directory level rules for the build root directory
 
 # The main recursive "all" target.
-all: CMakeFiles/sy.dir/all
+all: CMakeFiles/sysp.dir/all
 .PHONY : all
 
 # The main recursive "codegen" target.
-codegen: CMakeFiles/sy.dir/codegen
+codegen: CMakeFiles/sysp.dir/codegen
 .PHONY : codegen
 
 # The main recursive "preinstall" target.
@@ -75,40 +75,40 @@ preinstall:
 .PHONY : preinstall
 
 # The main recursive "clean" target.
-clean: CMakeFiles/sy.dir/clean
+clean: CMakeFiles/sysp.dir/clean
 .PHONY : clean
 
 #=============================================================================
-# Target rules for target CMakeFiles/sy.dir
+# Target rules for target CMakeFiles/sysp.dir
 
 # All Build rule for target.
-CMakeFiles/sy.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sy.dir/build.make CMakeFiles/sy.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sy.dir/build.make CMakeFiles/sy.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/techmaster/SysP/build/CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21 "Built target sy"
-.PHONY : CMakeFiles/sy.dir/all
+CMakeFiles/sysp.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sysp.dir/build.make CMakeFiles/sysp.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sysp.dir/build.make CMakeFiles/sysp.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/techmaster/SysP/build/CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19 "Built target sysp"
+.PHONY : CMakeFiles/sysp.dir/all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/sy.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/techmaster/SysP/build/CMakeFiles 21
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/sy.dir/all
+CMakeFiles/sysp.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/techmaster/SysP/build/CMakeFiles 19
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/sysp.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/techmaster/SysP/build/CMakeFiles 0
-.PHONY : CMakeFiles/sy.dir/rule
+.PHONY : CMakeFiles/sysp.dir/rule
 
 # Convenience name for target.
-sy: CMakeFiles/sy.dir/rule
-.PHONY : sy
+sysp: CMakeFiles/sysp.dir/rule
+.PHONY : sysp
 
 # codegen rule for target.
-CMakeFiles/sy.dir/codegen:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sy.dir/build.make CMakeFiles/sy.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/techmaster/SysP/build/CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21 "Finished codegen for target sy"
-.PHONY : CMakeFiles/sy.dir/codegen
+CMakeFiles/sysp.dir/codegen:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sysp.dir/build.make CMakeFiles/sysp.dir/codegen
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/techmaster/SysP/build/CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19 "Finished codegen for target sysp"
+.PHONY : CMakeFiles/sysp.dir/codegen
 
 # clean rule for target.
-CMakeFiles/sy.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sy.dir/build.make CMakeFiles/sy.dir/clean
-.PHONY : CMakeFiles/sy.dir/clean
+CMakeFiles/sysp.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sysp.dir/build.make CMakeFiles/sysp.dir/clean
+.PHONY : CMakeFiles/sysp.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

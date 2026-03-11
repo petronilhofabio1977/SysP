@@ -1,89 +1,37 @@
-#include "frontend/parser/pratt_parser.hpp"
+#include "pratt_parser.hpp"
 
-PrattParser::PrattParser(const std::vector<Token>& tokens)
-: tokens(tokens), pos(0) {}
+namespace sysp::parser {
 
-Token PrattParser::peek() {
-
-    if(pos >= tokens.size())
-        return tokens.back();
-
-    return tokens[pos];
+PrattParser::PrattParser()
+{
 }
 
-Token PrattParser::advance() {
-
-    Token t = peek();
-    pos++;
-
-    return t;
+sysp::ast::Expr* PrattParser::parse_expression(int precedence)
+{
+    return parse_prefix();
 }
 
-Expr* PrattParser::parse_expression(int precedence) {
-
-    Expr* left = parse_prefix();
-
-    while(precedence < get_precedence(peek().type)) {
-
-        Token op = advance();
-        left = parse_infix(left, op);
-
-    }
-
-    return left;
+sysp::ast::Expr* PrattParser::parse_prefix()
+{
+    auto node = new sysp::ast::LiteralExpr();
+    node->value = "0";
+    return node;
 }
 
-Expr* PrattParser::parse_prefix() {
+sysp::ast::Expr* PrattParser::parse_infix(sysp::ast::Expr* left, Token op)
+{
+    auto node = new sysp::ast::BinaryExpr();
 
-    Token t = advance();
+    node->left.reset(left);
 
-    if(t.type == TokenType::INTEGER || t.type == TokenType::FLOAT) {
+    auto right = std::make_unique<sysp::ast::LiteralExpr>();
+    right->value = "0";
 
-        auto* expr = new LiteralExpr();
-        expr->value = t.lexeme;
+    node->right = std::move(right);
 
-        return expr;
-    }
+    node->op = op.lexeme;
 
-    if(t.type == TokenType::IDENT) {
-
-        auto* expr = new IdentifierExpr();
-        expr->name = t.lexeme;
-
-        return expr;
-    }
-
-    return nullptr;
+    return node;
 }
 
-Expr* PrattParser::parse_infix(Expr* left, Token op) {
-
-    int precedence = get_precedence(op.type);
-
-    Expr* right = parse_expression(precedence);
-
-    auto* expr = new BinaryExpr();
-
-    expr->left = left;
-    expr->right = right;
-    expr->op = op.lexeme;
-
-    return expr;
-}
-
-int PrattParser::get_precedence(TokenType type) {
-
-    switch(type) {
-
-        case TokenType::PLUS:
-        case TokenType::MINUS:
-            return 10;
-
-        case TokenType::STAR:
-        case TokenType::SLASH:
-            return 20;
-
-        default:
-            return 0;
-    }
 }
