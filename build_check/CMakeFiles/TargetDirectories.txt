@@ -1,3 +1,0 @@
-/home/techmaster/SysP/build_check/CMakeFiles/sysp.dir
-/home/techmaster/SysP/build_check/CMakeFiles/edit_cache.dir
-/home/techmaster/SysP/build_check/CMakeFiles/rebuild_cache.dir
