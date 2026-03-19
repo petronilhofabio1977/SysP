@@ -1,16 +1,12 @@
 # SysP — System Programming Language
 
-<p align="center">
-  <img src="https://img.shields.io/badge/versão-1.1-1E6B9E?style=for-the-badge" />
-  <img src="https://img.shields.io/badge/grammar-v5.0_Final-2A8547?style=for-the-badge" />
-  <img src="https://img.shields.io/badge/extensão-.sp-orange?style=for-the-badge" />
-  <img src="https://img.shields.io/badge/licença-MIT-lightgrey?style=for-the-badge" />
-</p>
+![versão](https://img.shields.io/badge/versão-1.1-1E6B9E?style=for-the-badge)
+![grammar](https://img.shields.io/badge/grammar-v5.0_Final-2A8547?style=for-the-badge)
+![extensão](https://img.shields.io/badge/extensão-.sp-orange?style=for-the-badge)
+![licença](https://img.shields.io/badge/licença-MIT-lightgrey?style=for-the-badge)
 
-<p align="center">
-  <strong>A simplicidade do Python. A velocidade do C. A segurança do Rust.</strong><br/>
-  <em>Sem garbage collector · sem máquina virtual · sem surpresas</em>
-</p>
+**A simplicidade do Python. A velocidade do C. A segurança do Rust.**  
+*Sem garbage collector · sem máquina virtual · sem surpresas*
 
 ---
 
@@ -132,6 +128,7 @@ O **Jarbes** é o analisador central do compilador SysP. Ele constrói um **graf
 SysP oferece três formas de gerenciar memória, cada uma com seu propósito:
 
 ### Stack — automático e zero custo
+
 ```
 fn calcular() {
     let x: i32 = 10    -- stack, liberado ao sair da função
@@ -140,6 +137,7 @@ fn calcular() {
 ```
 
 ### Region — heap com escopo garantido
+
 ```
 region minha_regiao {
     let node = new Node(42)    -- heap, pertence à região
@@ -148,6 +146,7 @@ region minha_regiao {
 ```
 
 ### Unsafe — controle total quando necessário
+
 ```
 unsafe {
     -- Jarbes não analisa este bloco
@@ -161,8 +160,6 @@ unsafe {
 
 ## Domínios de aplicação
 
-Por ser compilada, sem GC e sem VM, SysP é adequada para praticamente qualquer domínio:
-
 | Domínio | Por que SysP funciona bem |
 |---|---|
 | Sistemas embarcados / firmware | Sem GC, sem runtime, controle total |
@@ -173,7 +170,7 @@ Por ser compilada, sem GC e sem VM, SysP é adequada para praticamente qualquer 
 | Sistemas distribuídos | Sem runtime pesado, módulos bem definidos |
 | Segurança / criptografia | Controle bit a bit, unsafe controlado |
 | Algoritmos e estruturas de dados | Sintaxe próxima de pseudocódigo |
-| Infraestrutura e backend | Result<T,E> para erros, módulos claros |
+| Infraestrutura e backend | `Result<T,E>` para erros, módulos claros |
 
 ---
 
@@ -182,18 +179,18 @@ Por ser compilada, sem GC e sem VM, SysP é adequada para praticamente qualquer 
 ```
 arquivo.sp
     ↓
-  Lexer          → tokens
+  Lexer             → tokens
     ↓
-  Parser         → AST
+  Parser            → AST
     ↓
-  MetatronBuilder → MetatronGraph
+  MetatronBuilder   → MetatronGraph
     ↓
   Jarbes Kernel
     ├─ DependencyChecker
     ├─ CycleDetector
     └─ DataRaceDetector
     ↓
-  Backend        → binário nativo
+  Backend           → binário nativo
     ↓
   Runtime Honeycomb
 ```
@@ -240,7 +237,16 @@ SysP/
 
 ## Status do projeto
 
-SysP está em desenvolvimento ativo. A gramática formal (v5.0 Final) está definida e o Jarbes Kernel está sendo implementado.
+| Componente | Status |
+|---|---|
+| Gramática (EBNF v5.0) | ✅ Finalizada |
+| Especificação da linguagem | ✅ Documentada |
+| Jarbes Kernel | 🔧 Em desenvolvimento |
+| Metatron Graph | 🔧 Em desenvolvimento |
+| Runtime Honeycomb | 🔧 Em desenvolvimento |
+| Frontend (Lexer / Parser) | 🔲 Planejado |
+| Backend (codegen) | 🔲 Planejado |
+| Módulos padrão (io, math...) | 🔲 Planejado |
 
 ---
 
@@ -250,6 +256,4 @@ MIT License — veja [LICENSE](LICENSE) para detalhes.
 
 ---
 
-<p align="center">
-  <em>SysP — segurança começa no compilador, não no runtime.</em>
-</p>
+*SysP — segurança começa no compilador, não no runtime.*
