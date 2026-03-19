@@ -1,3 +1,4 @@
+#include "middleend/jarbes_kernel/jarbes_kernel.hpp"
 #include "cli.hpp"
 
 #include <iostream>
@@ -56,6 +57,13 @@ int CLI::compile_file(const std::string& path)
     std::cout << "Parser...\n";
     std::cout << "AST...\n";
     std::cout << "Metatron IR...\n";
+    sysp::JarbesKernel kernel;
+    kernel.build_metatron(1.0);
+    kernel.build_honeycomb(4);
+    kernel.distribute_transistors();
+    kernel.step();
+    std::cout << "Jarbes Security Analysis..." << std::endl;
+
     std::cout << "Optimizer...\n";
     std::cout << "Backend...\n";
 

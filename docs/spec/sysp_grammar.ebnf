@@ -1,6 +1,7 @@
 (* ================================================= *)
 (* SysP Programming Language Grammar                 *)
 (* EBNF ISO-14977                                    *)
+(* Version: 4.0 — Final                              *)
 (* ================================================= *)
 
 program =
@@ -11,7 +12,7 @@ program =
 (* ================= MODULES ================= *)
 
 module_decl =
-      "module" identifier ;
+      "module" module_path ;
 
 use_decl =
       "use" module_path ;
@@ -23,26 +24,34 @@ module_path =
 
 declaration =
       function_decl
+    | impl_decl
+    | impl_trait_decl
     | struct_decl
     | enum_decl
     | trait_decl
+    | type_alias
     | const_decl
     | var_decl ;
+
+(* ================= TYPE ALIAS ================= *)
+
+type_alias =
+      [ "pub" ] "type" identifier "=" type ;
 
 (* ================= VARIABLES ================= *)
 
 var_decl =
       identifier ":" type "=" expression
-    | identifier "=" expression ;
+    | "let" identifier "=" expression ;
 
 const_decl =
-      "const" identifier [ ":" type ] "=" expression ;
+      [ "pub" ] "const" identifier [ ":" type ] "=" expression ;
 
 assignment =
       assignable assign_op expression ;
 
 assignable =
-      postfix_expr ;
+      identifier { postfix_op } ;
 
 assign_op =
       "="
@@ -61,7 +70,9 @@ type =
     | reference_type
     | array_type
     | slice_type
-    | generic_type ;
+    | generic_type
+    | result_type
+    | option_type ;
 
 primitive_type =
       "i8" | "i16" | "i32" | "i64"
@@ -85,6 +96,13 @@ slice_type =
 generic_type =
       identifier "<" type { "," type } ">" ;
 
+result_type =
+      "Result" "<" type "," type ">" ;
+
+(* NEW: Option<T> — represents presence or absence of a value *)
+option_type =
+      "Option" "<" type ">" ;
+
 (* ================= STRUCT ================= *)
 
 struct_decl =
@@ -96,7 +114,7 @@ struct_decl =
       "}" ;
 
 struct_field =
-      identifier type ;
+      [ "pub" ] identifier type ;
 
 (* ================= ENUM ================= *)
 
@@ -124,15 +142,36 @@ trait_method =
       "(" parameter_list ")"
       [ "->" type ] ;
 
+(* ================= IMPL ================= *)
+
+(* methods for a type *)
+impl_decl =
+      "impl" identifier [ generic_params ]
+      "{"
+      { function_decl }
+      "}" ;
+
+(* NEW: trait implementation for a type *)
+impl_trait_decl =
+      "impl" identifier [ generic_params ]
+      "for" identifier [ generic_params ]
+      "{"
+      { function_decl }
+      "}" ;
+
 (* ================= FUNCTIONS ================= *)
 
 function_decl =
       [ "pub" ]
-      "fn" identifier
+      "fn" function_name
       [ generic_params ]
       "(" parameter_list ")"
       [ "->" type ]
       block ;
+
+function_name =
+      identifier
+    | identifier "." identifier ;
 
 generic_params =
       "<" identifier { "," identifier } ">" ;
@@ -143,7 +182,8 @@ parameter_list =
       [ parameter { "," parameter } ] ;
 
 parameter =
-      identifier type
+      "self"
+    | identifier type
     | identifier "ref" type ;
 
 (* ================= BLOCK ================= *)
@@ -158,13 +198,15 @@ statement =
     | assignment
     | if_stmt
     | while_stmt
+    | loop_stmt
     | for_stmt
     | match_stmt
     | return_stmt
     | break_stmt
     | continue_stmt
-    | expression_stmt
-    | region_stmt ;
+    | region_stmt
+    | panic_stmt
+    | expression_stmt ;
 
 expression_stmt =
       expression ;
@@ -173,10 +215,13 @@ expression_stmt =
 
 if_stmt =
       "if" expression block
-      [ "else" block ] ;
+      [ "else" ( if_stmt | block ) ] ;
 
 while_stmt =
       "while" expression block ;
+
+loop_stmt =
+      "loop" block ;
 
 for_stmt =
       "for" identifier "in" range_expr block ;
@@ -185,21 +230,31 @@ range_expr =
       expression ".." expression
     | expression "..=" expression ;
 
+break_stmt =
+      "break" ;
+
+continue_stmt =
+      "continue" ;
+
 (* ================= MATCH ================= *)
 
 match_stmt =
       "match" expression
       "{"
-      match_arm { "," match_arm } [ "," ]
+      { match_arm }
       "}" ;
 
 match_arm =
-      pattern "=>" statement ;
+      pattern "=>" ( block | expression ) ;
 
 pattern =
       literal
     | identifier
     | "_"
+    | "Some" "(" pattern ")"
+    | "None"
+    | "Ok"  "(" pattern ")"
+    | "Err" "(" pattern ")"
     | identifier "(" pattern_list ")" ;
 
 pattern_list =
@@ -210,16 +265,28 @@ pattern_list =
 return_stmt =
       "return" [ expression ] ;
 
-break_stmt =
-      "break" ;
-
-continue_stmt =
-      "continue" ;
-
 (* ================= REGION ================= *)
 
 region_stmt =
       "region" identifier block ;
+
+(* ================= ERROR HANDLING ================= *)
+
+panic_stmt =
+      "panic" "(" expression ")" ;
+
+ok_expr =
+      "Ok" "(" expression ")" ;
+
+err_expr =
+      "Err" "(" expression ")" ;
+
+(* NEW: Option constructors *)
+some_expr =
+      "Some" "(" expression ")" ;
+
+none_expr =
+      "None" ;
 
 (* ================= EXPRESSIONS ================= *)
 
@@ -251,7 +318,14 @@ multiplicative_expr =
       { ( "*" | "/" | "%" ) unary_expr } ;
 
 unary_expr =
-      { "-" | "!" | "*" | "&" } postfix_expr ;
+      cast_expr
+    | "-" unary_expr
+    | "!" unary_expr
+    | "*" unary_expr
+    | "&" unary_expr ;
+
+cast_expr =
+      postfix_expr [ "as" type ] ;
 
 (* ================= POSTFIX ================= *)
 
@@ -260,60 +334,115 @@ postfix_expr =
       { postfix_op } ;
 
 postfix_op =
-      member_expr
-    | function_call
+      function_call
+    | method_call
     | array_access
-    | slice_expr ;
-
-member_expr =
-      "." identifier [ function_call ] ;
+    | member_access
+    | "?" ;
 
 (* ================= PRIMARY ================= *)
 
 primary_expr =
       literal
     | identifier
+    | alloc_expr
+    | ok_expr
+    | err_expr
+    | some_expr
+    | none_expr
     | lambda_expr
     | "(" expression ")" ;
+
+function_call =
+      "(" argument_list ")" ;
+
+method_call =
+      "." identifier "(" argument_list ")" ;
+
+array_access =
+      "[" expression "]" ;
+
+member_access =
+      "." identifier ;
+
+argument_list =
+      [ expression { "," expression } ] ;
+
+(* ================= ALLOC ================= *)
+
+alloc_expr =
+      "new" type [ "(" argument_list ")" ]
+    | "new" "[" expression "]" type ;
 
 (* ================= LAMBDA ================= *)
 
 lambda_expr =
       "fn"
       "(" parameter_list ")"
+      [ "->" type ]
       block ;
 
 (* ================= LITERALS ================= *)
 
 literal =
-      integer
-    | float
+      integer_literal
+    | float_literal
     | string_literal
     | "true"
     | "false" ;
 
-(* ================= IDENTIFIERS ================= *)
+(* ================= NUMERIC LITERALS ================= *)
 
-identifier =
-      ( letter | "_" ) { letter | digit | "_" } ;
+(* NEW: decimal, hex, binary — all support underscore separator *)
+integer_literal =
+      decimal_literal
+    | hex_literal
+    | binary_literal ;
 
-(* ================= NUMBERS ================= *)
+decimal_literal =
+      digit { digit | "_" } ;
 
-integer =
-      digit { digit } ;
+hex_literal =
+      "0x" hex_digit { hex_digit | "_" } ;
 
-float =
-      digit { digit } "." digit { digit } ;
+binary_literal =
+      "0b" ( "0" | "1" ) { "0" | "1" | "_" } ;
+
+float_literal =
+      decimal_literal "." decimal_literal ;
+
+hex_digit =
+      digit
+    | "A" | "B" | "C" | "D" | "E" | "F"
+    | "a" | "b" | "c" | "d" | "e" | "f" ;
 
 (* ================= STRINGS ================= *)
 
 string_literal =
       '"' { string_char } '"' ;
 
+(* NEW: escape sequences defined explicitly *)
 string_char =
-      ? any UTF-8 character except '"' ? ;
+      normal_char
+    | escape_seq ;
 
-(* ================= CHARACTERS ================= *)
+normal_char =
+      ? any UTF-8 character except '"', '\' and newline ? ;
+
+escape_seq =
+      "\" "n"
+    | "\" "t"
+    | "\" "r"
+    | "\" '"'
+    | "\" "\"
+    | "\" "0" ;
+
+(* ================= IDENTIFIERS ================= *)
+
+identifier =
+      ( letter | "_" ) { letter | digit | "_" } ;
+
+(* ================= BASE CHARACTERS ================= *)
 
 letter =
       "A" | "B" | "C" | "D" | "E" | "F" | "G"
@@ -329,3 +458,50 @@ digit =
       "0" | "1" | "2" | "3" | "4"
     | "5" | "6" | "7" | "8" | "9" ;
 
+(* ================= COMMENTS (lexer rules) ================= *)
+(*
+    Line comment  : -- anything until end of line
+    Block comment : (* anything *)
+    Both stripped by lexer before parsing.
+*)
+
+(* ================================================= *)
+(* RESERVED KEYWORDS                                 *)
+(* ================================================= *)
+(*
+    module    use       fn        return    let
+    const     type      struct    enum      trait
+    impl      for       pub       self
+    if        else      while     loop      for
+    break     continue  match     in        as
+    region    new       panic
+    true      false
+    Result    Option    Ok        Err       Some    None
+    i8  i16   i32  i64  u8  u16   u32  u64
+    f32 f64   bool      string
+    ref
+*)
+
+(* ================================================= *)
+(* CHANGE LOG v3 -> v4 — FINAL                       *)
+(* ================================================= *)
+(*
+  OPTION:
+  [1] option_type: Option<T> added to type system
+  [2] some_expr / none_expr: Some() and None in primary_expr
+  [3] pattern: Some(p), None, Ok(p), Err(p) added for match
+
+  TRAITS:
+  [4] impl_trait_decl: "impl Trait for Type" added to declarations
+
+  LITERALS:
+  [5] integer_literal: decimal, hex (0xFF), binary (0b1010)
+  [6] underscore separator in all numeric literals (1_000_000)
+  [7] hex_digit: A-F a-f defined
+  [8] escape_seq: \n \t \r \" \\ \0 defined explicitly
+  [9] float_literal: now references decimal_literal for consistency
+
+  OTHER:
+  [10] type_alias: "type Byte = u8" added to declarations
+  [11] reserved keywords section added for compiler reference
+*)
