@@ -1,21 +1,20 @@
 (* ================================================= *)
 (* SysP Programming Language Grammar                 *)
 (* EBNF ISO-14977                                    *)
-(* Version: 4.0 — Final                              *)
+(* Version: 6.0 — Tuples + Iterators +               *)
+(*               String Interpolation + Concurrency  *)
 (* ================================================= *)
 
 program =
-      module_decl
-      { use_decl }
+      { module_decl }
       { declaration } ;
 
 (* ================= MODULES ================= *)
 
+(* module calls a standard library module         *)
+(* e.g.: module io.println                        *)
 module_decl =
       "module" module_path ;
-
-use_decl =
-      "use" module_path ;
 
 module_path =
       identifier { "." identifier } ;
@@ -42,7 +41,10 @@ type_alias =
 
 var_decl =
       identifier ":" type "=" expression
-    | "let" identifier "=" expression ;
+    | "let" identifier "=" expression
+    | "let" "(" identifier { "," identifier } ")" "=" expression ;
+    (* last form: tuple destructuring                *)
+    (* e.g.: let (q, r) = dividir(10, 3)            *)
 
 const_decl =
       [ "pub" ] "const" identifier [ ":" type ] "=" expression ;
@@ -70,9 +72,12 @@ type =
     | reference_type
     | array_type
     | slice_type
+    | tuple_type
     | generic_type
     | result_type
-    | option_type ;
+    | option_type
+    | lambda_type
+    | task_type ;
 
 primitive_type =
       "i8" | "i16" | "i32" | "i64"
@@ -93,15 +98,29 @@ array_type =
 slice_type =
       "[" "]" type ;
 
+(* NEW: tuple type                                   *)
+(* e.g.: (i32, i32)   (string, f64, bool)           *)
+tuple_type =
+      "(" type { "," type } ")" ;
+
 generic_type =
       identifier "<" type { "," type } ">" ;
 
 result_type =
       "Result" "<" type "," type ">" ;
 
-(* NEW: Option<T> — represents presence or absence of a value *)
 option_type =
       "Option" "<" type ">" ;
+
+(* NEW: lambda as first-class type                   *)
+(* e.g.: fn(i32, i32) -> i32                        *)
+lambda_type =
+      "fn" "(" [ type { "," type } ] ")" [ "->" type ] ;
+
+(* NEW: task handle returned by spawn               *)
+(* e.g.: Task<i32>                                  *)
+task_type =
+      "Task" "<" type ">" ;
 
 (* ================= STRUCT ================= *)
 
@@ -142,16 +161,27 @@ trait_method =
       "(" parameter_list ")"
       [ "->" type ] ;
 
+(* ================= ITERATOR TRAIT ================= *)
+
+(* The Iterator trait is built into the language.    *)
+(* Any type that implements Iterator can be used     *)
+(* in a for..in loop.                               *)
+(*                                                   *)
+(* trait Iterator {                                  *)
+(*     fn next(self) -> Option<T>                    *)
+(* }                                                 *)
+(*                                                   *)
+(* Standard types that implement Iterator:          *)
+(*   []T  (slice), [N]T (array), Range, Channel<T>  *)
+
 (* ================= IMPL ================= *)
 
-(* methods for a type *)
 impl_decl =
       "impl" identifier [ generic_params ]
       "{"
       { function_decl }
       "}" ;
 
-(* NEW: trait implementation for a type *)
 impl_trait_decl =
       "impl" identifier [ generic_params ]
       "for" identifier [ generic_params ]
@@ -205,7 +235,10 @@ statement =
     | break_stmt
     | continue_stmt
     | region_stmt
+    | unsafe_stmt
     | panic_stmt
+    | spawn_stmt
+    | send_stmt
     | expression_stmt ;
 
 expression_stmt =
@@ -223,8 +256,13 @@ while_stmt =
 loop_stmt =
       "loop" block ;
 
+(* UPDATED: for now iterates over any Iterator,     *)
+(* not just ranges. Ranges are a special case.      *)
+(* e.g.: for x in 0..10 { }    -- range            *)
+(*        for x in minha_lista { }  -- iterator     *)
+(*        for x in canal { }    -- channel          *)
 for_stmt =
-      "for" identifier "in" range_expr block ;
+      "for" identifier "in" expression block ;
 
 range_expr =
       expression ".." expression
@@ -255,7 +293,13 @@ pattern =
     | "None"
     | "Ok"  "(" pattern ")"
     | "Err" "(" pattern ")"
+    | tuple_pattern
     | identifier "(" pattern_list ")" ;
+
+(* NEW: tuple pattern                               *)
+(* e.g.: (a, b) => ...                             *)
+tuple_pattern =
+      "(" pattern { "," pattern } ")" ;
 
 pattern_list =
       pattern { "," pattern } ;
@@ -270,6 +314,27 @@ return_stmt =
 region_stmt =
       "region" identifier block ;
 
+(* ================= UNSAFE ================= *)
+
+(* Jarbes does not analyze inside unsafe blocks     *)
+(* programmer takes full responsibility             *)
+(* all unsafe blocks are visible and auditable      *)
+unsafe_stmt =
+      "unsafe" block ;
+
+(* ================= CONCURRENCY ================= *)
+
+(* NEW: spawn launches a task concurrently          *)
+(* returns a Task<T> handle                        *)
+(* e.g.: let t = spawn calcular(x, y)              *)
+spawn_stmt =
+      "let" identifier "=" "spawn" expression ;
+
+(* NEW: send a value into a channel                 *)
+(* e.g.: send canal <- valor                       *)
+send_stmt =
+      "send" identifier "<-" expression ;
+
 (* ================= ERROR HANDLING ================= *)
 
 panic_stmt =
@@ -281,7 +346,6 @@ ok_expr =
 err_expr =
       "Err" "(" expression ")" ;
 
-(* NEW: Option constructors *)
 some_expr =
       "Some" "(" expression ")" ;
 
@@ -338,7 +402,13 @@ postfix_op =
     | method_call
     | array_access
     | member_access
+    | tuple_access
     | "?" ;
+
+(* NEW: tuple field access by index                 *)
+(* e.g.: par.0   par.1                             *)
+tuple_access =
+      "." integer_literal ;
 
 (* ================= PRIMARY ================= *)
 
@@ -346,11 +416,16 @@ primary_expr =
       literal
     | identifier
     | alloc_expr
+    | move_expr
     | ok_expr
     | err_expr
     | some_expr
     | none_expr
+    | tuple_expr
     | lambda_expr
+    | channel_expr
+    | await_expr
+    | range_expr
     | "(" expression ")" ;
 
 function_call =
@@ -374,13 +449,42 @@ alloc_expr =
       "new" type [ "(" argument_list ")" ]
     | "new" "[" expression "]" type ;
 
+(* ================= MOVE ================= *)
+
+(* explicit ownership transfer                      *)
+(* Jarbes marks source node as consumed in graph    *)
+(* any subsequent use of source = compile error     *)
+move_expr =
+      "move" expression ;
+
+(* ================= TUPLES ================= *)
+
+(* NEW: tuple literal                               *)
+(* e.g.: (10, 20)   ("ana", 25, true)              *)
+tuple_expr =
+      "(" expression "," expression { "," expression } ")" ;
+
 (* ================= LAMBDA ================= *)
 
+(* lambda as anonymous function / first-class value *)
+(* e.g.: fn(x i32) -> i32 { return x * 2 }        *)
 lambda_expr =
       "fn"
       "(" parameter_list ")"
       [ "->" type ]
       block ;
+
+(* ================= CONCURRENCY EXPRESSIONS ================= *)
+
+(* NEW: create a channel for communication          *)
+(* e.g.: let ch = channel()                        *)
+channel_expr =
+      "channel" "(" ")" ;
+
+(* NEW: await a Task<T> result                      *)
+(* e.g.: let resultado = await tarefa              *)
+await_expr =
+      "await" expression ;
 
 (* ================= LITERALS ================= *)
 
@@ -388,12 +492,12 @@ literal =
       integer_literal
     | float_literal
     | string_literal
+    | interpolated_string
     | "true"
     | "false" ;
 
 (* ================= NUMERIC LITERALS ================= *)
 
-(* NEW: decimal, hex, binary — all support underscore separator *)
 integer_literal =
       decimal_literal
     | hex_literal
@@ -421,21 +525,36 @@ hex_digit =
 string_literal =
       '"' { string_char } '"' ;
 
-(* NEW: escape sequences defined explicitly *)
 string_char =
       normal_char
     | escape_seq ;
 
 normal_char =
-      ? any UTF-8 character except '"', '\' and newline ? ;
+      ? any UTF-8 character except '"', '\', '{' and newline ? ;
 
 escape_seq =
-      "\" "n"
-    | "\" "t"
-    | "\" "r"
-    | "\" '"'
-    | "\" "\"
-    | "\" "0" ;
+      "\n"
+    | "\t"
+    | "\r"
+    | "\""
+    | "\\"
+    | "\0"
+    | "\{" ;
+
+(* NEW: interpolated string                         *)
+(* prefix f before the opening quote               *)
+(* e.g.: f"Olá, {nome}! Você tem {idade} anos."   *)
+(* { expression } inside evaluates and converts    *)
+(* to string at compile time when possible,        *)
+(* otherwise at runtime                            *)
+interpolated_string =
+      'f"' { interp_char | interp_block } '"' ;
+
+interp_char =
+      ? any UTF-8 character except '"', '\', '{' and newline ? ;
+
+interp_block =
+      "{" expression "}" ;
 
 (* ================= IDENTIFIERS ================= *)
 
@@ -469,39 +588,70 @@ digit =
 (* RESERVED KEYWORDS                                 *)
 (* ================================================= *)
 (*
-    module    use       fn        return    let
-    const     type      struct    enum      trait
-    impl      for       pub       self
+    module    fn        return    let       const
+    type      struct    enum      trait     impl
+    for       pub       self
     if        else      while     loop      for
     break     continue  match     in        as
-    region    new       panic
+    region    new       panic     move      unsafe
+    spawn     send      await     channel
     true      false
     Result    Option    Ok        Err       Some    None
+    Task
     i8  i16   i32  i64  u8  u16   u32  u64
-    f32 f64   bool      string
-    ref
+    f32 f64   bool      string    ref
 *)
 
 (* ================================================= *)
-(* CHANGE LOG v3 -> v4 — FINAL                       *)
+(* MEMORY SAFETY GUARANTEE MAP                       *)
 (* ================================================= *)
 (*
-  OPTION:
-  [1] option_type: Option<T> added to type system
-  [2] some_expr / none_expr: Some() and None in primary_expr
-  [3] pattern: Some(p), None, Ok(p), Err(p) added for match
+    Error class            Syntax that enables detection
+    ─────────────────────────────────────────────────────
+    use-before-definition  var_decl + Jarbes graph order
+    use-after-move         move_expr → node consumed
+    double-free            region_stmt → single owner
+    region escape          region_stmt + reference_type
+    dangling pointer       region_stmt + lifetime check
+    buffer overflow        array_type bounds in graph
+    unsafe code            unsafe_stmt → visible + auditable
+    data race              spawn + channel → Jarbes graph
+    tuple ownership        tuple_expr → Jarbes tracks each element
+*)
 
-  TRAITS:
-  [4] impl_trait_decl: "impl Trait for Type" added to declarations
+(* ================================================= *)
+(* CHANGE LOG v5 -> v6                               *)
+(* ================================================= *)
+(*
+  TUPLES:
+  [1] tuple_type:    (i32, i32)  — type system
+  [2] tuple_expr:    (10, 20)    — literal
+  [3] tuple_access:  par.0       — field access by index
+  [4] tuple_pattern: (a, b) =>   — destructuring in match
+  [5] var_decl:      let (a, b) = expr  — destructuring
 
-  LITERALS:
-  [5] integer_literal: decimal, hex (0xFF), binary (0b1010)
-  [6] underscore separator in all numeric literals (1_000_000)
-  [7] hex_digit: A-F a-f defined
-  [8] escape_seq: \n \t \r \" \\ \0 defined explicitly
-  [9] float_literal: now references decimal_literal for consistency
+  STRING INTERPOLATION:
+  [6] interpolated_string: f"Olá, {nome}!"
+      — f prefix before the opening quote
+      — {expression} evaluated inline
+      — escape \{ for literal brace
 
-  OTHER:
-  [10] type_alias: "type Byte = u8" added to declarations
-  [11] reserved keywords section added for compiler reference
+  ITERATORS:
+  [7] for_stmt: now iterates over any expression
+      that implements the Iterator trait (next -> Option<T>)
+      — slices, arrays, ranges and channels all qualify
+      — custom types can implement Iterator via impl
+
+  CONCURRENCY:
+  [8] spawn_stmt:   let t = spawn expr  — launches task
+  [9] send_stmt:    send ch <- valor    — sends to channel
+  [10] channel_expr: channel()          — creates channel
+  [11] await_expr:   await t            — waits for Task<T>
+  [12] task_type:    Task<T>            — handle to running task
+  [13] lambda_type:  fn(i32)->i32       — lambda as first-class type
+
+  DOCUMENTATION:
+  [14] iterator trait documented in grammar comments
+  [15] memory safety map updated with tuples and concurrency
+  [16] reserved keywords updated
 *)
