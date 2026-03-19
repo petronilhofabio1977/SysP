@@ -3,115 +3,213 @@
 #include <string>
 #include <vector>
 #include <memory>
+#include <optional>
+
+#include "expr.hpp"
+
+// ================================================================
+// SysP Statement AST — Grammar v7.0 Final
+// ================================================================
 
 namespace sysp::ast {
 
-struct Expr;
+    // ── Base ─────────────────────────────────────────────────────────
 
-struct Stmt {
-    virtual ~Stmt() = default;
-};
+    struct Stmt {
+        virtual ~Stmt() = default;
+    };
 
-struct BlockStmt : Stmt {
-    std::vector<std::unique_ptr<Stmt>> statements;
-};
+    using StmtPtr = std::unique_ptr<Stmt>;
 
-struct ExpressionStmt : Stmt {
-    std::unique_ptr<Expr> expression;
-};
+    // ── Block ─────────────────────────────────────────────────────────
 
-struct VarDeclStmt : Stmt {
+    struct BlockStmt : Stmt {
+        std::vector<StmtPtr> statements;
+    };
 
-    std::string name;
-    std::string type;
+    // ── Expressions as statements ─────────────────────────────────────
 
-    std::unique_ptr<Expr> initializer;
+    struct ExpressionStmt : Stmt {
+        ExprPtr expression;
+    };
 
-};
+    // ── Variable declarations ─────────────────────────────────────────
 
-struct ConstDeclStmt : Stmt {
+    // let x = expr
+    // x: i32 = expr
+    // let (a, b) = expr   (tuple destructuring)
+    struct VarDeclStmt : Stmt {
+        std::vector<std::string> names;     // single name or tuple names
+        std::string              type;      // optional explicit type
+        bool                     is_let       = true;
+        bool                     is_tuple_destructure = false;
+        ExprPtr                  initializer;
+    };
 
-    std::string name;
-    std::string type;
+    // const PI: f64 = 3.14
+    struct ConstDeclStmt : Stmt {
+        bool        is_pub = false;
+        std::string name;
+        std::string type;
+        ExprPtr     value;
+    };
 
-    std::unique_ptr<Expr> value;
+    // ── Assignment ───────────────────────────────────────────────────
 
-};
+    // x = expr   x += expr   x[i] = expr   x.field = expr
+    struct AssignStmt : Stmt {
+        ExprPtr     target;     // assignable expression
+        std::string op;         // = += -= *= /= %= &= |= ^= <<= >>=
+        ExprPtr     value;
+    };
 
-struct AssignStmt : Stmt {
+    // ── Return ───────────────────────────────────────────────────────
 
-    std::string name;
-    std::string op;
+    struct ReturnStmt : Stmt {
+        ExprPtr value;          // optional
+    };
 
-    std::unique_ptr<Expr> value;
+    // ── Break / Continue ─────────────────────────────────────────────
 
-};
+    // break [expr]  — break with optional value from loop { }
+    struct BreakStmt : Stmt {
+        ExprPtr value;          // optional — for loop { break value }
+    };
 
-struct ReturnStmt : Stmt {
-    std::unique_ptr<Expr> value;
-};
+    struct ContinueStmt : Stmt {};
 
-struct BreakStmt : Stmt {};
-struct ContinueStmt : Stmt {};
+    // ── If / Else ────────────────────────────────────────────────────
 
-struct IfStmt : Stmt {
+    struct IfStmt : Stmt {
+        ExprPtr                    condition;
+        std::unique_ptr<BlockStmt> then_block;
+        StmtPtr                    else_stmt;  // else block or else if
+    };
 
-    std::unique_ptr<Expr> condition;
+    // ── While ────────────────────────────────────────────────────────
 
-    std::unique_ptr<BlockStmt> then_block;
+    struct WhileStmt : Stmt {
+        ExprPtr                    condition;
+        std::unique_ptr<BlockStmt> body;
+    };
 
-    std::unique_ptr<BlockStmt> else_block;
+    // ── Loop ─────────────────────────────────────────────────────────
 
-};
+    // loop { ... break value ... }
+    struct LoopStmt : Stmt {
+        std::unique_ptr<BlockStmt> body;
+    };
 
-struct WhileStmt : Stmt {
+    // ── For ──────────────────────────────────────────────────────────
 
-    std::unique_ptr<Expr> condition;
+    // for x in iterable { }
+    // iterable can be: range (0..n), slice, array, channel, custom Iterator
+    struct ForStmt : Stmt {
+        std::string                iterator;
+        ExprPtr                    iterable;
+        std::unique_ptr<BlockStmt> body;
+    };
 
-    std::unique_ptr<BlockStmt> body;
+    // ── Match ────────────────────────────────────────────────────────
 
-};
+    // Pattern hierarchy
+    enum class PatternKind {
+        Wildcard,       // _
+        Identifier,     // name  (binds value)
+        Literal,        // 42  "hello"  true
+        Range,          // 1..10  1..=10
+        Tuple,          // (a, b)
+        EnumVariant,    // Variant(p1, p2)
+        Some,           // Some(p)
+        None,           // None
+        Ok,             // Ok(p)
+        Err,            // Err(p)
+    };
 
-struct RangeExpr {
+    struct Pattern {
+        PatternKind kind = PatternKind::Wildcard;
 
-    std::unique_ptr<Expr> start;
+        // Identifier / Wildcard
+        std::string name;
 
-    std::unique_ptr<Expr> end;
+        // Literal
+        ExprPtr literal_value;
 
-    bool inclusive = false;
+        // Range: low..high or low..=high
+        std::string range_low;
+        std::string range_high;
+        bool        range_inclusive = false;
 
-};
+        // Tuple / EnumVariant / Some / Ok / Err
+        std::vector<std::unique_ptr<Pattern>> sub_patterns;
 
-struct ForStmt : Stmt {
+        // EnumVariant name
+        std::string variant_name;
+    };
 
-    std::string iterator;
+    // One arm: pattern [if guard] => stmt_or_expr
+    struct MatchArm {
+        std::unique_ptr<Pattern> pattern;
+        ExprPtr                  guard;     // optional: if expr
+        StmtPtr                  body;      // block or expression stmt
+    };
 
-    RangeExpr range;
+    struct MatchStmt : Stmt {
+        ExprPtr                  value;
+        std::vector<MatchArm>    arms;
+    };
 
-    std::unique_ptr<BlockStmt> body;
+    // ── Memory ───────────────────────────────────────────────────────
 
-};
+    // region name { }
+    struct RegionStmt : Stmt {
+        std::string                name;
+        std::unique_ptr<BlockStmt> body;
+    };
 
-struct Pattern {
+    // unsafe { }
+    struct UnsafeStmt : Stmt {
+        std::unique_ptr<BlockStmt> body;
+    };
 
-    std::string value;
+    // drop(expr) as statement
+    struct DropStmt : Stmt {
+        ExprPtr expr;
+    };
 
-};
+    // ── Error ────────────────────────────────────────────────────────
 
-struct MatchArm {
+    // panic("message")
+    struct PanicStmt : Stmt {
+        ExprPtr message;
+    };
 
-    Pattern pattern;
+    // ── Concurrency ──────────────────────────────────────────────────
 
-    std::unique_ptr<Stmt> statement;
+    // let handle = spawn expr
+    struct SpawnStmt : Stmt {
+        std::string name;   // variable receiving Task<T>
+        ExprPtr     expr;
+    };
 
-};
+    // send ch <- value
+    struct SendStmt : Stmt {
+        std::string channel;
+        ExprPtr     value;
+    };
 
-struct MatchStmt : Stmt {
+    // select { recv ch -> v => { } ... default => { } }
+    struct SelectArm {
+        enum class Kind { Recv, Send, Default };
+        Kind        kind;
+        std::string channel;
+        std::string bind_name;  // recv ch -> bind_name
+        ExprPtr     send_value; // send ch <- value
+        StmtPtr     body;
+    };
 
-    std::unique_ptr<Expr> value;
+    struct SelectStmt : Stmt {
+        std::vector<SelectArm> arms;
+    };
 
-    std::vector<MatchArm> arms;
-
-};
-
-}
+} // namespace sysp::ast

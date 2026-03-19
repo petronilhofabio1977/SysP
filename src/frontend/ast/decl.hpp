@@ -3,84 +3,172 @@
 #include <string>
 #include <vector>
 #include <memory>
+#include <optional>
 
 #include "stmt.hpp"
 
+// ================================================================
+// SysP Declaration AST — Grammar v7.0 Final
+// ================================================================
+
 namespace sysp::ast {
 
-struct Decl {
-    virtual ~Decl() = default;
-};
+    // ── Base ─────────────────────────────────────────────────────────
 
-struct Parameter {
+    struct Decl {
+        virtual ~Decl() = default;
+    };
 
-    std::string name;
-    std::string type;
+    using DeclPtr = std::unique_ptr<Decl>;
 
-    bool is_ref = false;
+    // ── Shared building blocks ────────────────────────────────────────
 
-};
+    // Generic parameter with optional trait bounds
+    // e.g.: T   T: Ord   T: Ord + Display
+    struct GenericParam {
+        std::string              name;
+        std::vector<std::string> bounds;    // trait names
+    };
 
-struct StructField {
+    // Where clause item: T: Trait1 + Trait2
+    struct WhereItem {
+        std::string              type_name;
+        std::vector<std::string> bounds;
+    };
 
-    std::string name;
-    std::string type;
+    // Function / method parameter
+    // e.g.: self   x i32   p ref i32
+    struct Parameter {
+        std::string name;
+        std::string type;
+        bool        is_self = false;
+        bool        is_ref  = false;
+    };
 
-};
+    // ── Type alias ───────────────────────────────────────────────────
 
-struct EnumVariant {
+    // [pub] type Name = Type
+    struct TypeAliasDecl : Decl {
+        bool        is_pub = false;
+        std::string name;
+        std::string type;
+    };
 
-    std::string name;
-    std::vector<std::string> fields;
+    // ── Constant ─────────────────────────────────────────────────────
 
-};
+    // [pub] const NAME [: Type] = expr
+    struct ConstDecl : Decl {
+        bool        is_pub = false;
+        std::string name;
+        std::string type;       // optional
+        ExprPtr     value;
+    };
 
-struct TraitMethod {
+    // ── Struct ───────────────────────────────────────────────────────
 
-    std::string name;
+    struct StructField {
+        bool        is_pub = false;
+        std::string name;
+        std::string type;
+    };
 
-    std::vector<Parameter> parameters;
+    // [pub] struct Name [<T, U: Bound>] [where ...] { fields }
+    struct StructDecl : Decl {
+        bool                     is_pub = false;
+        std::string              name;
+        std::vector<GenericParam> generics;
+        std::vector<WhereItem>   where_clause;
+        std::vector<StructField> fields;
+    };
 
-    std::string return_type;
+    // ── Enum ─────────────────────────────────────────────────────────
 
-};
+    struct EnumVariant {
+        std::string              name;
+        std::vector<std::string> fields;    // types for tuple-style variants
+    };
 
-struct FunctionDecl : Decl {
+    // [pub] enum Name [<T>] { Variant, Variant(T), ... }
+    struct EnumDecl : Decl {
+        bool                     is_pub = false;
+        std::string              name;
+        std::vector<GenericParam> generics;
+        std::vector<EnumVariant> variants;
+    };
 
-    std::string name;
+    // ── Trait ────────────────────────────────────────────────────────
 
-    std::vector<std::string> generics;
+    // Associated type declaration inside trait
+    struct AssocType {
+        std::string name;           // e.g.: Item
+    };
 
-    std::vector<Parameter> parameters;
+    // Method signature or method with default implementation
+    struct TraitMethod {
+        std::string                name;
+        std::vector<GenericParam>  generics;
+        std::vector<Parameter>     parameters;
+        std::string                return_type;
+        std::vector<WhereItem>     where_clause;
+        bool                       has_default = false;
+        std::unique_ptr<BlockStmt> default_body;  // only when has_default
+    };
 
-    std::string return_type;
+    // trait Name [<T: Bound>] [where ...] { assoc_types methods }
+    struct TraitDecl : Decl {
+        std::string                name;
+        std::vector<GenericParam>  generics;
+        std::vector<WhereItem>     where_clause;
+        std::vector<AssocType>     assoc_types;
+        std::vector<TraitMethod>   methods;
+    };
 
-    std::unique_ptr<BlockStmt> body;
+    // ── Function ─────────────────────────────────────────────────────
 
-};
+    // [pub] fn name [<T: Bound>] (params) [-> Type] [where ...] { body }
+    struct FunctionDecl : Decl {
+        bool                       is_pub = false;
+        std::string                name;
+        std::vector<GenericParam>  generics;
+        std::vector<Parameter>     parameters;
+        std::string                return_type;
+        std::vector<WhereItem>     where_clause;
+        std::unique_ptr<BlockStmt> body;
+    };
 
-struct StructDecl : Decl {
+    // ── Impl ─────────────────────────────────────────────────────────
 
-    std::string name;
+    // impl Name [<T>] [where ...] { fn methods }
+    struct ImplDecl : Decl {
+        std::string                        type_name;
+        std::vector<GenericParam>          generics;
+        std::vector<WhereItem>             where_clause;
+        std::vector<std::unique_ptr<FunctionDecl>> methods;
+    };
 
-    std::vector<StructField> fields;
+    // impl Trait [<T>] for Type [<T>] [where ...] { fn methods }
+    struct ImplTraitDecl : Decl {
+        std::string                        trait_name;
+        std::vector<GenericParam>          trait_generics;
+        std::string                        type_name;
+        std::vector<GenericParam>          type_generics;
+        std::vector<WhereItem>             where_clause;
+        std::vector<std::unique_ptr<FunctionDecl>> methods;
+    };
 
-};
+    // ── Module ───────────────────────────────────────────────────────
 
-struct EnumDecl : Decl {
+    // module io.println
+    struct ModuleDecl : Decl {
+        std::string path;   // full dot-separated path
+    };
 
-    std::string name;
+    // ── Program root ─────────────────────────────────────────────────
 
-    std::vector<EnumVariant> variants;
+    // Top-level: list of module calls + declarations
+    struct Program {
+        std::vector<std::unique_ptr<ModuleDecl>> modules;
+        std::vector<DeclPtr>                     declarations;
+    };
 
-};
-
-struct TraitDecl : Decl {
-
-    std::string name;
-
-    std::vector<TraitMethod> methods;
-
-};
-
-}
+} // namespace sysp::ast

@@ -30,8 +30,8 @@ Expr* PrattParser::parse_prefix()
         case TokenType::INTEGER:
         case TokenType::FLOAT:
         case TokenType::STRING:
-        case TokenType::TRUE:
-        case TokenType::FALSE:
+        case TokenType::BOOL_TRUE:
+        case TokenType::BOOL_FALSE:
         case TokenType::IDENT:
         {
             auto node = new sysp::ast::LiteralExpr();
@@ -150,7 +150,7 @@ int PrattParser::get_precedence(TokenType type) const
             return 5;
 
         case TokenType::EQEQ:
-        case TokenType::NOTEQ:
+        case TokenType::BANG_EQ:
             return 4;
 
         case TokenType::AND_AND:
