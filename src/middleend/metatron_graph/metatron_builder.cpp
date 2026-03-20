@@ -1,4 +1,5 @@
 #include "metatron_builder.hpp"
+#include "../jarbes_kernel/analyzers/analyzers.hpp"
 #include "symbol_table.hpp"
 #include "../../frontend/ast/decl.hpp"
 #include "../../frontend/ast/stmt.hpp"
@@ -178,10 +179,10 @@ namespace sysp {
             return node.id;
         }
 
-        // Move
+        // Move — mark source as consumed in Jarbes
         if (auto* e = dynamic_cast<const sysp::ast::MoveExpr*>(expr)) {
             uint32_t src = process_expr(ctx, e->expr.get());
-            // Mark source as consumed — Jarbes will check this
+            consumed_nodes[src] = true;  // Jarbes: use-after-move check
             return ctx.new_node_with_dep(src);
         }
 
@@ -339,11 +340,18 @@ namespace sysp {
             return;
         }
 
-        // region
+        // region — track all nodes created inside as belonging to this region
         if (auto* s = dynamic_cast<const sysp::ast::RegionStmt*>(stmt)) {
             uint32_t region_node = ctx.new_node();
-            ctx.symbols.set(s->name, static_cast<int>(region_node));
+            int region_id = static_cast<int>(region_node);
+            ctx.symbols.set(s->name, region_id);
+            node_region[region_node] = region_id;
+            // Track size before processing body
+            size_t before = ctx.graph.nodes.size();
             if (s->body) process_block(ctx, s->body.get());
+            // Mark all nodes created inside the region
+            for (size_t i = before; i < ctx.graph.nodes.size(); i++)
+                node_region[ctx.graph.nodes[i].id] = region_id;
             return;
         }
 
