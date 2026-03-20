@@ -1,32 +1,31 @@
 #pragma once
+#include <vector>
 #include <queue>
-#include <unordered_set>
 
-template<typename Graph, typename Node>
-void bfs(Graph& g, Node start) {
+namespace sysp::core::algorithm {
 
-    std::queue<Node> q;
-    std::unordered_set<Node> visited;
+inline std::vector<int> bfs(
+    const std::vector<std::vector<int>>& adj,
+    int start)
+{
+    std::vector<bool> visited(adj.size(), false);
+    std::vector<int>  order;
+    std::queue<int>   q;
 
+    visited[start] = true;
     q.push(start);
-    visited.insert(start);
 
-    while(!q.empty()) {
-
-        Node n = q.front();
-        q.pop();
-
-        for(auto& neighbor : g.neighbors(n)) {
-
-            if(!visited.count(neighbor)) {
-
-                visited.insert(neighbor);
-                q.push(neighbor);
-
+    while (!q.empty()) {
+        int v = q.front(); q.pop();
+        order.push_back(v);
+        for (int u : adj[v]) {
+            if (!visited[u]) {
+                visited[u] = true;
+                q.push(u);
             }
-
         }
-
     }
-
+    return order;
 }
+
+} // namespace sysp::core::algorithm
