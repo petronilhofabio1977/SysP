@@ -90,14 +90,25 @@ namespace sysp {
     static uint32_t process_expr(BuildContext& ctx, const sysp::ast::Expr* expr) {
         if (!expr) return ctx.new_node();
 
-        // Literal — register type for type-mismatch checker
+        // Literal — register type and value for checkers
         if (auto* e = dynamic_cast<const sysp::ast::LiteralExpr*>(expr)) {
             uint32_t lit_node = ctx.new_node();
             switch (e->kind) {
-            case sysp::ast::LiteralKind::Int:    get_node_types()[lit_node] = "i32"; break;
-            case sysp::ast::LiteralKind::Float:  get_node_types()[lit_node] = "f64"; break;
-            case sysp::ast::LiteralKind::String: get_node_types()[lit_node] = "string"; break;
-            case sysp::ast::LiteralKind::Bool:   get_node_types()[lit_node] = "bool"; break;
+            case sysp::ast::LiteralKind::Int:
+                get_node_types()[lit_node] = "i32";
+                get_node_names()[lit_node] = e->value; // for buffer-overflow
+                try { get_node_const_values()[lit_node] = std::stoll(e->value); }
+                catch (...) {}
+                break;
+            case sysp::ast::LiteralKind::Float:
+                get_node_types()[lit_node] = "f64";
+                break;
+            case sysp::ast::LiteralKind::String:
+                get_node_types()[lit_node] = "string";
+                break;
+            case sysp::ast::LiteralKind::Bool:
+                get_node_types()[lit_node] = "bool";
+                break;
             }
             return lit_node;
         }
@@ -258,8 +269,11 @@ namespace sysp {
             return ctx.new_node_with_dep(process_expr(ctx, e->task.get()));
         if (auto* e = dynamic_cast<const sysp::ast::RecvExpr*>(expr))
             return ctx.new_node_with_dep(process_expr(ctx, e->channel.get()));
-        if (auto* e = dynamic_cast<const sysp::ast::SpawnExpr*>(expr))
-            return ctx.new_node_with_dep(process_expr(ctx, e->expr.get()));
+        if (auto* e = dynamic_cast<const sysp::ast::SpawnExpr*>(expr)) {
+            uint32_t spawn_node = ctx.new_node_with_dep(process_expr(ctx, e->expr.get()));
+            get_spawn_nodes().insert(spawn_node);
+            return spawn_node;
+        }
 
         // Channel — register for data-race detection
         if (dynamic_cast<const sysp::ast::ChannelExpr*>(expr)) {

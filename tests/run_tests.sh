@@ -59,6 +59,7 @@ echo ""
 echo "── Match errors ─────────────────────────────────"
 run_test tests/match/non_exhaustive.sp      error
 run_test tests/match/exhaustive_ok.sp       ok
+run_test tests/match/type_mismatch.sp       error
 
 echo ""
 echo "================================================"

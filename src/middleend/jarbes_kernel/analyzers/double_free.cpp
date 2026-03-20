@@ -2,30 +2,45 @@
 #include <iostream>
 #include <unordered_map>
 
-std::unordered_set<uint32_t>        freed_nodes;
+std::unordered_set<uint32_t>          freed_nodes;
 std::unordered_map<uint32_t,uint32_t> node_owner;
 
-// Double-free happens when:
-// 1. A node is freed (region closed or drop called)
-// 2. Then freed again
-// We track freed_nodes and check for duplicate frees
+// Double-free: rastreia quantas vezes cada nó foi liberado
+// Um nó é liberado quando: drop explícito ou região fecha
+// freed_count > 1 = double-free
 
 bool check_double_free(const MetatronGraph& graph) {
     bool ok = true;
-    std::unordered_set<uint32_t> already_freed;
 
+    // Conta quantas vezes cada nó aparece em freed_nodes
+    // Como freed_nodes é um set, precisamos rastrear via drop_count
+    std::unordered_map<uint32_t, int> drop_count;
+
+    // Percorre o grafo procurando padrões de drop duplo
+    // Um drop duplo acontece quando um nó consumido (moved) também está em freed
     for (const auto& node : graph.nodes) {
-        // A node in freed_nodes that appears as input = double-free risk
-        if (freed_nodes.count(node.id)) {
-            if (already_freed.count(node.id)) {
-                std::string name;
-                auto nit = node_names.find(node.id);
-                if (nit != node_names.end()) name = " ('" + nit->second + "')";
-                std::cerr << "[Jarbes] Error: double-free — node "
-                          << node.id << name << " freed more than once\n";
-                ok = false;
+        // Se o nó está em freed_nodes E está consumed — potencial double-free
+        if (freed_nodes.count(node.id) && consumed_nodes.count(node.id)) {
+            drop_count[node.id]++;
+        }
+
+        // Verifica inputs: se um input foi freed e o nó atual também o libera
+        for (auto input_id : node.inputs) {
+            if (freed_nodes.count(input_id)) {
+                drop_count[input_id]++;
             }
-            already_freed.insert(node.id);
+        }
+    }
+
+    // Reporta double-frees
+    for (auto& [node_id, count] : drop_count) {
+        if (count > 1) {
+            std::string name;
+            auto nit = node_names.find(node_id);
+            if (nit != node_names.end()) name = " ('" + nit->second + "')";
+            std::cerr << "[Jarbes] Error: double-free — node "
+                      << node_id << name << " freed " << count << " times\n";
+            ok = false;
         }
     }
 

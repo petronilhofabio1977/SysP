@@ -8,6 +8,7 @@
 #include <string>
 #include <memory>
 #include <functional>
+#include <algorithm>
 
 // ================================================================
 // SysP Jarbes Kernel — All Security Analyzers
@@ -26,6 +27,7 @@ extern std::unordered_map<uint32_t, uint32_t>     node_owner;
 extern std::unordered_set<uint32_t>               spawn_nodes;
 extern std::unordered_set<uint32_t>               move_result_nodes;
 extern std::unordered_set<uint32_t>               channel_nodes;
+extern std::unordered_map<uint32_t, int64_t>      node_const_values;
 
 // ── Accessors ─────────────────────────────────────────────────────
 inline std::unordered_set<uint32_t>&             get_builtin_nodes()  { return builtin_nodes; }
@@ -39,7 +41,8 @@ inline std::unordered_set<uint32_t>&             get_freed_nodes()    { return f
 inline std::unordered_map<uint32_t, uint32_t>&   get_node_owner()     { return node_owner; }
 inline std::unordered_set<uint32_t>&             get_spawn_nodes()    { return spawn_nodes; }
 inline std::unordered_set<uint32_t>&             get_move_result_nodes() { return move_result_nodes; }
-inline std::unordered_set<uint32_t>&             get_channel_nodes()  { return channel_nodes; }
+inline std::unordered_set<uint32_t>&             get_channel_nodes()   { return channel_nodes; }
+inline std::unordered_map<uint32_t, int64_t>&     get_node_const_values(){ return node_const_values; }
 
 // ── Graph-based checkers (MetatronGraph) ──────────────────────────
 bool check_use_before_production(const MetatronGraph& graph);
