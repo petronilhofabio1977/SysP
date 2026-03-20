@@ -181,8 +181,18 @@ namespace sysp {
 
         // Move — mark source as consumed in Jarbes
         if (auto* e = dynamic_cast<const sysp::ast::MoveExpr*>(expr)) {
+            // Resolve the identifier being moved
             uint32_t src = process_expr(ctx, e->expr.get());
-            consumed_nodes[src] = true;  // Jarbes: use-after-move check
+            // If moving an identifier, get the actual variable node
+            if (auto* id = dynamic_cast<const sysp::ast::IdentifierExpr*>(e->expr.get())) {
+                int var_id = ctx.symbols.get(id->name);
+                if (var_id >= 0) {
+                    src = static_cast<uint32_t>(var_id);
+                    // Copy name to consumed map for error messages
+                    get_node_names()[src] = id->name;
+                }
+            }
+            get_consumed_nodes()[src] = true;
             return ctx.new_node_with_dep(src);
         }
 
@@ -267,8 +277,10 @@ namespace sysp {
         // var decl: let x = expr
         if (auto* s = dynamic_cast<const sysp::ast::VarDeclStmt*>(stmt)) {
             uint32_t val_node = process_expr(ctx, s->initializer.get());
-            for (auto& name : s->names)
+            for (auto& name : s->names) {
                 ctx.symbols.set(name, static_cast<int>(val_node));
+                get_node_names()[val_node] = name;
+            }
             return;
         }
 
@@ -345,13 +357,13 @@ namespace sysp {
             uint32_t region_node = ctx.new_node();
             int region_id = static_cast<int>(region_node);
             ctx.symbols.set(s->name, region_id);
-            node_region[region_node] = region_id;
+            get_node_region()[region_node] = region_id;
             // Track size before processing body
             size_t before = ctx.graph.nodes.size();
             if (s->body) process_block(ctx, s->body.get());
             // Mark all nodes created inside the region
             for (size_t i = before; i < ctx.graph.nodes.size(); i++)
-                node_region[ctx.graph.nodes[i].id] = region_id;
+                get_node_region()[ctx.graph.nodes[i].id] = region_id;
             return;
         }
 
@@ -496,7 +508,7 @@ namespace sysp {
             if (it != MODULE_BUILTINS.end()) {
                 uint32_t builtin_id = ctx.new_node();
                 ctx.symbols.set(it->second, static_cast<int>(builtin_id));
-                builtin_nodes.insert(builtin_id);
+                get_builtin_nodes().insert(builtin_id);
             }
         }
 

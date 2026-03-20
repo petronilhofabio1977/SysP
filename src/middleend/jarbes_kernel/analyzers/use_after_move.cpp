@@ -4,6 +4,7 @@
 std::unordered_map<uint32_t, bool> consumed_nodes;
 
 bool check_use_after_move(const MetatronGraph& graph) {
+
     bool ok = true;
     for (const auto& node : graph.nodes) {
         for (auto input_id : node.inputs) {
