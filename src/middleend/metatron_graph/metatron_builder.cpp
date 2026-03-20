@@ -199,7 +199,9 @@ namespace sysp {
                 }
             }
             get_consumed_nodes()[src] = true;
-            return ctx.new_node_with_dep(src);
+            uint32_t move_result = ctx.new_node_with_dep(src);
+            get_move_result_nodes().insert(move_result); // this node IS the move — not an error
+            return move_result;
         }
 
         // Alloc: new Type(args) or new [n]T

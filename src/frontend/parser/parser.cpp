@@ -562,8 +562,18 @@ namespace sysp::parser {
             stmt->type = parse_type();
         }
 
-        expect(TokenType::EQ, "expected '='");
-        stmt->initializer = parse_expression();
+        // Initializer is optional when type is explicitly provided
+        // let x: i32        — valid (uninitialized, Jarbes will check usage)
+        // let x: i32 = 42   — valid (initialized)
+        // let x = 42        — valid (type inferred)
+        if (match(TokenType::EQ)) {
+            stmt->initializer = parse_expression();
+        } else if (stmt->type.empty()) {
+            // No type and no initializer — must have '='
+            expect(TokenType::EQ, "expected '='");
+            stmt->initializer = parse_expression();
+        }
+        // else: has type but no '=' — uninitialized variable, OK
         return stmt;
     }
 
