@@ -1,0 +1,4 @@
+-- print.sp
+-- Módulo: io.print
+-- Imprime valor sem nova linha
+-- Tipos suportados: string, i32, i64, f64, bool

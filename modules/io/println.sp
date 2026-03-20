@@ -1,0 +1,5 @@
+-- println.sp
+-- Módulo: io.println
+-- Imprime valor + nova linha
+-- Tipos suportados: string, i32, i64, f64, bool
+-- Implementado via syscall write (Linux x86-64)

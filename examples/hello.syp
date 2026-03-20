@@ -1,9 +1,0 @@
-module main
-
-use io.print
-
-fn main() {
-
-    print("Hello SysP")
-
-}
