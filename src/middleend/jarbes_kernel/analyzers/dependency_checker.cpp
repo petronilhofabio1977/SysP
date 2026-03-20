@@ -2,8 +2,10 @@
 #include <unordered_set>
 #include <iostream>
 
-std::unordered_set<uint32_t>             builtin_nodes;
+std::unordered_set<uint32_t>              builtin_nodes;
 std::unordered_map<uint32_t, std::string> node_names;
+std::unordered_map<uint32_t, std::string> node_types;
+std::unordered_map<uint32_t, int>         array_bounds;
 
 bool check_use_before_production(const MetatronGraph& graph) {
     std::unordered_set<uint32_t> produced;
