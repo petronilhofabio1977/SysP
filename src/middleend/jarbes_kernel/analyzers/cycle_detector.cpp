@@ -1,40 +1,49 @@
-#include "../core/metatron_graph.hpp"
+#include "analyzers.hpp"
+#include <unordered_set>
+#include <unordered_map>
 #include <vector>
+#include <iostream>
 
-bool dfs(uint32_t node,
-         std::vector<int> &visited,
-         std::vector<int> &stack,
-         MetatronGraph &graph)
+static bool dfs(uint32_t node_id,
+                const std::unordered_map<uint32_t, std::vector<uint32_t>>& adj,
+                std::unordered_set<uint32_t>& visited,
+                std::unordered_set<uint32_t>& in_stack)
 {
-    if (!visited[node])
-    {
-        visited[node] = 1;
-        stack[node] = 1;
+    visited.insert(node_id);
+    in_stack.insert(node_id);
 
-        for (auto input : graph.nodes[node].inputs)
-        {
-            if (!visited[input] && dfs(input, visited, stack, graph))
+    auto it = adj.find(node_id);
+    if (it != adj.end()) {
+        for (auto neighbor : it->second) {
+            if (in_stack.count(neighbor)) {
+                std::cerr << "[Jarbes] Error: cycle detected at node " << node_id << "\n";
                 return true;
-
-            else if (stack[input])
-                return true;
+            }
+            if (!visited.count(neighbor)) {
+                if (dfs(neighbor, adj, visited, in_stack))
+                    return true;
+            }
         }
     }
 
-    stack[node] = 0;
+    in_stack.erase(node_id);
     return false;
 }
 
-bool detect_cycle(MetatronGraph &graph)
-{
-    size_t n = graph.nodes.size();
+bool detect_cycle(const MetatronGraph& graph) {
+    std::unordered_map<uint32_t, std::vector<uint32_t>> adj;
+    for (const auto& node : graph.nodes)
+        for (auto input : node.inputs)
+            adj[input].push_back(node.id);
 
-    std::vector<int> visited(n, 0);
-    std::vector<int> stack(n, 0);
+    std::unordered_set<uint32_t> visited;
+    std::unordered_set<uint32_t> in_stack;
 
-    for (size_t i = 0; i < n; i++)
-        if (dfs(i, visited, stack, graph))
-            return true;
-
-    return false;
+    for (const auto& node : graph.nodes) {
+        if (!visited.count(node.id)) {
+            if (dfs(node.id, adj, visited, in_stack))
+                return false; // cycle found
+        }
+    }
+    return true; // no cycle
 }
