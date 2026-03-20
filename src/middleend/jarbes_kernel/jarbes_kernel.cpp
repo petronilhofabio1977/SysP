@@ -5,39 +5,33 @@
 
 namespace sysp {
 
-    void JarbesKernel::build_metatron(double version) {
-        std::cout << "[JarbesKernel] Metatron initialized version "
-        << version << std::endl;
-    }
+void JarbesKernel::build_metatron(double version) {
+    std::cout << "[JarbesKernel] Metatron initialized version " << (int)version << "\n";
+}
+void JarbesKernel::build_honeycomb(int layers) {
+    std::cout << "[JarbesKernel] Honeycomb grid with " << layers << " layers created\n";
+}
+void JarbesKernel::distribute_transistors() {
+    std::cout << "[JarbesKernel] Distributing logical transistors\n";
+}
+void JarbesKernel::step() {
+    std::cout << "[JarbesKernel] Kernel logical step executed\n";
+}
+void JarbesKernel::register_builtin(uint32_t id)                      { builtin_nodes.insert(id); }
+void JarbesKernel::register_move(uint32_t id)                         { consumed_nodes[id] = true; }
+void JarbesKernel::register_region_node(uint32_t id, int region_id)   { node_region[id] = region_id; }
+void JarbesKernel::register_name(uint32_t id, const std::string& name){ node_names[id] = name; }
 
-    void JarbesKernel::build_honeycomb(int layers) {
-        std::cout << "[JarbesKernel] Honeycomb grid with "
-        << layers << " layers created" << std::endl;
-    }
-
-    void JarbesKernel::distribute_transistors() {
-        std::cout << "[JarbesKernel] Distributing logical transistors" << std::endl;
-    }
-
-    void JarbesKernel::step() {
-        std::cout << "[JarbesKernel] Kernel logical step executed" << std::endl;
-    }
-
-    void JarbesKernel::register_builtin(uint32_t node_id) {
-        builtin_nodes.insert(node_id);
-    }
-
-    void JarbesKernel::analyze(MetatronGraph& graph) {
-        std::cout << "[JarbesKernel] Graph nodes: "
-        << graph.nodes.size() << std::endl;
-
-        if (!check_use_before_production(graph))
-            throw std::runtime_error("JarbesKernel: dependency error");
-
-        if (!detect_cycle(graph))
-            throw std::runtime_error("JarbesKernel: cycle detected");
-
-        std::cout << "[Jarbes] Analysis complete — no violations.\n";
-    }
+void JarbesKernel::analyze(MetatronGraph& graph) {
+    std::cout << "[JarbesKernel] Analyzing " << graph.nodes.size() << " nodes\n";
+    bool ok = true;
+    if (!check_use_before_production(graph)) ok = false;
+    if (!check_use_after_move(graph))        ok = false;
+    if (!check_region_escape(graph))         ok = false;
+    if (!detect_cycle(graph))                ok = false;
+    if (!detect_data_race(graph))            ok = false;
+    if (!ok) throw std::runtime_error("JarbesKernel: memory safety violations detected");
+    std::cout << "[JarbesKernel] All checks passed — program is memory safe\n";
+}
 
 } // namespace sysp

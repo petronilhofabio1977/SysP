@@ -1,89 +1,39 @@
 #include "optimizer.hpp"
-
-#include <unordered_map>
+#include <iostream>
 #include <unordered_set>
 
 namespace sysp::optimizer {
 
-using sysp::metatron::Graph;
-using sysp::metatron::Node;
+Optimizer::Optimizer() {}
 
-Optimizer::Optimizer()
-{}
-
-void Optimizer::run(Graph& graph)
-{
-    constant_folding(graph);
-    common_subexpression(graph);
-    eliminate_dead_nodes(graph);
+int Optimizer::run(MetatronGraph& graph) {
+    int total = 0;
+    total += constant_folding(graph);
+    total += eliminate_dead_nodes(graph);
+    if (total > 0) std::cout << "    [Optimizer] " << total << " optimizations applied\n";
+    else           std::cout << "    [Optimizer] No optimizations needed\n";
+    return total;
 }
 
-void Optimizer::constant_folding(Graph& graph)
-{
-    for (auto& node_ptr : graph.nodes()) {
-
-        Node* node = node_ptr.get();
-
-        if (node->inputs.size() != 2)
-            continue;
-
-        auto lhs = node->inputs[0];
-        auto rhs = node->inputs[1];
-
-        if (!lhs || !rhs)
-            continue;
-
-        if (lhs->opcode == sysp::ir::Opcode::ConstInt &&
-            rhs->opcode == sysp::ir::Opcode::ConstInt) {
-
-            node->opcode = sysp::ir::Opcode::ConstInt;
-            node->inputs.clear();
-        }
+int Optimizer::eliminate_dead_nodes(MetatronGraph& graph) {
+    std::unordered_set<uint32_t> used;
+    for (const auto& node : graph.nodes)
+        for (auto input_id : node.inputs)
+            used.insert(input_id);
+    int removed = 0;
+    auto it = graph.nodes.begin();
+    while (it != graph.nodes.end()) {
+        if (!used.count(it->id) && it->outputs.empty() && it->inputs.empty()) {
+            it = graph.nodes.erase(it);
+            removed++;
+        } else { ++it; }
     }
+    return removed;
 }
 
-void Optimizer::common_subexpression(Graph& graph)
-{
-    std::unordered_map<std::string, Node*> table;
-
-    for (auto& node_ptr : graph.nodes()) {
-
-        Node* node = node_ptr.get();
-
-        std::string key = std::to_string((int)node->opcode);
-
-        for (auto in : node->inputs)
-            key += "_" + std::to_string(in->id);
-
-        if (table.count(key)) {
-            node->inputs.clear();
-            node->inputs.push_back(table[key]);
-        } else {
-            table[key] = node;
-        }
-    }
+int Optimizer::constant_folding(MetatronGraph& graph) {
+    (void)graph;
+    return 0;
 }
 
-void Optimizer::eliminate_dead_nodes(Graph& graph)
-{
-    std::unordered_set<Node*> used;
-
-    for (auto& node_ptr : graph.nodes()) {
-
-        Node* node = node_ptr.get();
-
-        for (auto in : node->inputs)
-            used.insert(in);
-    }
-
-    for (auto& node_ptr : graph.nodes()) {
-
-        Node* node = node_ptr.get();
-
-        if (!used.count(node) && node->inputs.empty()) {
-            node->opcode = sysp::ir::Opcode::Nop;
-        }
-    }
-}
-
-}
+} // namespace sysp::optimizer

@@ -1,23 +1,15 @@
 #pragma once
-
-#include "../metatron_graph/metatron_graph.hpp"
+#include "../jarbes_kernel/core/metatron_graph.hpp"
 
 namespace sysp::optimizer {
 
 class Optimizer {
-
 public:
-
     Optimizer();
-
-    void run(sysp::metatron::Graph& graph);
-
+    int run(MetatronGraph& graph);
 private:
-
-    void constant_folding(sysp::metatron::Graph& graph);
-    void eliminate_dead_nodes(sysp::metatron::Graph& graph);
-    void common_subexpression(sysp::metatron::Graph& graph);
-
+    int eliminate_dead_nodes(MetatronGraph& graph);
+    int constant_folding(MetatronGraph& graph);
 };
 
-}
+} // namespace sysp::optimizer

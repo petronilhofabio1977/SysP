@@ -2,31 +2,26 @@
 #include <unordered_set>
 #include <iostream>
 
-// Global set of built-in node IDs — always considered "produced"
-std::unordered_set<uint32_t> builtin_nodes;
+std::unordered_set<uint32_t>             builtin_nodes;
+std::unordered_map<uint32_t, std::string> node_names;
 
 bool check_use_before_production(const MetatronGraph& graph) {
-    // Collect all node IDs that exist in the graph
     std::unordered_set<uint32_t> produced;
-
-    // Built-ins are always produced
-    for (auto id : builtin_nodes)
-        produced.insert(id);
-
+    for (auto id : builtin_nodes) produced.insert(id);
     bool ok = true;
-
     for (const auto& node : graph.nodes) {
-        // Check all inputs are already produced
         for (auto input_id : node.inputs) {
-            if (produced.find(input_id) == produced.end()) {
-                std::cerr << "[Jarbes] Error: use before production at node "
-                << node.id << " (input " << input_id << " not yet defined)\n";
+            if (!produced.count(input_id)) {
+                std::string name;
+                auto it = node_names.find(input_id);
+                if (it != node_names.end()) name = " ('" + it->second + "')";
+                std::cerr << "[Jarbes] Error: use-before-definition — node "
+                          << input_id << name << " used before being defined\n";
                 ok = false;
             }
         }
-        // This node is now produced
         produced.insert(node.id);
     }
-
+    if (ok) std::cout << "    [Jarbes] use-before-definition: OK\n";
     return ok;
 }
