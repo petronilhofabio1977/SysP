@@ -1,5 +1,6 @@
 #pragma once
 #include "core/metatron_graph.hpp"
+#include "frontend/ast/decl.hpp"
 #include <cstdint>
 #include <string>
 
@@ -11,9 +12,14 @@ public:
     void build_honeycomb(int layers);
     void distribute_transistors();
     void step();
+
+    // Main analysis — runs all checkers
+    void analyze(MetatronGraph& graph, const sysp::ast::Program& program);
+
+    // Legacy interface (kept for compatibility)
     void analyze(MetatronGraph& graph);
 
-    // Registration methods — called by MetatronBuilder
+    // Registration methods
     void register_builtin(uint32_t node_id);
     void register_move(uint32_t source_node_id);
     void register_region_node(uint32_t node_id, int region_id);

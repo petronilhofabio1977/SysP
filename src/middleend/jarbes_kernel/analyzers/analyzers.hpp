@@ -1,13 +1,16 @@
 #pragma once
 #include "../core/metatron_graph.hpp"
+#include "frontend/ast/decl.hpp"
+#include "../../cfg/basic_block.hpp"
 #include <unordered_set>
 #include <unordered_map>
 #include <vector>
 #include <string>
+#include <memory>
+#include <functional>
 
 // ================================================================
-// SysP Jarbes Kernel — Security Analyzers
-// All run on the MetatronGraph before code generation
+// SysP Jarbes Kernel — All Security Analyzers
 // ================================================================
 
 // ── Global registries ─────────────────────────────────────────────
@@ -23,7 +26,7 @@ extern std::unordered_map<uint32_t, uint32_t>     node_owner;
 extern std::unordered_set<uint32_t>               spawn_nodes;
 extern std::unordered_set<uint32_t>               channel_nodes;
 
-// ── Accessor functions ────────────────────────────────────────────
+// ── Accessors ─────────────────────────────────────────────────────
 inline std::unordered_set<uint32_t>&             get_builtin_nodes()  { return builtin_nodes; }
 inline std::unordered_map<uint32_t, bool>&        get_consumed_nodes() { return consumed_nodes; }
 inline std::unordered_map<uint32_t, int>&         get_node_region()    { return node_region; }
@@ -36,7 +39,7 @@ inline std::unordered_map<uint32_t, uint32_t>&   get_node_owner()     { return n
 inline std::unordered_set<uint32_t>&             get_spawn_nodes()    { return spawn_nodes; }
 inline std::unordered_set<uint32_t>&             get_channel_nodes()  { return channel_nodes; }
 
-// ── Checkers ──────────────────────────────────────────────────────
+// ── Graph-based checkers (MetatronGraph) ──────────────────────────
 bool check_use_before_production(const MetatronGraph& graph);
 bool check_use_after_move(const MetatronGraph& graph);
 bool check_region_escape(const MetatronGraph& graph);
@@ -47,3 +50,14 @@ bool check_unsafe_audit(const MetatronGraph& graph);
 bool check_type_mismatch(const MetatronGraph& graph);
 bool detect_cycle(const MetatronGraph& graph);
 bool detect_data_race(const MetatronGraph& graph);
+
+// ── CFG-based checkers (need Control Flow Graph) ──────────────────
+bool check_uninitialized_use(
+    const std::vector<std::unique_ptr<sysp::cfg::BasicBlock>>& blocks);
+
+bool check_dead_code(
+    std::vector<std::unique_ptr<sysp::cfg::BasicBlock>>& blocks);
+
+// ── AST-based checkers ────────────────────────────────────────────
+bool check_integer_overflow(const sysp::ast::Program& program);
+bool check_match_exhaustive(const sysp::ast::Program& program);

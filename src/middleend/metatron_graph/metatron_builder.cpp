@@ -90,10 +90,16 @@ namespace sysp {
     static uint32_t process_expr(BuildContext& ctx, const sysp::ast::Expr* expr) {
         if (!expr) return ctx.new_node();
 
-        // Literal
+        // Literal — register type for type-mismatch checker
         if (auto* e = dynamic_cast<const sysp::ast::LiteralExpr*>(expr)) {
-            (void)e;
-            return ctx.new_node();
+            uint32_t lit_node = ctx.new_node();
+            switch (e->kind) {
+            case sysp::ast::LiteralKind::Int:    get_node_types()[lit_node] = "i32"; break;
+            case sysp::ast::LiteralKind::Float:  get_node_types()[lit_node] = "f64"; break;
+            case sysp::ast::LiteralKind::String: get_node_types()[lit_node] = "string"; break;
+            case sysp::ast::LiteralKind::Bool:   get_node_types()[lit_node] = "bool"; break;
+            }
+            return lit_node;
         }
 
         // Identifier — look up in symbol table
@@ -196,7 +202,7 @@ namespace sysp {
             return ctx.new_node_with_dep(src);
         }
 
-        // Alloc: new Type(args)
+        // Alloc: new Type(args) or new [n]T
         if (auto* e = dynamic_cast<const sysp::ast::AllocExpr*>(expr)) {
             MetatronNode node;
             node.id = ctx.next_id++;
@@ -204,6 +210,17 @@ namespace sysp {
                 node.inputs.push_back(process_expr(ctx, arg.get()));
             node.outputs.push_back(node.id);
             ctx.graph.nodes.push_back(node);
+            // Register type for type-mismatch checker
+            get_node_types()[node.id] = e->alloc_type;
+            // Register array bounds for buffer-overflow checker
+            if (e->is_array && e->array_size) {
+                if (auto* lit = dynamic_cast<const sysp::ast::LiteralExpr*>(e->array_size.get())) {
+                    try {
+                        int sz = std::stoi(lit->value);
+                        get_array_bounds()[node.id] = sz;
+                    } catch (...) {}
+                }
+            }
             return node.id;
         }
 
@@ -242,9 +259,12 @@ namespace sysp {
         if (auto* e = dynamic_cast<const sysp::ast::SpawnExpr*>(expr))
             return ctx.new_node_with_dep(process_expr(ctx, e->expr.get()));
 
-        // Channel
-        if (dynamic_cast<const sysp::ast::ChannelExpr*>(expr))
-            return ctx.new_node();
+        // Channel — register for data-race detection
+        if (dynamic_cast<const sysp::ast::ChannelExpr*>(expr)) {
+            uint32_t ch_node = ctx.new_node();
+            get_channel_nodes().insert(ch_node);
+            return ch_node;
+        }
 
         // Lambda
         if (auto* e = dynamic_cast<const sysp::ast::LambdaExpr*>(expr)) {
@@ -280,6 +300,9 @@ namespace sysp {
             for (auto& name : s->names) {
                 ctx.symbols.set(name, static_cast<int>(val_node));
                 get_node_names()[val_node] = name;
+                // Register explicit type if provided
+                if (!s->type.empty())
+                    get_node_types()[val_node] = s->type;
             }
             return;
         }
@@ -362,20 +385,35 @@ namespace sysp {
             size_t before = ctx.graph.nodes.size();
             if (s->body) process_block(ctx, s->body.get());
             // Mark all nodes created inside the region
-            for (size_t i = before; i < ctx.graph.nodes.size(); i++)
+            for (size_t i = before; i < ctx.graph.nodes.size(); i++) {
                 get_node_region()[ctx.graph.nodes[i].id] = region_id;
+                // Mark as freed when region closes — for dangling-pointer check
+                get_freed_nodes().insert(ctx.graph.nodes[i].id);
+            }
             return;
         }
 
-        // unsafe
+        // unsafe — register all nodes inside as unsafe
         if (auto* s = dynamic_cast<const sysp::ast::UnsafeStmt*>(stmt)) {
+            size_t before = ctx.graph.nodes.size();
             if (s->body) process_block(ctx, s->body.get());
+            for (size_t i = before; i < ctx.graph.nodes.size(); i++)
+                get_unsafe_nodes()[ctx.graph.nodes[i].id] = true;
             return;
         }
 
-        // drop
+        // drop — mark node as freed
         if (auto* s = dynamic_cast<const sysp::ast::DropStmt*>(stmt)) {
-            process_expr(ctx, s->expr.get());
+            uint32_t drop_node = process_expr(ctx, s->expr.get());
+            get_freed_nodes().insert(drop_node);
+            // If dropping an identifier, mark the variable node too
+            if (auto* id = dynamic_cast<const sysp::ast::IdentifierExpr*>(s->expr.get())) {
+                int var_id = ctx.symbols.get(id->name);
+                if (var_id >= 0) {
+                    get_freed_nodes().insert(static_cast<uint32_t>(var_id));
+                    get_node_names()[static_cast<uint32_t>(var_id)] = id->name;
+                }
+            }
             return;
         }
 
@@ -386,10 +424,12 @@ namespace sysp {
             return;
         }
 
-        // spawn
+        // spawn — register spawn node for data-race detection
         if (auto* s = dynamic_cast<const sysp::ast::SpawnStmt*>(stmt)) {
             uint32_t task_node = process_expr(ctx, s->expr.get());
             ctx.symbols.set(s->name, static_cast<int>(task_node));
+            get_spawn_nodes().insert(task_node);
+            get_node_names()[task_node] = s->name;
             return;
         }
 

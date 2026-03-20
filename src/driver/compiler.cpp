@@ -25,39 +25,6 @@ static std::string get_out(const std::string& in, const std::string& ext) {
     return (dot != std::string::npos ? in.substr(0, dot) : in) + ext;
 }
 
-static void print_token_summary(const std::vector<Token>& tokens) {
-    int ids=0,lits=0,kws=0,ops=0;
-    for (auto& t : tokens) {
-        switch(t.type) {
-        case TokenType::IDENT: ids++; break;
-        case TokenType::INTEGER: case TokenType::FLOAT:
-        case TokenType::STRING: case TokenType::INTERP_STRING:
-        case TokenType::BOOL_TRUE: case TokenType::BOOL_FALSE: lits++; break;
-        case TokenType::END: break;
-        default:
-            if (!t.lexeme.empty() && !std::isalpha(t.lexeme[0])) ops++;
-            else kws++;
-        }
-    }
-    std::cout << "    tokens:" << (tokens.size()-1)
-              << " idents:" << ids << " lits:" << lits
-              << " kws:" << kws << " ops:" << ops << "\n";
-}
-
-static void print_ast_summary(const sysp::ast::Program& p) {
-    int fns=0,st=0,en=0,tr=0,im=0;
-    for (auto& d : p.declarations) {
-        if (dynamic_cast<const sysp::ast::FunctionDecl*>(d.get())) fns++;
-        if (dynamic_cast<const sysp::ast::StructDecl*>(d.get()))   st++;
-        if (dynamic_cast<const sysp::ast::EnumDecl*>(d.get()))     en++;
-        if (dynamic_cast<const sysp::ast::TraitDecl*>(d.get()))    tr++;
-        if (dynamic_cast<const sysp::ast::ImplDecl*>(d.get()))     im++;
-    }
-    std::cout << "    modules:" << p.modules.size()
-              << " fns:" << fns << " structs:" << st
-              << " enums:" << en << " traits:" << tr << " impls:" << im << "\n";
-}
-
 static void run_pipeline(const std::string& file, bool verbose) {
     const std::string SEP(52,'-');
     std::cout << "\n[SysP] Compiling: " << file << "\n" << SEP << "\n";
@@ -71,12 +38,10 @@ static void run_pipeline(const std::string& file, bool verbose) {
         for (auto& e : lexer.errors()) std::cerr << "  [Lexer Error] " << e << "\n";
         throw std::runtime_error("Lexer failed.");
     }
-    if (verbose) print_token_summary(tokens);
 
     std::cout << "[2/6] Parser\n";
     sysp::parser::Parser parser(std::move(tokens));
     sysp::ast::Program program = parser.parse_program();
-    if (verbose) print_ast_summary(program);
 
     std::cout << "[3/6] Type System\n";
     sysp::typesystem::TypeSystem types;
@@ -85,12 +50,10 @@ static void run_pipeline(const std::string& file, bool verbose) {
             if (!fn->return_type.empty())
                 types.set_type(fn->name, types.infer_from_name(fn->return_type));
     }
-    if (verbose) std::cout << "    type table initialized\n";
 
     std::cout << "[4/6] Metatron IR\n";
     MetatronBuilder builder;
     MetatronGraph graph = builder.build_from_program(program);
-    if (verbose) std::cout << "    nodes: " << graph.nodes.size() << "\n";
 
     std::cout << "[5/6] Jarbes Security Analysis\n";
     JarbesKernel kernel;
@@ -98,7 +61,7 @@ static void run_pipeline(const std::string& file, bool verbose) {
     kernel.build_honeycomb(4);
     kernel.distribute_transistors();
     kernel.step();
-    kernel.analyze(graph);
+    kernel.analyze(graph, program);  // new interface with full Program
 
     sysp::optimizer::Optimizer optimizer;
     optimizer.run(graph);
@@ -115,8 +78,7 @@ static void run_pipeline(const std::string& file, bool verbose) {
 
     std::string base = get_out(file, "");
     std::cout << "    output: " << asm_path << "\n";
-    std::cout << SEP << "\n";
-    std::cout << "[SysP] Done. To run:\n";
+    std::cout << SEP << "\n[SysP] Done. To run:\n";
     std::cout << "    nasm -f elf64 " << asm_path << " -o " << base << ".o\n";
     std::cout << "    ld " << base << ".o -o " << base << "\n";
     std::cout << "    ./" << base << "\n\n";
@@ -137,7 +99,8 @@ int main(int argc, char** argv) {
     if (cmd=="compile") {
         if (argc < 3) { std::cerr << "Error: missing source file\n"; return 1; }
         bool verbose = (argc>=4 && strcmp(argv[3],"--verbose")==0);
-        try { run_pipeline(argv[2], verbose); }
+        (void)verbose;
+        try { run_pipeline(argv[2], false); }
         catch (const std::exception& e) { std::cerr << "\n[Error] " << e.what() << "\n"; return 1; }
         return 0;
     }
