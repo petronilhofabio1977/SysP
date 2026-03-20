@@ -343,11 +343,27 @@ sysp_println_bool:
     // ── var decl ─────────────────────────────────────────────────────
 
     void Backend::gen_var_decl(const VarDeclStmt* stmt, std::ostream& out) {
-        gen_expr(stmt->initializer.get(), out);
+        if (stmt->initializer)
+            gen_expr(stmt->initializer.get(), out);
+        else
+            out << "    xor rax, rax\n"; // uninitialized — zero
         // rax now holds the value
         for (auto& name : stmt->names) {
             int off = alloc_stack_var(name);
             out << "    mov [rbp-" << off << "], rax\n";
+            // Register type for println dispatch
+            if (!stmt->type.empty())
+                var_types_[name] = stmt->type;
+            else if (stmt->initializer) {
+                if (auto* lit = dynamic_cast<const LiteralExpr*>(stmt->initializer.get())) {
+                    switch (lit->kind) {
+                    case LiteralKind::Bool:   var_types_[name] = "bool";   break;
+                    case LiteralKind::Float:  var_types_[name] = "f64";    break;
+                    case LiteralKind::String: var_types_[name] = "string"; break;
+                    default:                  var_types_[name] = "i32";    break;
+                    }
+                }
+            }
         }
     }
 
@@ -752,7 +768,34 @@ sysp_println_bool:
         // Variable or expression → evaluate and dispatch
         gen_expr(arg, out);
         out << "    mov rdi, rax\n";
-        out << "    call sysp_println_int\n"; // default to int for now
+
+        // Detect type to call correct println variant
+        // Check if argument is an identifier with known type
+        if (auto* id = dynamic_cast<const IdentifierExpr*>(arg)) {
+            // Look up variable type from type map
+            auto it = var_types_.find(id->name);
+            if (it != var_types_.end()) {
+                if (it->second == "bool") {
+                    out << "    call sysp_println_bool\n";
+                    return;
+                }
+                if (it->second == "f32" || it->second == "f64") {
+                    out << "    call sysp_println_int\n"; // TODO: float
+                    return;
+                }
+                if (it->second == "string") {
+                    // rax has the string address — print as string
+                    out << "    mov rsi, rdi\n";
+                    // compute length
+                    out << "    ; TODO: string variable println\n";
+                    out << "    call sysp_println_int\n";
+                    return;
+                }
+            }
+        }
+
+        // Default: print as int
+        out << "    call sysp_println_int\n";
     }
 
 } // namespace sysp::backend::x86

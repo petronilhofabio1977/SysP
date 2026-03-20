@@ -37,7 +37,8 @@ namespace sysp::backend::x86 {
         int                         str_counter_ = 0;
 
         // ── Register / variable tracking ─────────────────────────────
-        std::unordered_map<std::string, int> var_offsets_; // var → stack offset
+        std::unordered_map<std::string, int>         var_offsets_; // var → stack offset
+    std::unordered_map<std::string, std::string>  var_types_;   // var → type
         int stack_offset_ = 0;
 
         // ── Code generation ───────────────────────────────────────────
