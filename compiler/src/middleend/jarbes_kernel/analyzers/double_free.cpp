@@ -2,9 +2,6 @@
 #include <iostream>
 #include <unordered_map>
 
-std::unordered_set<uint32_t>          freed_nodes;
-std::unordered_map<uint32_t,uint32_t> node_owner;
-
 // Double-free: rastreia quantas vezes cada nó foi liberado
 // Um nó é liberado quando: drop explícito ou região fecha
 // freed_count > 1 = double-free

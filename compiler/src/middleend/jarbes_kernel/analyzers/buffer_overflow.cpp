@@ -2,10 +2,6 @@
 #include <iostream>
 #include <unordered_map>
 
-// Tracks constant values of nodes: node_id → integer value
-// Populated when a literal integer is assigned to a variable
-std::unordered_map<uint32_t, int64_t> node_const_values;
-
 bool check_buffer_overflow(const MetatronGraph& graph) {
     bool ok = true;
 

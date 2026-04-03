@@ -1,9 +1,6 @@
 #include "analyzers.hpp"
 #include <iostream>
 
-std::unordered_set<uint32_t> spawn_nodes;
-std::unordered_set<uint32_t> channel_nodes;
-
 bool detect_data_race(const MetatronGraph& graph) {
     bool ok = true;
 

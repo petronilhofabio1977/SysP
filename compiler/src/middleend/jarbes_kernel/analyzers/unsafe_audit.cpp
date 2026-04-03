@@ -1,8 +1,6 @@
 #include "analyzers.hpp"
 #include <iostream>
 
-std::unordered_map<uint32_t, bool> unsafe_nodes;
-
 // Unsafe audit:
 // - Conta todos os nós marcados como unsafe
 // - Reporta como aviso (não bloqueia compilação)

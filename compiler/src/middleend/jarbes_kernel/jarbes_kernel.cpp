@@ -20,22 +20,26 @@ void JarbesKernel::step() {
     std::cout << "[JarbesKernel] Kernel logical step executed\n";
 }
 
-void JarbesKernel::register_builtin(uint32_t id)                      { get_builtin_nodes().insert(id); }
-void JarbesKernel::register_move(uint32_t id)                         { get_consumed_nodes()[id] = true; }
-void JarbesKernel::register_region_node(uint32_t id, int region_id)   { get_node_region()[id] = region_id; }
-void JarbesKernel::register_name(uint32_t id, const std::string& name){ get_node_names()[id] = name; }
-void JarbesKernel::register_unsafe(uint32_t id)                       { get_unsafe_nodes()[id] = true; }
-void JarbesKernel::register_array(uint32_t id, int size)              { get_array_bounds()[id] = size; }
-void JarbesKernel::register_freed(uint32_t id)                        { get_freed_nodes().insert(id); }
-void JarbesKernel::register_spawn(uint32_t id)                        { get_spawn_nodes().insert(id); }
-void JarbesKernel::register_channel(uint32_t id)                      { get_channel_nodes().insert(id); }
+void JarbesKernel::register_builtin(uint32_t id)                       { get_builtin_nodes().insert(id); }
+void JarbesKernel::register_move(uint32_t id)                          { get_consumed_nodes()[id] = true; }
+void JarbesKernel::register_region_node(uint32_t id, int region_id)    { get_node_region()[id] = region_id; }
+void JarbesKernel::register_name(uint32_t id, const std::string& name) { get_node_names()[id] = name; }
+void JarbesKernel::register_unsafe(uint32_t id)                        { get_unsafe_nodes()[id] = true; }
+void JarbesKernel::register_array(uint32_t id, int size)               { get_array_bounds()[id] = size; }
+void JarbesKernel::register_freed(uint32_t id)                         { get_freed_nodes().insert(id); }
+void JarbesKernel::register_spawn(uint32_t id)                         { get_spawn_nodes().insert(id); }
+void JarbesKernel::register_channel(uint32_t id)                       { get_channel_nodes().insert(id); }
 
-// ── Full analysis with Program (new interface) ────────────────────
+// ── Full analysis ─────────────────────────────────────────────────
 void JarbesKernel::analyze(MetatronGraph& graph, const sysp::ast::Program& program) {
+    // Reset all global state — makes analyze() safe to call multiple
+    // times in the same process (e.g. compiling multiple source files).
+    reset_jarbes_state();
+
     std::cout << "[JarbesKernel] Analyzing " << graph.nodes.size() << " nodes\n";
     bool ok = true;
 
-    // ── Phase 1: Graph-based checks ───────────────────────────────
+    // ── Phase 1: Graph-based checks ──────────────────────────────
     if (!check_use_before_production(graph)) ok = false;
     if (!check_use_after_move(graph))        ok = false;
     if (!check_region_escape(graph))         ok = false;
@@ -47,17 +51,17 @@ void JarbesKernel::analyze(MetatronGraph& graph, const sysp::ast::Program& progr
     if (!detect_cycle(graph))                ok = false;
     if (!detect_data_race(graph))            ok = false;
 
-    // ── Phase 2: AST-based checks ─────────────────────────────────
+    // ── Phase 2: AST-based checks ────────────────────────────────
     if (!check_integer_overflow(program))    ok = false;
     if (!check_match_exhaustive(program))    ok = false;
 
-    // ── Phase 3: CFG + Dataflow checks ────────────────────────────
+    // ── Phase 3: CFG + Dataflow checks ───────────────────────────
     sysp::cfg::ASTToCFG cfg_builder;
     for (auto& decl : program.declarations) {
         if (auto* fn = dynamic_cast<const sysp::ast::FunctionDecl*>(decl.get())) {
             auto blocks = cfg_builder.build(fn);
             if (!check_uninitialized_use(blocks)) ok = false;
-            if (!check_dead_code(blocks))         ok = false;
+            if (!check_dead_code(blocks))        ok = false;
         }
     }
 
@@ -65,9 +69,10 @@ void JarbesKernel::analyze(MetatronGraph& graph, const sysp::ast::Program& progr
     std::cout << "[JarbesKernel] All checks passed — program is memory safe\n";
 }
 
-// ── Legacy interface ──────────────────────────────────────────────
+// ── Legacy interface (sem Program) ───────────────────────────────
 void JarbesKernel::analyze(MetatronGraph& graph) {
-    std::cout << "[JarbesKernel] Analyzing " << graph.nodes.size() << " nodes\n";
+    reset_jarbes_state();
+    std::cout << "[JarbesKernel] Analyzing " << graph.nodes.size() << " nodes (legacy)\n";
     bool ok = true;
     if (!check_use_before_production(graph)) ok = false;
     if (!check_use_after_move(graph))        ok = false;

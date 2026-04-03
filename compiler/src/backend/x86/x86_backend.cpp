@@ -158,6 +158,11 @@ sysp_println_int:
     )";
     }
 
+    // emit_println_float: stub — floats printed as integers for now
+    void Backend::emit_println_float(std::ostream& out) {
+        (void)out; // TODO: implement using xmm registers
+    }
+
     // println_bool: prints "true\n" or "false\n" based on rdi
     void Backend::emit_println_bool(std::ostream& out) {
         out << R"(
@@ -235,6 +240,12 @@ sysp_println_bool:
     // ================================================================
 
     void Backend::gen_function(const FunctionDecl* fn, std::ostream& out) {
+        // Reset per-function state — prevents stack offset accumulating
+        // across multiple functions compiled in the same Backend instance.
+        stack_offset_ = 0;
+        var_offsets_.clear();
+        var_types_.clear();
+
         // Estimate stack size (will refine later)
         int estimated_stack = 256;
 

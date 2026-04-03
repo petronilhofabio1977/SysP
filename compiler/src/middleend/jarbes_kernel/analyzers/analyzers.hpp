@@ -15,6 +15,9 @@
 // ================================================================
 
 // ── Global registries ─────────────────────────────────────────────
+// IMPORTANT: these are reset at the start of every analyze() call
+// via reset_jarbes_state(). Never rely on them persisting between
+// compilation units.
 extern std::unordered_set<uint32_t>              builtin_nodes;
 extern std::unordered_map<uint32_t, bool>         consumed_nodes;
 extern std::unordered_map<uint32_t, int>          node_region;
@@ -29,20 +32,23 @@ extern std::unordered_set<uint32_t>               move_result_nodes;
 extern std::unordered_set<uint32_t>               channel_nodes;
 extern std::unordered_map<uint32_t, int64_t>      node_const_values;
 
+// ── State reset — MUST be called before each analyze() ────────────
+void reset_jarbes_state();
+
 // ── Accessors ─────────────────────────────────────────────────────
-inline std::unordered_set<uint32_t>&             get_builtin_nodes()  { return builtin_nodes; }
-inline std::unordered_map<uint32_t, bool>&        get_consumed_nodes() { return consumed_nodes; }
-inline std::unordered_map<uint32_t, int>&         get_node_region()    { return node_region; }
-inline std::unordered_map<uint32_t, std::string>& get_node_names()     { return node_names; }
-inline std::unordered_map<uint32_t, bool>&        get_unsafe_nodes()   { return unsafe_nodes; }
-inline std::unordered_map<uint32_t, std::string>& get_node_types()     { return node_types; }
-inline std::unordered_map<uint32_t, int>&         get_array_bounds()   { return array_bounds; }
-inline std::unordered_set<uint32_t>&             get_freed_nodes()    { return freed_nodes; }
-inline std::unordered_map<uint32_t, uint32_t>&   get_node_owner()     { return node_owner; }
-inline std::unordered_set<uint32_t>&             get_spawn_nodes()    { return spawn_nodes; }
+inline std::unordered_set<uint32_t>&             get_builtin_nodes()     { return builtin_nodes; }
+inline std::unordered_map<uint32_t, bool>&        get_consumed_nodes()    { return consumed_nodes; }
+inline std::unordered_map<uint32_t, int>&         get_node_region()       { return node_region; }
+inline std::unordered_map<uint32_t, std::string>& get_node_names()        { return node_names; }
+inline std::unordered_map<uint32_t, bool>&        get_unsafe_nodes()      { return unsafe_nodes; }
+inline std::unordered_map<uint32_t, std::string>& get_node_types()        { return node_types; }
+inline std::unordered_map<uint32_t, int>&         get_array_bounds()      { return array_bounds; }
+inline std::unordered_set<uint32_t>&             get_freed_nodes()       { return freed_nodes; }
+inline std::unordered_map<uint32_t, uint32_t>&   get_node_owner()        { return node_owner; }
+inline std::unordered_set<uint32_t>&             get_spawn_nodes()       { return spawn_nodes; }
 inline std::unordered_set<uint32_t>&             get_move_result_nodes() { return move_result_nodes; }
-inline std::unordered_set<uint32_t>&             get_channel_nodes()   { return channel_nodes; }
-inline std::unordered_map<uint32_t, int64_t>&     get_node_const_values(){ return node_const_values; }
+inline std::unordered_set<uint32_t>&             get_channel_nodes()     { return channel_nodes; }
+inline std::unordered_map<uint32_t, int64_t>&    get_node_const_values() { return node_const_values; }
 
 // ── Graph-based checkers (MetatronGraph) ──────────────────────────
 bool check_use_before_production(const MetatronGraph& graph);
@@ -56,13 +62,12 @@ bool check_type_mismatch(const MetatronGraph& graph);
 bool detect_cycle(const MetatronGraph& graph);
 bool detect_data_race(const MetatronGraph& graph);
 
-// ── CFG-based checkers (need Control Flow Graph) ──────────────────
-bool check_uninitialized_use(
-    const std::vector<std::unique_ptr<sysp::cfg::BasicBlock>>& blocks);
-
-bool check_dead_code(
-    std::vector<std::unique_ptr<sysp::cfg::BasicBlock>>& blocks);
-
 // ── AST-based checkers ────────────────────────────────────────────
 bool check_integer_overflow(const sysp::ast::Program& program);
 bool check_match_exhaustive(const sysp::ast::Program& program);
+
+// ── CFG + Dataflow checkers ───────────────────────────────────────
+bool check_uninitialized_use(
+    const std::vector<std::unique_ptr<sysp::cfg::BasicBlock>>& blocks);
+bool check_dead_code(
+    std::vector<std::unique_ptr<sysp::cfg::BasicBlock>>& blocks);

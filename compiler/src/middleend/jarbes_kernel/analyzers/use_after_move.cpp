@@ -1,9 +1,6 @@
 #include "analyzers.hpp"
 #include <iostream>
 
-std::unordered_map<uint32_t, bool>  consumed_nodes;
-std::unordered_set<uint32_t>        move_result_nodes;
-
 bool check_use_after_move(const MetatronGraph& graph) {
     bool ok = true;
 

@@ -32,6 +32,7 @@ private:
     void emitir_tipo(const std::string& t);
     void push(uint8_t a, uint8_t b);
     void push_hash(const std::string& nome);
+    uint8_t op_byte(const std::string& op);
 };
 
 } // namespace sysp::ai

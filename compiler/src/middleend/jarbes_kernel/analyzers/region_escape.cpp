@@ -1,8 +1,6 @@
 #include "analyzers.hpp"
 #include <iostream>
 
-std::unordered_map<uint32_t, int> node_region;
-
 bool check_region_escape(const MetatronGraph& graph) {
     bool ok = true;
     for (const auto& node : graph.nodes) {
