@@ -29,6 +29,15 @@ namespace sysp::backend::x86 {
         // field i is at [rbp - (var_offsets_[var] + i*8)]
     };
 
+    // Enum layout: variant names + field counts per variant
+    struct EnumLayout {
+        std::vector<std::string> variant_names;
+        std::vector<int>         variant_field_counts;
+        int                      max_fields = 0; // total slots needed beyond tag
+        // Memory: [tag:i64, field0:i64, field1:i64, ...]
+        // tag = variant index (0, 1, 2, ...)
+    };
+
     class Backend {
     public:
         Backend();
@@ -52,6 +61,15 @@ namespace sysp::backend::x86 {
         // ── Struct layout table (populated once per program) ──────────
         std::unordered_map<std::string, StructLayout> struct_layouts_;
 
+        // ── Enum layout table (populated once per program) ────────────
+        std::unordered_map<std::string, EnumLayout> enum_layouts_;
+
+        // ── Stdlib flags (emit helpers only if needed) ────────────────
+        bool need_io_read_      = false;
+        bool need_string_len_   = false;
+        bool need_string_cont_  = false;
+        bool need_math_         = false;
+
         // ── Code generation ───────────────────────────────────────────
         void gen_function(const sysp::ast::FunctionDecl* fn, std::ostream& out);
         void gen_block(const sysp::ast::BlockStmt* block, std::ostream& out);
@@ -66,6 +84,7 @@ namespace sysp::backend::x86 {
         void gen_while(const sysp::ast::WhileStmt* stmt, std::ostream& out);
         void gen_for(const sysp::ast::ForStmt* stmt, std::ostream& out);
         void gen_expr_stmt(const sysp::ast::ExpressionStmt* stmt, std::ostream& out);
+        void gen_match(const sysp::ast::MatchStmt* stmt, std::ostream& out);
 
         // Specific expression generators
         void gen_literal(const sysp::ast::LiteralExpr* expr, std::ostream& out);
@@ -83,6 +102,19 @@ namespace sysp::backend::x86 {
         void gen_assign_member(const sysp::ast::MemberExpr* mem,
                                std::ostream& out);
 
+        // Enum support
+        void collect_enum_layouts(const sysp::ast::Program& program);
+        void gen_enum_init(const std::string& var_name,
+                           int tag,
+                           const sysp::ast::Expr* data_expr,
+                           int n_slots,
+                           std::ostream& out);
+        // Generates match code; returns true if subject needs tag load
+        void gen_match_pattern(const sysp::ast::Pattern* pat,
+                               int subj_offset,
+                               const std::string& skip_lbl,
+                               std::ostream& out);
+
         // Helpers
         std::string new_string_label(const std::string& value);
         std::string new_label(const std::string& prefix);
@@ -96,6 +128,12 @@ namespace sysp::backend::x86 {
         void emit_println_int(std::ostream& out);
         void emit_println_float(std::ostream& out);
         void emit_println_bool(std::ostream& out);
+
+        // Stdlib helpers
+        void emit_io_read(std::ostream& out);
+        void emit_string_length(std::ostream& out);
+        void emit_string_contains(std::ostream& out);
+        void emit_math_helpers(std::ostream& out);
     };
 
 } // namespace sysp::backend::x86
