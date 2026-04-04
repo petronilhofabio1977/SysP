@@ -1,6 +1,3 @@
-; SysP Compiler Output
-; Source: ../../language/examples/test.sp
-
 
 section .data
     str_0 db 109, 97, 105, 111, 114, 32, 113, 117, 101, 32, 53, 10

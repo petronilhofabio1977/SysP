@@ -1,7 +1,8 @@
 
 section .data
     str_0 db 79, 108, 195, 161, 44, 32, 83, 121, 115, 80, 33, 10
-    str_0_len equ $ - str_0
+    str_0_null db 0
+    str_0_len equ str_0_null - str_0
 
     sysp_str_true  db 't','r','u','e',10
     sysp_str_false db 'f','a','l','s','e',10

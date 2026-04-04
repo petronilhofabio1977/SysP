@@ -1,4 +1,9 @@
 
+section .data
+    str_0 db 118, 97, 122, 105, 111, 10
+    str_0_null db 0
+    str_0_len equ str_0_null - str_0
+
     sysp_str_true  db 't','r','u','e',10
     sysp_str_false db 'f','a','l','s','e',10
 section .text
@@ -9,7 +14,31 @@ verificar:
     mov rbp, rsp
     sub rsp, 256
     mov [rbp-8], rdi
-    ; unhandled statement
+    mov rax, [rbp-8]
+    mov [rbp-16], rax    ; match subject
+    ; match begin
+    mov rax, [rbp-16]
+    cmp rax, 1
+    jne .match_arm_skip_1
+    mov rax, [rbp-24]
+    mov [rbp-24], rax    ; bind v
+    mov rax, [rbp-24]
+    mov rdi, rax
+    call sysp_println_int
+    jmp .match_end_0
+.match_arm_skip_1:
+    mov rax, [rbp-16]
+    test rax, rax
+    jnz .match_arm_skip_2
+    mov rax, 1
+    mov rdi, 1
+    mov rsi, str_0
+    mov rdx, str_0_len
+    syscall
+    jmp .match_end_0
+.match_arm_skip_2:
+.match_end_0:
+    ; match end
     xor rax, rax
     mov rsp, rbp
     pop rbp
