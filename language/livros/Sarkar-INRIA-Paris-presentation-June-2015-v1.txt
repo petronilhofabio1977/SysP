@@ -1,0 +1,1129 @@
+ Structured Parallel Programming Primitives and their use
+          in Compilers, Runtimes and Debuggers
+mergeSort.log
+                    for Parallel Systems                                                                           Show controls and legend
+
+
+
+
+                                                                                                                                                                                                     Vivek Sarkar
+                                                             fork
+
+
+
+                                                            activity
+
+
+
+
+                                                                                                                                                                                   E.D. Butcher Chair in Engineering
+                                                             fork
+
+
+
+                                      activity                                    activity
+
+
+
+                                       fork                                        fork
+                                                                                                                                                                                     Professor of Computer Science
+                                                                                                                                                                                                     Rice University
+                activity              activity                                    activity              activity
+
+
+
+                 fork                  fork                                        fork                  fork
+
+
+
+     activity   activity
+
+
+
+                 join
+                           activity
+
+
+
+                                        join
+                                                 activity              activity
+
+
+
+                                                                                   join
+                                                                                             activity   activity
+
+
+
+                                                                                                         join
+                                                                                                                           activity
+
+                                                                                                                                                                                                   vsarkar@rice.edu
+                                                                                                                                                                        7) ALL
+                   2                     2                                           2                     2
+
+                                                                                                                                               6) DET
+                                        join                                       join                                                                               5) DRF-ALL
+
+                                                                                                                                                  3) DRF-DET
+                                         4                                           4                                                                           4) DLF-DRF-ALL
+
+                                                                                                                                                              2) DLF-
+                                                             join
+                                                                                                                                                             DRF-DET
+
+                                                               8
+                                                                                                                                                        1) DLF-
+                                                                                                                                                        DRF-DET-SER
+                                                             join
+
+
+
+                                                             join
+
+
+
+
+                                                                                                                                         1/2
+Acknowledgments --- Habanero Extreme Scale Software Group
+ §   Faculty
+      § Vivek Sarkar
+ §   Senior Research Scientists
+      § Michael Burke, Kathleen Knobe
+ §   Research Scientists
+      § Zoran Budimlić, Philippe Charles, Akihiro Hayashi, Vivek Kumar, Jun Shirako,
+         Jisheng Zhao
+ §   Research Programmer
+      § Vincent Cavé
+ §   Postdoctoral Researcher
+      §   Dragoș Sbîrlea
+ §   PhD Students (five of whom are graduating this year!)
+      § Kumud Bhandari, Prasanth Chatarasi, Arghya Chatterjee, Max Grossman, Shams
+         Imam, Deepak Majeti, Ankush Mandal, Yuhan Peng, Alina Sbîrlea, Jonathan
+         Sharman, Rishi Surendran, Sağnak Taşırlar, Nick Vrvilo
+ §   Supported in part by the National Science Foundation, DoD Advanced Computing
+      Initiative (ACI) program, by the X-Stack program funded by U.S. Department of Energy,
+      Office of Science, Advanced Scientific Computing Research (ASCR)
+                                                 2
+With Multicore Processors and Cloud Computing,
+     all Computers are Parallel Computers
+
+
+
+
+                      3
+Multicore Processors and Extreme Scale Systems
+§ Characteristics of Extreme Scale systems in the next decade
+     § Massively multi-core (~ 100ʼs of cores/chip)
+     § Performance driven by parallelism, constrained by energy
+     § Subject to frequent faults and failures
+§ Many Classes of Extreme Scale Systems
+
+
+
+
+Mobile, < 10 Watts,    Embedded, 100’s of Watts,      Departmental,                Data Center
+O(101) concurrency        O(103) concurrency          100’s of KW,                   > 1 MW,
+                                                    O(106) concurrency          O(109) concurrency
+Key Challenges
+§ Energy Efficiency                Source:
+§ Concurrency                      • DARPA Exascale Software study, Sep 2009
+§ Resiliency                       • “Software Challenges in Extreme Scale Systems”. V. Sarkar,
+                                    W. Harrod, A.E. Snavely. SciDAC Review, January 2010.
+                                                   4
+ Extreme Scale Challenges for Applications
+
+§ Goal: forward-scalable and portable expression of
+   parallelism, locality, data movement, and resilience
+• Our premise: fundamental advances in runtime systems are
+ necessary to achieve this goal
+  • dynamic asynchronous parallelism
+  • asynchronous data movement
+  • distributed global address/name space
+  • hierarchical abstractions of locality
+  • support for failure recovery
+  • ...
+
+                               5                             5	  
+Performance Variability is on the rise …
+ § Concurrency --- increased performance variability with
+    increased parallelism
+ § Energy efficiency --- increased performance variability with
+    increased non-uniformity and heterogeneity in processors
+ § Locality --- increased performance variability with increased
+    memory hierarchy depths
+ § Resiliency --- increased performance variability with fault
+    tolerance adaptation (migration, rollback, redundancy, …)
+
+ Increasing performance variability è runtime becomes an
+ increasingly critical component of the software stack
+
+                                6
+ Execution Models play a Key Role in Framing
+ Discussions for Software-Hardware Co-Design
+Execution Model        Device trend              Arch. trend        System s/w trend
+
+Von Neumann            SSI devices               Scalar instrs.     Scalar compilers
+
+Vector Parallelism     MSI devices               Vector instrs.     Vectorizing compilers
+
+Shared-memory          VLSI microprocessors Cache coherence         Multithreaded OS and
+Parallelism                                                         runtime
+Bulk-synchronous       VLSI microprocessors Interconnects           Message-passing libraries
+Parallelism                                                         (MPI)
+                       50B transistors/chip w/   Heterogeneous       Lightweight asynchronous
+Execution model goal   severe energy             manycore            tasks and data transfers
+in Habanero project    constraints & new         processors w/ local
+                       classes of hardware       & shared memories
+                       defects
+
+                                                 7
+Rice Habanero Extreme Scale Research Project
+                                             Parallel Applications
+Structured-parallel execution model                                   Two-level programming model
+1) Lightweight asynchronous tasks and             Habanero               Declarative Coordination
+data transfers                                  Programming            Language for Domain Experts:
+§ Creation: async tasks, future tasks,          Languages            CnC-HC, CnC-Java, CnC-Python,
+data-driven tasks                                                             CnC-Matlab, … +
+§ Termination: finish, future get, await                               Task-Parallel Languages for
+                                                 Habanero
+§ Data Transfers: asyncPut, asyncGet                                  Parallelism-aware Developers:
+                                               Compiler & PIR
+2) Locality control for task and data                                   Habanero-C, Habanero-C++,
+distribution                                   (Built on LLVM)        Habanero-Java, Habanero-Scala
+§ Computation and Data Distributions:
+hierarchical places, global name space            Habanero
+3) Inter-task synchronization operations           Runtime
+§ Mutual exclusion: isolated, actors              System
+§ Collective and point-to-point
+operations: phasers, accumulators
+                                                (Built on OCR)
+
+                                            Extreme Scale Platforms
+
+                                                      8                   http://habanero.rice.edu
+Structured Primitives in Habanero Execution Model
+ 1) Lightweight asynchronous tasks and data transfers
+ § Creation: async tasks, future tasks, data-driven tasks
+ § Termination: finish, future get, await
+ § Data Transfers: asyncPut, asyncGet
+ 2) Locality control for control and data distribution
+ § Computation and Data Distributions: hierarchical places, global
+     name space
+ 3) Inter-task synchronization operations
+ § Mutual exclusion: global/object-based isolation, actors
+ § Collective and point-to-point operations: phasers, accumulators
+
+ Claim: Structured Parallel Primitives greatly simplifies the task of
+ developing correct and efficient parallel programs!
+                                   9
+Properties of Habanero Execution Model
+  § Deadlock freedom guarantee for large subset of operations
+     § All operations except explicit wait in phasers, accumulators and explicit await
+        clause in async
+  § Data-race freedom guarantee for subset of data accesses
+     § Future values, accumulator values, read-write permission regions, isolated
+        accesses, actors
+  § Functional and structural determinism guarantees for data-race-free
+     subset
+     § Data-race freedom implies functional and structural determinism for all
+        programs that do not use mutual exclusion constructs (isolated, actors)
+  § Execution model primitives can be used to implement higher-level
+     programming models
+     § For example, CnC semantics can be directly captured by data-driven tasks
+         § async await(ddf1, ddf2, ...)
+  § Execution model primitives have been shown to be amenable to
+     scalable implementations
+                                         10
+                                                              § Legend
+Semantic Classification of
+                                                                    § DLF = DeadLock-Free
+Habanero Parallel Programs                                          § DRF = Data-Race-Free
+                                                                    § DET = Determinate
+                                                                    § DRFèDET = DRF implies DET
+                           7) ALL
+                                                                    § SER = Serial elision
+                                                              § If a Habanero program only uses
+  6) DET
+                         5) DRF-ALL
+                                                              async, finish, and future constructs (no
+                                                              mutual exclusion), then it is guaranteed
+     3) DRF-DET                                               to belong to the DLF + (DRFèDET) +
+                    4) DLF-DRF-ALL
+                                                              SER class
+                 2) DLF-                                      § Adding phasers yields programs in
+                DRF-DET
+                                                              the DLF + (DRFèDET) class
+                                                              § Adding async await yields programs in
+           1) DLF-                                            the DRFèDET class
+           DRF-DET-SER
+                                                              § Restricting shared data accesses to
+                                                              futures, isolated, actors yields programs
+                                                              in the DRF-ALL class
+              “Habanero-Java: the New Adventures of Old X10.” Vincent Cave, Jisheng Zhao, Jun Shirako,
+                                            Vivek 11
+                                                  Sarkar PPPJ 2011.
+Pedagogy using Habanero execution model,
+COMP 322: Fundamentals of Parallel Programming
+ § Sophomore-level CS Course at Rice
+     § https://wiki.rice.edu/confluence/display/PARPROG/COMP322
+ § Approach – mid-level parallel programming model
+     § “Simple things should be simple, complex things should be possible”
+     § Introduce students to fundamentals of parallel programming
+          § Primitive constructs for task creation & termination, collective & point-to-
+             point synchronization, task and data distribution, and data parallelism
+          § Abstract models of parallel computations and computation graphs
+          § Parallel algorithms & data structures including lists, trees, graphs, matrices
+          § Common parallel programming patterns
+     § Use Habanero-Java (HJ) library for Java 8 as pedagogic programming model
+        to understand fundamentals in two-thirds of course, and then introduce
+        students to lower-level parallel programming models (Java threads, MPI,
+        CUDA) using HJ principles
+     § Easy transition from HJ-lib to Habanero-C++ library
+                                           12
+Selected Topics
+
+ § Polyhedral Optimizations for a Data-Flow Graph
+    Language (DFGL)
+ § Task scheduling on heterogeneous nodes
+ § Bounded memory task scheduling
+ § Dynamic scheduling of elastic SPMD tasks
+ § Speculative task parallelism with the Eureka
+    programming model
+
+
+                          13
+Data-Flow Graph Representation (DFGR)
+§ New high-level intermediate graph representation for macro-
+   dataflow programs
+   § Derived from ideas in Tstreams / Concurrent Collections (CnC) models,
+      with extensions such as step-step dependences and compiler
+      optimizations
+   § Can express both synchronous pipeline and asynchronous task
+      parallelism
+§ Properties:
+   § Designed for programmability
+   § Can be used as an embedded DSL --- Data-Flow Graph Language
+   § Can be mapped on multiple runtimes
+       § Good interoperability with current languages
+       § Automatic portable generation of tuned code
+       § Can  target
+                   an current andGraph
+                                   future architectures
+            “DFGR:    Intermediate      Representation
+                     Alina Sbirlea, Louis-Noel 14                                14
+                                                       for Macro-Dataflow Programs.”
+                                              Pouchet, Vivek Sarkar. DFM 2014
+      DFGL example: Smith-Waterman
+Item collection      Specific step    Specific
+                                     Item       item
+                                            identifier
+                      in an step       incan
+                                           an be
+                                              item
+                                                 a
+                      collection        collection
+                                         complex
+  [ int       A ];
+                                         function
+
+
+  ( corner : i, j ) → [ A : i, j ];
+  ( top : i, j ) → [ A : i, j ];
+  ( left : i, j ) → [ A : i, j ];
+  [ A : i-1, j ], [ A : i, j-1 ], [ A : i-1, j-1 ] →
+    ( mainStep : i, j ) → [ A : i, j ];
+                                                                      The environment
+  env :: (corner: 0, 0);                                              starts initial steps
+  env :: ( top: 0, {1 .. NW} );                                        and gets outputs
+  env :: ( left : {1 .. NH}, 0 );                                       after the graph
+                                                                           execution
+  env :: ( mainStep : {1 .. NH}, {1 .. NW} );
+  [ A : NH, NW ] → env;               Ranges used as                                 15
+                                                         iteration spaces
+                Mapping DFGL to a
+                polyhedral compiler
+• Input: subset of DFGL programs
+  – no non-affine expressions, uninterpreted functions, or
+    data-dependent get/puts (e.g., [A : [B : i] ]) permitted in
+    dataflow graph specification
+     • These features can be freely used in step code, however
+• Output: SCopLib representation of the graph
+  – Each step viewed as a statement
+     • step collections are a set of step instances
+  – Each item viewed as a variable
+     • item collections are arrays, indexed by the item tag
+  – Each step spawn modeled as a producer-consumer
+    relation with an implicit variable
+                                                                 16
+           From DFGL to Polyhedra
+• SCopLib format for statement S has 3 components:
+                                               mainStep:{1..NH},{1..NW}
+– Domain(S): set of instances for
+                                               à1 ≤ i < NH, 1 ≤ j< NW
+  statement S                                     #e/i i j NH NW 1
+   • Use tag functions in step prescriptions       1 1 0 0 0 -1
+   to create iteration domains                     1 -1 0 1 0 0
+
+– Access(S): array elements accessed (mainStep:i,j)→[A:i,j];
+  (reads, writes)                    àW(A, i, j)
+                                                   #id_data i j NH NW 1
+   • Use item tag functions to create access         2 1 0 0 0 0
+     functions directly from item tag functions      0 0 1 0 0 0
+– Schedule(S): mapping an instance to a                 à0 i 0 j 3
+  lexicographical time stamp                            #e/i i j NH NW 1
+                                                         0 0 0 0 0 0
+   • Use dynamic single assignment property              0 1 0 0 0 0
+   • Iteratively adjust schedule such that all           0 0 0 0 0 0
+     dependencies are flow dependences (RAW)             0 0 1 0 0 0       17
+     è can also flag errors in input program            0 0 0 0 0 3
+      DFGL à SCoP à OpenMP
+• SCoP transformations performed by existing
+  polyhedral optimization tool (PolyAST [SC14]) to
+  generate OpenMP parallel code instead of calls to
+  DFGL runtime
+  – Uses proposed doacross construct in OpenMP 4.1 for
+    synchronous pipeline parallelism
+  – This feature is currently better tuned for POWER7 than
+    Westmere
+
+
+• Experiments run on two systems:
+  – Westmere Intel X5660 – 12 cores @ 2.83GHz (DAVinCI)
+  – POWER7 – 32 cores @ 3.86GHz (BlueBiou)
+                                                         18
+     LULESH – application details
+• 4D loop nest
+  – outer nest: time iteration
+  – inner nests: 3D space iterations
+• Computation converges after 50 time iterations
+• Experiment with two different values for the space
+  dimension: 503 and 1003
+
+
+
+
+                                                   19
+         LULESH - POWER7
+
+• 1003 space
+
+
+
+
+                           20
+   Smith-Waterman – POWER7
+• 2D loop nest; Test 2 dimensions: 50k2 and 100k2
+• 100k2 data set:
+
+
+
+
+                                                21
+            Results analysis
+• Results are dependent on data size:
+  – Tiling gives less benefit on small sizes
+  – Larger data set has more parallel slackness
+    => better speedup due to load balancing
+• Results are platform dependent:
+  – Westmere:
+    • high communication cost between the two 6-core
+      chips makes doacross synchronization costly
+  – POWER7
+    • cache hierarchy favors doacross synchronization
+    => very good speedup on 32 cores                  22
+Selected Topics
+
+ § Polyhedral Optimizations for a Data-Flow Graph
+    Language (DFGL)
+ § Task scheduling on heterogeneous nodes
+ § Bounded memory task scheduling
+ § Dynamic scheduling of elastic SPMD tasks
+ § Speculative task parallelism with the Eureka
+    programming model
+
+
+                          23
+   Adding Affinity Annotations for Heterogeneous Computing
+       to Concurrent Collections (CnC) Dataflow Model
+              D1           Steps of type R launched
+                           at a FPGA place
+                                                        }   CnC graph representation
+              R1
+                                                             extended with tag functions and
+              S1
+                           Steps of type S launched
+                           at a GPU place
+                                                             affinity annotations:
+    env
+                                                             }   < C > :: ( D @CPU=20,GPU=10);
+                           Steps D launched
+                           at a CPU place                    }   < C > :: ( R @GPU=5, FPGA=10);
+              D2
+                                                             }   < C > :: ( S @GPU=12);
+              R2
+
+              S2                                             }   [ IN : k-1 ] → ( D : k ) → [ IN2 : k+1 ];
+              …                               S2      R2
+       CPU only tasks          D2
+                               D1             S1      R1     }   [ IN2 : 2*k ] → ( R : k ) → [ IN3 : k/2 ];
+    Dedicated device queues                                  }   [ IN3 : k ] → ( S : k ) → [ OUT : IN3[k] ];
+   An instance of step R
+   stolen by GPU
+                           CPU1     CPU2    GPU       FPGA }     env → [ IN : { 0 .. 9 } ], < C : { 0 .. 9 } >;
+                              Instances of steps D           }   [ OUT : 1 ] → env;
+                              stolen by CPU or GPU
+
+
+
+“Mapping a Data-Flow Programming Model onto Heterogeneous Platforms.” Alina Sbirlea, Yi Zou, Zoran Budimlic,
+Jason Cong, Vivek Sarkar. LCTES 2012                 24
+ Hybrid Scheduling with Heterogeneous Work Stealing
+    ♦ Steps are compiled for execution on CPU, GPU or FPGA
+       § Aim for single-source multi-target compilation!
+    ♦ Designate a CPU core as a proxy worker for heterogeneous device
+    ♦ Device inbox is now a concurrent queue and tasks can be stolen by
+      CPU or other proxy workers
+
+                                                             Device tasks stolen by
+                                                             CPU and other device
+                                                             workers
+
+                                                PL7                         Continuations stolen
+Device tasks created from CPU                                               by CPU workers
+                    worker via    tail   head         tail   head
+
+ async at(gpl) IN() OUT() { … }
+                                                W4
+
+                                           25
+    Convey HC-1ex Testbed
+
+   “Commodity” Intel Server              Convey FPGA-based coprocessor
+                                            Application          Application Engines    Direct
+     Intel®                                                                             Data
+                                            Engine Hub           (AEs)
+     Xeon®                                  (AEH)
+                                                                                        Port
+
+     Processor           Intel®
+                         Memory XC6vlx760 FPGAs
+                         Controller80GB/s off-chip bandwidth
+Xeon Quad
+                         Hub (MCH)94W Design Power
+Core LV5408
+40W TDP
+
+     Intel® I/O
+                            Memory                           Memory
+     Subsystem
+        Standard Intel® x86-64 Server               Convey coprocessor
+        x86-64 Linux                                FPGA-based
+                                                    Shared cache-coherent memory
+                              Tesla C1060
+                              100GB/s off-chip bandwidth
+                              200W TDP                                                 26
+                                            26
+Experimental Results for Medical Imaging Workload
+• Execution times and active energy with dynamic vs.
+  static scheduling on heterogeneous processors
+
+
+
+
+                          27
+ HadoopCL: Automatic Generation and Scheduling of
+ OpenCL for Heterogeneous Execution of Hadoop
+HadoopCL accelerates Hadoop map/
+reduce tasks using OpenCL
+§ Reuse of Hadoop MapReduce API
+§ Distributed execution using Hadoop
+   MapReduce
+§ APARAPI extensions for automatic
+   generation of OpenCL from Java
+   bytecodes
+§ Execution of map and reduce tasks
+   on OpenCL devices
+§ Auto-scheduler for mapping tasks to
+   OpenCL devices
+                         “HadoopCL2: Motivating the Design of a Distributed, Heterogeneous Programming
+                                           28
+                                         System with Machine-Learning Applications.” IEEE TPDS. 2015.
+HadoopCL Experimental Results
+                          Auto-Scheduling
+   Overall Speedup
+
+
+
+
+                     29
+Selected Topics
+
+ § Polyhedral Optimizations for a Data-Flow Graph
+    Language (DFGL)
+ § Task scheduling on heterogeneous nodes
+ § Bounded memory task scheduling
+ § Dynamic scheduling of elastic SPMD tasks
+ § Speculative task parallelism with the Eureka
+    programming model
+
+
+                          30
+                      Mo%va%on:	  Memory	  per	  core	  is	  
+                              declining!	  
+1000
+                     # Core
+                                                                                                                  Source:	  	  
+                     GB DRAM
+                                                                                                                  Kevin	  Lim	  et	  al.,	  
+100
+                                                                                                                  “Disaggregated	  Memory	  	  for	  
+                                                                                                                  Expansion	  and	  Sharing	  in	  
+                                                                                                                  Blade	  Servers”,	  ISCA	  2009	  
+  10
+
+
+
+
+   1
+       2003   2004    2005    2006   2007   2008   2009   2010   2011   2012   2013   2014   2015   2016   2017
+
+
+   “This	  projec%on	  indicates	  that	  the	  average	  memory	  per	  
+    core	  drops	  to	  megabytes	  	  in	  extreme	  scale	  systems.”	  
+                                                                                                           Source:	  	  
+                             “Memory-­‐conscious	  Collec=ve	  I/O	  for	  Extreme-­‐Scale	  HPC	  Systems”,	  	  
+                                                                  Yin	  Lu	  et	  al.,	  Supercompu%ng,	  2012	  
+                                                                                                                                                    31	  
+            Bounded	  memory	  scheduling	  
+                 	  (BMS)	  problem	  
+
+
+  Given	  a	  program	  P	  with	  input	  I	  and	  a	  memory	  
+  bound	  M,	  	  ﬁnd	  a	  set	  of	  task	  ordering	  rela=ons	  
+  TO,	  such	  that	  every	  schedule	  that	  is	  legal	  for	  P	  
+          and	  also	  respects	  TO	  has	  to	  ﬁt	  in	  M.	  
+
+     	  
+D.	  Sbirlea,	  Z.	  Budimlic,	  V.	  Sarkar,	  	  
+“Bounded	  memory	  scheduling	  of	  dynamic	  task	  graphs”,	  PACT	  2014	  
+                                                                                     32	  
+Inspector-­‐Executor	  Approach	  
+             • Our	  programming	  model	  creates	  the	  
+               dynamic	  computa3on	  graph	  without	  
+               running	  the	  full	  computa3on.	  
+                	  
+             • Limita%on:	  Assume	  structural	  
+               determinism	  
+                • Same	  input	  always	  leads	  to	  same	  
+                     computa%on	  graph	  
+
+
+
+
+                                                               33	  
+                         BMS	  algorithm	  
+• Simplifying	  assump%ons	  (see	  paper	  for	  generaliza%on):	  
+    – Only	  data	  items	  in	  graph	  consume	  memory.	  
+    – Data	  items	  are	  a	  ﬁxed	  size,	  ITEM_SIZE.	  
+
+
+                                       Dividing	  
+                                     memory	  in	  
+                                     item-­‐sized	  
+                                        slots	  
+
+
+                     Before	                             A_er	  
+                                        memory
+                              colors =
+                                       item _ size                      34	  
+                                     BMS	  algorithm:	  
+                               	  Task	  ordering	  edges	  
+       • Task	  ordering	  edges	  ensure	  only	               A	  
+         the	  schedules	  that	  ﬁt	  the	  
+         memory	  bound	  are	  valid.	  
+
+       • Iﬀ.	  A	  and	  B	  have	  the	  same	  color,	  
+         we	  add	  ordering	  edges:	  
+                                                                                                  B	  
+            – From	  the	  consumers	  of	  A	  
+            – To	  the	  producer	  of	  B	  
+
+
+            These	  edges	  enforce	  non-­‐
+            overlapping	  life3mes	  for	  	                             ordering	  
+                                                                              	  edge	  
+                same-­‐color	  data.	                                                  35	  
+
+
+
+	  
+                              BMS	  algorithm	  
+Input:	  	  	  	  	  	                                                Build	  topological	  
+     • Computa%on	  graph	  	                                               	  task	  order	  
+
+     • Number	  of	  colors	           Schedule	       Yes	                   Task	  list	  
+	                                         found!	                                empty?	  
+	                                                                                      No	  
+                                                                                  Pop	  task	  
+	  
+	  
+                                                                                 Assign	  colors	  
+	                                           Fail	  
+                                                           Not	  
+                                                         enough	  
+                                                                                 to	  produced	  
+	                                                        colors	  
+                                                                                        items	  
+                                                                                             Colors	  
+	                                                                                           assigned	  
+	  
+                                                                          Add	  ordering	  edges	  
+	  
+Output:	  	  	  
+     • Set	  of	  task	  ordering	  edges	                      If	  unused,	  reclaim	  color	  of	  
+                                                                             consumed	  items	  
+	                                                                                                                 36	  
+                    BMS	  algorithm:	  
+                   Example	  coloring	  
+7	  colors:	                     6	  colors:	  
+
+
+
+
+                    Fewer	  colors	  means	  
+                      less	  parallelism.	          37	  
+          Experimental	  setup	  
+CPU:	  	  
+                                             	   	  Benchmarks:	  
+16	  core	  Intel	  Xeon	  
+                                      	  
+	                                           – Blackscholes	  
+RAM:	  	                                   – Cholesky	  
+32GB	  RAM	  
+	                                           – Matrix	  Inverse	  
+                                             – Merge	  Sort	  
+Run3me:	  	  
+                                             – Smith-­‐Waterman	  
+BMS-­‐CnC	  is	  based	  on:	  
+                                             – Standard	  Task	  Graph	  
+• Sandia	  QThreads	  
+• Graphviz	  Cgraph	  
+                                                                               38	  
+                                                      Smith-­‐Waterman:	  	  
+                                                     OpenMP	  comparison	  
+                    350#    CnC##
+                           serial#                                           OpenMP#
+                    300#                                                      serial#
+
+
+                    250#                                                                  OpenMP	  	  
+                                                                 BMS-­‐CnC	  	  
+                                                                                          • uses	  barrier-­‐style	  memory	  
+
+Execu&on)&me)(s))
+                                                                 performance	  
+                    200#
+                                                                                             management	  (pre-­‐alloca%on,	  	  	  
+                    150#
+                                                                                             post-­‐dealloca%on)	  
+                    100#                                                                  • matches	  in	  performance,	  	  
+                                                                                 CnC##
+                     50#
+                                                                              parallel#   • lags	  in	  memory	  usage	  
+                                                                       OpenMP#
+                                                                       parallel#
+                      0#
+                        700#         900#      1100#    1300#      1500#      1700#
+                                            Memory)bound)(MB))
+
+                     Figure:	  BMS-­‐CnC	  executor	  %me	  as	  a	  func%on	  
+                     of	  the	  memory	  bound	  for	  Smith-­‐Waterman.	  
+
+                                                                                                                                   39	  
+                                                    Merge-­‐Sort:	  	  
+                                               Finding	  the	  sweet-­‐spot	  
+             12#
+                                  CnC##
+                                 serial#
+                                                                                                   Sweetspot:	  	  	  	  	  	  	  	  
+             10#                                                        BMS-­‐CnC	  	  
+                                                                        performance	  
+                                                                                                   With	  14%	  of	  parallel	  
+                    8#
+                                                                                                   footprint,	  BMS	  oﬀers	  
+Execu&on)&me)(s))
+                    6#                                                                             91%	  of	  the	  parallel	  
+                    4#                                                                             speedup.	  
+                                                                                    CnC##
+                                                                                   parallel#
+                    2#
+
+
+                    0#
+                         0#                5000#          10000#                     15000#
+                                              Memory)bound)(MB))
+
+                         Figure:	  BMS-­‐CnC	  executor	  %me	  as	  a	  func%on	  of	  
+                         memory	  bound	  for	  Merge	  Sort.	  
+                                                                                                                                      40	  
+                        Take-­‐away	  
+• The	  inspector-­‐executor	  model	  can	  be	  used	  for	  
+  memory-­‐eﬃcient	  scheduling	  of	  task	  graphs.	  
+   – Further	  mo%vated	  by	  schedule	  caching	  across	  
+     runs.	  
+
+• Our	  bounded	  memory	  scheduling	  algorithm	  
+  enforces	  a	  user-­‐speciﬁed	  bound	  on	  peak	  
+  memory	  usage	  leading	  to	  low	  and	  predictable	  
+  memory	  footprints	  
+
+                                                                      41	  
+Selected Topics
+
+ § Polyhedral Optimizations for a Data-Flow Graph
+    Language (DFGL)
+ § Task scheduling on heterogeneous nodes
+ § Bounded memory task scheduling
+ § Dynamic scheduling of elastic SPMD tasks
+ § Speculative task parallelism with the Eureka
+    programming model
+
+
+                          42
+       Definition of elastic tasks
+• Elastic tasks are internally parallel tasks
+                         – c(u)
+             u              • Capacity of task u
+         c(u),w(u)
+                            • Measure of parallelism within
+                              task --- task u is assumed to
+                              scale linearly with up to c(u)
+                  …
+                              worker threads
+           c(u)          – w(u)
+                            • Estimated total work in task u
+
+• Automatic allocation of a(u) ≤ c(u) workers to a
+  single elastic task, based on worker availability 43
+         The elastic task model
+• Computation is modeled as a dynamic directed
+  acyclic graph (DAG)
+  – Nodes represent elastic or non-elastic tasks
+     • A task is non-elastic if its capacity, c(u) = 1
+  – Edges represent dependences
+• W = total work in the graph
+  – For elastic task u: Work(u) = w(u)
+• S = span/critical path/execution on ∞ processors
+  – For elastic task u: Span(u) = w(u) / c(u)
+• Parallelism in the graph is W/S
+• Computations take at least max(W/P, S) time
+                                                         44
+       Work-stealing with elastic tasks:
+             Theoretical Model
+• w(u) = modeled as w(u) unit-time steps
+• Worker wi is assigned elastic task u Steal tasks from head
+   – does not start execution, waits for other threads
+   – a(u) = 1
+• Thief wj , chooses victim wi
+   – wj is also assigned u, starts waiting
+   – a(u) = 2
+• Every time step: wait(u) += a(u)
+• Task u starts executing when
+   – a(u) = c(u) (task is saturated), OR     w0     w1     w2      w3
+   – wait(u) = w(u)
+                                                  Worker threads    45
+              Theoretical bounds on
+                 completion time
+
+• Work-stealing scheduler
+   – O(W / P + S + E lgP) expected
+
+
+• Work-sharing scheduler:
+   – O(W / P + S + E)
+
+W = work; total computation
+S = span; critical path of the computation
+P = number of processors
+E = number of elastic tasks
+                                             46
+                   ElastiJ:
+       Adaptive runtime for elastic tasks
+• New runtime, integrated in the Habanero Java library
+• Existing constructs:
+  – async: spawns a task
+  – finish: waits for all tasks started inside this scope
+• We introduce:
+  – asyncElastic (w(u), c(u)))
+     • spawns an elastic task, u, with work w(u) and capacity c(u)
+• Future Work
+  – Extension to adaptive scheduling on GPUs, and also inter-
+    SM scheduling within a GPU
+
+                                                                     47
+           Experimental results
+• Platforms:
+  – Intel Xeon X5660 @ 2.83 GHz (Westmere)
+     • 12 cores
+     • DAVinCI system
+  – POWER7 @ 3.86GHz
+     • 32 cores, 4M L3 cache
+     • BlueBioU system
+• Benchmarks
+  – Quicksort, FFT (adaptation)
+  – Fork-Join micro-benchmark (locality)
+  – IMSuite: 8 benchmarks (overhead, adaptation) 48
+           Quicksort Benchmark
+1. Choose pivot
+2. Partition                         Elastic task / Asyncs
+    1. Move all elements < pivot to the left of the array
+    2. Move all elements > pivot to the right of the array
+3. Sort remaining left array                 Fork 2 Asyncs
+4. Sort remaining right array                (based on
+                                             threshold)
+
+•      Adapt to different task size and available
+    number of threads at each recursion level
+                                                             49
+                  Quicksort results
+• Y axis:
+   – Time using elastic tasks
+     normalized w.r.t async runs
+   – A value > 1 indicates a better
+     performance for elastic tasks
+     than the async versions
+• Small dataset – 107
+• Large dataset – 108
+• Partition step in Quicksort
+  uses elastic parallelism in
+  elastic version, and fixed
+  parallelism in async version
+• Recursive calls are async
+  tasks in both versions              50
+              FFT Benchmark
+1. FFT on left half of array
+                                      Fork 2 Asyncs
+2. FFT on right half of array
+3. Recombine                 Elastic task / Asyncs
+
+
+
+•      Adapt to different task size and available
+    number of threads at each recursion level
+
+
+                                                51
+                        FFT results
+• Y axis:
+   – Time using elastic tasks
+     normalized w.r.t async runs
+   – A value > 1 indicates a better
+     performance for elastic tasks
+     than the async versions
+• Small dataset – 222
+• Large dataset – 223
+• Recombine step in FFT
+  uses elastic parallelism in
+  elastic version, and fixed
+  parallelism in async version
+• Recursive calls are async
+  tasks in both versions              52
+Selected Topics
+
+ § Polyhedral Optimizations for a Data-Flow Graph
+    Language (DFGL)
+ § Task scheduling on heterogeneous nodes
+ § Bounded memory task scheduling
+ § Dynamic scheduling of elastic SPMD tasks
+ § Speculative task parallelism with the Eureka
+    programming model
+
+
+                          53
+               Eureka Style Computation
+
+• Applicable	  to	  many	  search	  and	  
+  op%miza%on	  problems	  
+• Specula%ve	  parallelism	  abundant	  
+    •Results	  may	  or	  may	  not	  be	  needed	  
+    •Each	  task	  amempts	  to	  ﬁnd	  a	  result	  
+• Announces	  result	  has	  been	  found	  
+    •An	  "aha!"	  moment	  –	  Eureka	  event	  
+    •Can	  curtail	  rest	  of	  the	  computa%on	  
+
+
+
+                         Image source: http://www.netstate.com/states/mottoes/images/ca_eureka.jpg
+
+                                                  54                                                 54
+Simple Approach: Matrix Search
+
+
+
+
+              55                 55
+Current Approach: Manual termination via
+          Cancellation Tokens
+•Manual	  periodic	  checks	  with	  returns	  
+•User	  controls	  responsiveness	  
+
+
+
+
+                                                               Repeated checks
+                                                               which are written
+                                                               manually
+
+
+
+
+•Cumbersome	  to	  write	  
+    •Pass-­‐through	  methods	  need	  instrumenta%on	  
+•	  Cannot	  support	  inaccessible	  func%ons	  
+                                       56                                      56
+                      Detecting eureka events
+   • Our	  solu3on: Eureka	  construct	  to	  abstract	  various	  pamerns	  
+   • Simpliﬁes	  grouping	  of	  specula%ve	  tasks	  
+
+
+
+
+        •NEW:	  freshly	  created	  
+        •UPDATING:	  changeable	  state	  
+        •RESOLVED:	  stable	  state	  
+   • Desired	  invariant:	  monotonicity	  in	  state	  transi%ons.	  	  Once	  
+     resolved,	  eureka	  always	  stays	  resolved.	  
+The Eureka Programming Model for Speculative Task Parallelism.
+Shams Imam, Vivek Sarkar. 29th European Conference on Object-
+Oriented Programming (ECOOP), July 57
+                                   2015.                                                   57
+             Eureka Programming Model
+
+• finish (eureka) S1
+   •Mul%ple	  finishes	  can	  register	  on	  same	  Eureka	  
+    •Wait	  for	  all	  tasks	  or	  un%l	  eureka	  is	  resolved	  
+• async	  	  
+    •Launches	  an	  asynchronous	  task	  
+    •Inherit	  eureka	  registra%on	  
+• offer()
+    •Triggers	  eureka	  event	  on	  registered	  eureka	  
+• check()
+    •Causes	  task	  to	  terminate	  if	  eureka	  resolved	  
+
+                                                  58                             58
+Eureka Version of Example
+
+
+
+
+  Call to check() supports early termination with
+  automatic stack unwinding                         59
+                  59
+                               Eureka Variants
+
+• Both	  determinis%c	  and	  nondeterminis%c	  computa%ons	  
+• Examples	  
+    •Parallel	  Search	  
+    •K-­‐Count	  Eureka	  
+    •N-­‐Version	  Programming	  
+    •Branch	  and	  Bound	  Op%miza%on	  
+    •So_	  Real-­‐Time	  Deadlines	  
+    •Convergence	  Itera%ons	  
+    •Binary	  Composi%on	  of	  variants	  
+    •Nes%ng	  computa%ons	  
+    •…	  
+
+
+                                                  60                  60
+Eureka Variants…
+
+
+
+
+       61          61
+                                              Experimental Setup
+• 	  	  	  	  	  	  	  	  	  	  Four	  8-­‐core	  3.8	  GHz	  IBM	  POWER7	  
+• 	  	  	  	  	  	  	  	  	  	  256	  GB	  of	  RAM	  
+• 	  	  	  	  	  	  	  	  	  	  32	  KB	  L1	  Cache	  
+• So_ware	  
+          •	  	  	  	  Habanero-­‐Java	  library	  0.1.4	  
+                     •Coopera%ve	  scheduler	  that	  uses	  con%nua%ons	  
+                     •Other	  variants	  implemented	  from	  scratch	  
+• Benchmarks	  run	  with	  single	  place	  
+         • 	  	  	  	  	  	  	  32	  worker	  threads	  per	  place	  
+         • 	  	  	  	  	  	  	  64	  GB	  memory	  allocated	  to	  JVM	  
+         • 	  	  	  	  	  	  	  Mean	  of	  best	  50	  out	  of	  150	  execu%on	  %mes	  reported	  
+
+
+                                                                          62                                              62
+                                 Performance Results
+• Legend:	  AF:	  async-finish;	  CT:	  Cancella%on-­‐token;	  	  
+  EX:	  Excep%on-­‐based;	  FS:	  Func%on-­‐scoped;	  EU:	  Eureka.	  
+
+
+
+
+Execution Time Ratio w.r.t. EU
+
+
+
+
+       (lower is better)
+
+
+
+
+• EU	  slightly	  faster	  than	  EX	  and	  CT,	  about	  50%	  faster	  than	  FS	  
+                                                   63                                                63
+                             Productivity –
+                         Cyclomatic Complexity
+
+
+
+Cyclomatic Complexity
+
+
+
+
+   (lower is better)
+
+
+
+
+   • EU	  similar	  to	  AF,	  at	  least	  10%	  bemer	  than	  FS,	  EX,	  and	  CT	  
+
+                                                      64                                                64
+                                             Productivity –
+                                     Halstead’s Development Effort
+
+
+Development Effort Ratio w.r.t. EU
+
+
+
+
+        (lower is better)
+
+
+
+
+ EU	  10%	  more	  than	  AF,	  15%	  lower	  than	  FS,	  EX,	  and	  CT.	  
+
+                                                    65                                      65
+Conclusions
+ § Future systems will need fundamental changes in Programming
+    Models, Compilers, Runtimes, and Debuggers to address
+    Extreme Scale challenges
+ § Urgent need for execution models that span multiple scales of
+    parallelism and heterogeneity – multicore, accelerators, multi-
+    node, HPC cluster, data center cluster
+ § New structured-parallel primitives can provide foundation for
+    new execution models, with synergistic innovation in languages,
+    compilers, runtimes, and formal methods
+ § This talk presented early experiences in the Habanero project,
+    and key structured-parallel primitives that help improve both
+    programmability, performance, and debuggability
+                                 66
+

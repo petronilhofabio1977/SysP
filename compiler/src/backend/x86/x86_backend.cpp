@@ -190,6 +190,24 @@ sysp_println_bool:
     // Main program generation
     // ================================================================
 
+    // ================================================================
+    // Struct layout collection
+    // ================================================================
+
+    void Backend::collect_struct_layouts(const sysp::ast::Program& program) {
+        struct_layouts_.clear();
+        for (auto& decl : program.declarations) {
+            if (auto* s = dynamic_cast<const StructDecl*>(decl.get())) {
+                StructLayout layout;
+                for (auto& f : s->fields) {
+                    layout.field_names.push_back(f.name);
+                    layout.field_types.push_back(f.type);
+                }
+                struct_layouts_[s->name] = std::move(layout);
+            }
+        }
+    }
+
     void Backend::generate_program(const sysp::ast::Program& program, std::ostream& out) {
         // Reset state
         string_constants_.clear();
@@ -197,6 +215,9 @@ sysp_println_bool:
         label_counter_ = 0;
         var_offsets_.clear();
         stack_offset_ = 0;
+
+        // Build struct layout table before any codegen
+        collect_struct_layouts(program);
 
         // Collect all code into a buffer first (we need string constants)
         std::ostringstream code;
@@ -351,9 +372,143 @@ sysp_println_bool:
         out << "    ; unhandled statement\n";
     }
 
+    // ================================================================
+    // Struct generation
+    // ================================================================
+
+    // Allocates n_fields × 8 bytes on the stack and initializes each field.
+    // var_offsets_[var_name] = offset of field 0 from rbp.
+    // Field i lives at [rbp - (var_offsets_[var_name] + i*8)].
+    void Backend::gen_struct_init(const std::string& var_name,
+                                  const StructInitExpr* si,
+                                  std::ostream& out) {
+        auto it = struct_layouts_.find(si->type_name);
+        int n_fields = (it != struct_layouts_.end())
+                       ? static_cast<int>(it->second.field_names.size())
+                       : static_cast<int>(si->fields.size());
+
+        if (n_fields == 0) return;
+
+        // Allocate n_fields slots (8 bytes each); field 0 at [rbp - base].
+        stack_offset_ += 8;
+        int base_off = stack_offset_;
+        if (n_fields > 1) stack_offset_ += (n_fields - 1) * 8;
+
+        var_offsets_[var_name] = base_off;
+        var_types_[var_name]   = si->type_name;
+
+        out << "    ; struct " << si->type_name << " " << var_name
+            << " base=[rbp-" << base_off << "] fields=" << n_fields << "\n";
+
+        if (it != struct_layouts_.end()) {
+            // Initialize in layout order so offsets are deterministic
+            auto& names = it->second.field_names;
+            for (int i = 0; i < static_cast<int>(names.size()); i++) {
+                bool found = false;
+                for (auto& f : si->fields) {
+                    if (f.name == names[i]) {
+                        gen_expr(f.value.get(), out);
+                        out << "    mov [rbp-" << (base_off + i * 8) << "], rax"
+                            << "    ; " << si->type_name << "." << names[i] << "\n";
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found)
+                    out << "    mov qword [rbp-" << (base_off + i * 8)
+                        << "], 0    ; " << names[i] << " (default 0)\n";
+            }
+        } else {
+            // Unknown struct — initialize in the order provided
+            for (int i = 0; i < static_cast<int>(si->fields.size()); i++) {
+                gen_expr(si->fields[i].value.get(), out);
+                out << "    mov [rbp-" << (base_off + i * 8) << "], rax"
+                    << "    ; ." << si->fields[i].name << "\n";
+            }
+        }
+    }
+
+    // Generates a member-field read. Result in rax.
+    void Backend::gen_member(const MemberExpr* mem, std::ostream& out) {
+        auto* id = dynamic_cast<const IdentifierExpr*>(mem->object.get());
+        if (!id) {
+            out << "    ; TODO: complex member access\n";
+            out << "    xor rax, rax\n";
+            return;
+        }
+
+        auto type_it = var_types_.find(id->name);
+        if (type_it == var_types_.end()) {
+            out << "    ; unknown type for var " << id->name << "\n";
+            out << "    xor rax, rax\n";
+            return;
+        }
+
+        auto layout_it = struct_layouts_.find(type_it->second);
+        if (layout_it == struct_layouts_.end()) {
+            out << "    ; unknown struct layout " << type_it->second << "\n";
+            out << "    xor rax, rax\n";
+            return;
+        }
+
+        int field_idx = -1;
+        auto& names = layout_it->second.field_names;
+        for (int i = 0; i < static_cast<int>(names.size()); i++) {
+            if (names[i] == mem->field) { field_idx = i; break; }
+        }
+        if (field_idx < 0) {
+            out << "    ; unknown field " << mem->field
+                << " in " << type_it->second << "\n";
+            out << "    xor rax, rax\n";
+            return;
+        }
+
+        int base_off = var_offsets_[id->name];
+        out << "    mov rax, [rbp-" << (base_off + field_idx * 8) << "]"
+            << "    ; " << id->name << "." << mem->field << "\n";
+    }
+
+    // Generates a member-field write. Value to store must already be in rax.
+    void Backend::gen_assign_member(const MemberExpr* mem, std::ostream& out) {
+        auto* id = dynamic_cast<const IdentifierExpr*>(mem->object.get());
+        if (!id) { out << "    ; TODO: complex member assign\n"; return; }
+
+        auto type_it = var_types_.find(id->name);
+        if (type_it == var_types_.end()) {
+            out << "    ; unknown type for var " << id->name << "\n"; return;
+        }
+
+        auto layout_it = struct_layouts_.find(type_it->second);
+        if (layout_it == struct_layouts_.end()) {
+            out << "    ; unknown struct layout " << type_it->second << "\n"; return;
+        }
+
+        int field_idx = -1;
+        auto& names = layout_it->second.field_names;
+        for (int i = 0; i < static_cast<int>(names.size()); i++) {
+            if (names[i] == mem->field) { field_idx = i; break; }
+        }
+        if (field_idx < 0) {
+            out << "    ; unknown field " << mem->field << "\n"; return;
+        }
+
+        int base_off = var_offsets_[id->name];
+        out << "    mov [rbp-" << (base_off + field_idx * 8) << "], rax"
+            << "    ; " << id->name << "." << mem->field << " =\n";
+    }
+
     // ── var decl ─────────────────────────────────────────────────────
 
     void Backend::gen_var_decl(const VarDeclStmt* stmt, std::ostream& out) {
+        // Struct init: allocates and initialises directly — no extra mov needed
+        if (stmt->initializer) {
+            if (auto* si = dynamic_cast<const StructInitExpr*>(stmt->initializer.get())) {
+                if (!stmt->names.empty())
+                    gen_struct_init(stmt->names[0], si, out);
+                return;
+            }
+        }
+
         if (stmt->initializer)
             gen_expr(stmt->initializer.get(), out);
         else
@@ -382,6 +537,14 @@ sysp_println_bool:
 
     void Backend::gen_assign(const AssignStmt* stmt, std::ostream& out) {
         gen_expr(stmt->value.get(), out);
+
+        // p.field = value
+        if (auto* mem = dynamic_cast<const MemberExpr*>(stmt->target.get())) {
+            gen_assign_member(mem, out);
+            return;
+        }
+
+        // scalar assignment
         if (auto* id = dynamic_cast<const IdentifierExpr*>(stmt->target.get())) {
             auto it = var_offsets_.find(id->name);
             if (it != var_offsets_.end()) {
@@ -521,8 +684,13 @@ sysp_println_bool:
         }
 
         if (auto* e = dynamic_cast<const MemberExpr*>(expr)) {
-            gen_expr(e->object.get(), out);
-            out << "    ; member ." << e->field << " (TODO: struct offset)\n";
+            gen_member(e, out);
+            return;
+        }
+
+        if (auto* e = dynamic_cast<const StructInitExpr*>(expr)) {
+            // StructInitExpr as expression (not inside let) — allocate anonymous slot
+            gen_struct_init("__anon_struct_" + std::to_string(label_counter_++), e, out);
             return;
         }
 
@@ -803,6 +971,31 @@ sysp_println_bool:
                     return;
                 }
             }
+        }
+
+        // Member access: println(p.field) — look up field type for dispatch
+        if (auto* mem = dynamic_cast<const MemberExpr*>(arg)) {
+            if (auto* id = dynamic_cast<const IdentifierExpr*>(mem->object.get())) {
+                auto type_it = var_types_.find(id->name);
+                if (type_it != var_types_.end()) {
+                    auto layout_it = struct_layouts_.find(type_it->second);
+                    if (layout_it != struct_layouts_.end()) {
+                        auto& names = layout_it->second.field_names;
+                        auto& types = layout_it->second.field_types;
+                        for (size_t i = 0; i < names.size(); i++) {
+                            if (names[i] == mem->field) {
+                                if (types[i] == "bool") {
+                                    out << "    call sysp_println_bool\n";
+                                    return;
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            out << "    call sysp_println_int\n";
+            return;
         }
 
         // Default: print as int

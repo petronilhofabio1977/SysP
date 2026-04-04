@@ -1209,8 +1209,14 @@ namespace sysp::parser {
         if (check(TokenType::LPAREN))
             return parse_tuple_or_grouped();
 
-        // Identifier
+        // Identifier — or struct init: TypeName { field: val, ... }
         if (check(TokenType::IDENT)) {
+            // Lookahead: IDENT LBRACE IDENT COLON  →  struct literal
+            if (peek(1).type == TokenType::LBRACE &&
+                peek(2).type == TokenType::IDENT   &&
+                peek(3).type == TokenType::COLON)
+                return parse_struct_init();
+
             auto id = std::make_unique<IdentifierExpr>();
             id->name = advance().lexeme;
             return id;
@@ -1337,6 +1343,27 @@ namespace sysp::parser {
     }
 
     // ── Argument list ────────────────────────────────────────────────
+
+    // ── Struct initializer ──────────────────────────────────────────
+    // Syntax: TypeName { field: expr, field: expr }
+
+    ExprPtr Parser::parse_struct_init() {
+        auto si = std::make_unique<StructInitExpr>();
+        si->type_name = advance().lexeme;          // consume TypeName
+        expect(TokenType::LBRACE, "expected '{'");
+
+        while (!check(TokenType::RBRACE) && !is_at_end()) {
+            StructFieldInit f;
+            f.name  = expect(TokenType::IDENT,  "expected field name").lexeme;
+            expect(TokenType::COLON, "expected ':' after field name");
+            f.value = parse_expression();
+            si->fields.push_back(std::move(f));
+            if (!match(TokenType::COMMA)) break;
+        }
+
+        expect(TokenType::RBRACE, "expected '}'");
+        return si;
+    }
 
     std::vector<ExprPtr> Parser::parse_argument_list() {
         std::vector<ExprPtr> args;

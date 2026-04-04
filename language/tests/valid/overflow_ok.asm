@@ -1,6 +1,3 @@
-; SysP Compiler Output
-; Source: ../../language/tests/valid/overflow_ok.sp
-
 
     sysp_str_true  db 't','r','u','e',10
     sysp_str_false db 'f','a','l','s','e',10

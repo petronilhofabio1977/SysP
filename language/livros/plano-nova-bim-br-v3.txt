@@ -1,0 +1,2043 @@
+Plano de Trabalho
+
+
+NOVA
+BIM BR
+Expediente
+Comitê gestor da Estratégia BIM BR
+Presidente da República                          Ministro da Defesa
+Luíz Inácio Lula da Silva                        José Múcio Monteiro Filho
+
+Vice-Presidente da República e Ministro
+do Desenvolvimento, Indústria, Comércio          Ministro da Educação
+e Serviços                                       Camilo Sobreira de Santana
+Geraldo José Rodrigues Alckmin Filho
+                                                 Ministra da Gestão e da Inovação em
+Ministro da Casa Civil da Presidência            Serviços Públicos
+da República                                     Esther Dweck
+Rui Costa dos Santos
+
+                                                 Ministro dos Portos e Aeroportos
+Ministro das Cidades
+Jader Barbalho Filho                             Silvio Seraﬁm Costa Filho
+
+
+Ministra da Ciência, Tecnologia                  Ministro dos Transportes
+e Inovação                                       José Renan Vasconcellos Calheiros Filho
+Luciana Barbosa de Oliveira Santos
+
+
+            Ministério do Desenvolvimento, Indústria, Comércio e Serviços
+       Secretaria de Desenvolvimento Industrial, Inovação, Comércio e Serviços
+             Secretaria Executiva do Comitê Gestor da Estratégia BIM BR
+                             Esplanada dos Ministérios, Bloco "J"
+                                 Zona Cívico-Administrativa
+                                           70053-900
+                                           Brasília, DF
+                                    Tel.: +55 61 2027-7070
+                            Email: estrategiabimbr@mdic.gov.br
+
+
+
+
+                                                                                  MINISTÉRIO DO
+                                                                         D E S E N V O LV I M E N T O ,
+                                                                       INDÚSTRIA, COMÉRCIO
+                                                                                     E SERVIÇOS
+Sumário
+SUMÁRIO EXECUTIVO                                                                             4
+
+
+   1. A NOVA ESTRATÉGIA NACIONAL DE DISSEMINAÇÃO DO BIM
+                                                                                              4
+      (NOVA BIM BR)
+
+   2. ANTECEDENTES                                                                            5
+
+
+   3. A GOVERNANÇA DA NOVA BIM BR                                                             7
+
+
+   4. OBJETIVOS ESTRATÉGICOS DA NOVA BIM BR                                                   9
+
+
+   5. EIXOS E TEMAS ADOTADOS                                                                  9
+
+
+   6. CONSTRUÇÃO DO PLANO DE TRABALHO                                                         10
+
+
+   7. IDENTIDADE ESTRATÉGICA INSTITUCIONAL                                                    11
+
+
+   8. ELEMENTOS DE COMPOSIÇÃO DO PLANO                                                        12
+
+
+   9. OBJETIVOS ESTRATÉGICOS E EIXOS TEMÁTICOS DA NOVA BIM BR                                 12
+
+
+   10. PORTFÓLIO DE AÇÕES                                                                     13
+
+
+ANEXO I - TABELAS RESUMO                                                                      25
+
+
+ANEXO II – ELABORAÇÃO DO PLANO DE TRABALHO                                                    31
+
+
+
+
+                                                                      MINISTÉRIO DO
+                                                             D E S E N V O LV I M E N T O ,
+                                                           INDÚSTRIA, COMÉRCIO
+                                                                         E SERVIÇOS
+         Página 4
+
+
+
+
+Sumário executivo
+Este documento apresenta as principais ações da Nova Estratégia Nacional de
+Disseminação do Building Information Modelling, ou em português, Modelagem da
+Informação da Construção. A Estratégia BIM BR é uma política instituída com o objetivo de
+promover um ambiente adequado ao investimento em BIM e a sua difusão no País.
+
+O Plano de Trabalho foi elaborado por meio de um amplo diálogo em oﬁcinas
+colaborativas e parte de três premissas.
+
+Primeiro, que é preciso estruturar o setor público para a utilização do BIM, em conformidade
+com a Nova Lei de Licitações e Contratos Administrativos (NLLC),
+Lei nº 14.133/2021¹, que estabelece em seu artigo 19, o uso preferencial da Modelagem
+da Informação da Construção (Building Information Modelling - BIM).
+
+Segundo, que é preciso aproximar a política educacional às necessidades de
+transformação digital da indústria de Arquitetura, Engenharia, Construção e Operação
+(AECO).
+
+E Terceiro, que é preciso criar condições para aumentar os investimentos em PD&I
+promovendo o desenvolvimento econômico e sustentável da indústria da construção, com
+apoio do BIM e tecnologias correlatas.
+
+
+
+1. A Nova Estratégia de disseminação do BIM
+  (Nova BIM BR)²
+
+    O que é e por que BIM
+    BIM (Building Information Modelling) ou Modelagem da Informação da Construção
+    é o conjunto integrado de processos e tecnologias que permite criar, utilizar,
+    atualizar e compartilhar, colaborativamente, modelos digitais de uma construção,
+    de forma a servir potencialmente a todos os participantes do empreendimento
+    durante o ciclo de vida da construção.
+
+    O uso do BIM possibilita “construir virtualmente” e realizar diversos tipos
+    de análises e simulações, antecipando eventuais problemas que não
+    eram possíveis de serem identiﬁcados no método tradicional de elaboração
+    de projetos.
+
+
+
+
+  ¹ https://www.planalto.gov.br/ccivil_03/_Ato2019-2022/2021/Lei/L14133.htm
+  ² https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2024/decreto/d11888.htm
+
+
+                                                                                             MINISTÉRIO DO
+                                                                                    D E S E N V O LV I M E N T O ,
+                                                                                  INDÚSTRIA, COMÉRCIO
+                                                                                                E SERVIÇOS
+            Página 5
+
+
+
+        Também, funciona como uma “enciclopédia digital” do empreendimento,
+        onde é possível acessar informações detalhadas e precisas para facilitar a
+        operação e a manutenção de cada elemento ao longo do ciclo de vida.
+
+        BIM é o alicerce para a Construção 4.0.
+
+
+
+A Estratégia BIM-BR³ é elencada como parte das ações da Nova Indústria Brasil (NIB)³,
+com o propósito de fortalecer as cadeias produtivas nacionais da indústria da arquitetura,
+engenharia, construção e operação (AECO) com o uso de sistemas construtivos digitais.
+O BIM, como uma metodologia estratégica, desempenha um papel central na
+transformação digital da indústria da construção civil, promovendo ganhos de eﬁciência,
+sustentabilidade e integração tecnológica, alinhando-se diretamente com os princípios
+da NIB.
+
+Nesse sentido, a Nova BIM BR apoiará o desenvolvimento de novas aplicações em BIM,
+fomentando a concorrência e criando condições para que mais desenvolvedores
+alcancem o mercado de softwares de modelagem da informação da construção.
+
+Além disso, a BIM BR também está prevista no Novo PAC 4, como uma das medidas
+institucionais para redução de custos e aumento de celeridade na execução de obras
+estruturantes.
+
+A Nova BIM BR está alinhada com princípios de incremento de: produtividade,
+competitividade e digitalização da indústria.
+
+
+
+2. Antecedentes
+Na história recente, em junho de 2017, foi instituído o Comitê Estratégico para formulação
+da primeira Estratégia Nacional de Disseminação de BIM, decretada em 17 de maio de 2018
+(Decreto n° 9.377/2018), com reedição em 22 de agosto de 2019 (Decreto nº 9.983/2019).
+
+Na esteira desses atos normativos, foi publicado o Decreto nº 10.306, de 2 de abril de 2020,
+que estabelece o uso de BIM na execução de obras e serviços de engenharia realizada por
+órgãos e entidades da Administração Pública Federal. O referido Decreto estabeleceu o
+uso do BIM em programas piloto somente para certos órgãos vinculados ao Ministério da
+Defesa (as três Forças Armadas) e ao Ministério da Infraestrutura, à época. Com o
+aumento da disseminação e adoção do BIM no país, com novos programas de governo e
+a nova lei de licitações e contratos administrativos promover a atualização deste Decreto
+é certamente demanda essencial.
+
+
+
+
+ ³ https://www.gov.br/mdic/pt-br/composicao/se/cndi/plano-de-acao/nova-industria-brasil-plano-de-acao.pdf
+ 4
+     https://www.gov.br/casacivil/pt-br/novopac
+
+
+
+                                                                                                              MINISTÉRIO DO
+                                                                                                     D E S E N V O LV I M E N T O ,
+                                                                                                   INDÚSTRIA, COMÉRCIO
+                                                                                                                 E SERVIÇOS
+            Página 6
+
+
+Alguns estados brasileiros seguiram a iniciativa federal da Estratégia Nacional de
+Disseminação de BIM e estabeleceram suas estratégias estaduais 5 : Rio de Janeiro
+(Decreto Estadual nº 46.471/ 2018), Paraná (Decreto Estadual nº 3080 /2019), Minas Gerais
+(Decreto Estadual nº 48.146/2021), Santa Catarina (Decreto Estadual nº 1.370/2021), Rio
+Grande do Sul (Decreto Estadual nº 56.311/2022) e Maranhão (Decreto Estadual nº 38.886/
+2024).
+
+Ainda, no contexto da Estratégia Nacional de Disseminação de BIM, uma iniciativa
+relevante do MDIC é o Construa Brasil 6, projeto iniciado a partir do Chamamento Público nº
+03/2019. Para dar celeridade ao Construa Brasil, foi celebrado o Termo de Colaboração nº
+16/2019 visando promover ganho de produtividade e competitividade do setor da
+construção civil. Decorridos cinco anos, são oito metas cumpridas com importantes
+entregas para a sociedade em três grandes temáticas: desburocratização, digitalização e
+industrialização.
+
+A implementação da Lei nº 14.133/2021, a Nova Lei de Licitações e Contratos (NLLC),
+representa um marco para os órgãos públicos de todo o país, trazendo mudanças e
+inovações nas compras governamentais. Em 30 de dezembro de 2023, a Lei nº 14.133/2021
+passou a ser a única norma vigente para as licitações e contratos dos órgãos públicos
+brasileiros. Em seu art. 19, § 3º, estabelece o uso preferencial do BIM sempre que adequado
+ao objeto da licitação:
+
+      “Art. 19. Os órgãos da Administração com competências regulamentares relativas às
+      atividades de administração de materiais, de obras e serviços e de licitações e
+      contratos deverão:
+
+      § 3º Nas licitações de obras e serviços de engenharia e arquitetura, sempre que
+      adequada ao objeto da licitação, será preferencialmente adotada a Modelagem da
+      Informação da Construção (Building Information Modelling - BIM) ou tecnologias e
+      processos integrados similares ou mais avançados que venham a substitui-la.”
+
+No primeiro semestre de 2023, o MDIC retomou e reestruturou a política de transformação
+digital da indústria da Construção, denominada Nova Estratégia BIM BR (Nova BIM BR),
+estabelecida conforme o Decreto nº 11.888/2024. Esse processo envolveu a articulação
+com os demais órgãos de governo que têm elevada interface com a indústria da
+construção, especialmente os órgãos representantes do Comitê Gestor da Nova BIM BR.
+
+No mesmo período em que se preparava a retomada da Estratégia, estavam em
+discussão no governo federal grandes projetos estruturantes, como o Novo PAC e uma
+nova política industrial, intitulada Nova Indústria Brasil (NIB). Percebendo a sinergia entre
+essas políticas e o BIM, o MDIC articulou para que a Nova BIM BR passasse a constar
+desses projetos estruturantes.
+
+
+
+
+ 5
+     https://plataformabimbr.abdi.com.br/guias-normas
+ 6
+     https://www.gov.br/mdic/pt-br/assuntos/ambiente-de-negocios/competitividade-industrial/construa-brasil
+
+
+
+                                                                                                                  MINISTÉRIO DO
+                                                                                                         D E S E N V O LV I M E N T O ,
+                                                                                                       INDÚSTRIA, COMÉRCIO
+                                                                                                                     E SERVIÇOS
+       Página 7
+
+
+Assim, a retomada da Estratégia passou a integrar as medidas institucionais do Novo PAC,
+entendidas como o conjunto de atos normativos de gestão e de planejamento que
+contribuem de forma decisiva para a expansão sustentada de investimentos públicos e
+privados no Brasil e, por conseguinte, para o atingimento dos objetivos do Novo PAC.
+
+A NIB, política de neoindustrialização do governo federal, foi estruturada por meio de
+missões que abordam os principais desaﬁos enfrentados pela sociedade. Essas missões
+são guiadas por objetivos especíﬁcos, e, entre as seis estabelecidas, a Nova BIM BR foi
+inserida como um dos instrumentos das missões 3 e 4: missão 3 - Garantir infraestrutura,
+saneamento, moradia e mobilidade sustentáveis, promovendo a integração produtiva e o
+bem-estar nas cidades; missão 4 - Impulsionar a transformação digital da indústria,
+visando o aumento da produtividade.
+
+A missão 3, tem como um de seus objetivos ‘’adensar as cadeias produtivas nacionais de
+construção e obras de infraestrutura, priorizando a digitalização, sistemas construtivos
+inteligentes, materiais sustentáveis, energia renovável, redes de água e esgoto e
+drenagem pluvial, especialmente para moradias do Programa Minha Casa, Minha Vida e
+demais programas de investimento.’’ Além disso, observa-se que a Nova BIM BR possui
+grande interface com a missão 4 da NIB, que tem entre seus objetivos ‘’fortalecer e
+desenvolver empresas nacionais competitivas em tecnologias digitais disruptivas e
+emergentes, em segmentos estratégicos para a soberania digital e tecnológica’’ e
+‘’aumentar a produtividade da indústria brasileira por meio da incorporação de
+tecnologias digitais, especialmente as desenvolvidas e produzidas no país’’.
+
+
+
+3. A Governança da Nova BIM BR
+O Decreto nº 11.888/2024 instituiu para condução dessa política duas instâncias:
+
+       Comitê Gestor (CG BIM) da BIM BR, órgão deliberativo destinado a implementar a
+       Estratégia e gerenciar as suas ações. O comitê interministerial é presidido pelo
+       MDIC e composto pelos seguintes órgãos: Casa Civil da Presidência da República;
+       Ministério das Cidades; Ministério da Ciência, Tecnologia e Inovação; Ministério da
+       Defesa; Ministério da Educação; Ministério da Gestão e da Inovação em Serviços
+       Públicos; Ministério de Portos e Aeroportos; e Ministério dos Transportes;
+
+
+       Grupo de Assessoramento Técnico da BIM BR, para auxiliar o Comitê Gestor da
+       Estratégia BIM BR na consecução de suas atividades. O Grupo é composto por
+       representantes dos órgãos que compõe o CG BIM e convidados permanentes
+       de entidades vinculadas.
+
+
+O Comitê Gestor é responsável por:
+
+       deﬁnir e gerenciar as ações necessárias para que se alcancem os objetivos da
+       Estratégia BIM BR;
+
+       Elaborar anualmente o plano de trabalho, com as ações prioritárias do Comitê;
+
+
+                                                                                  MINISTÉRIO DO
+                                                                         D E S E N V O LV I M E N T O ,
+                                                                       INDÚSTRIA, COMÉRCIO
+                                                                                     E SERVIÇOS
+       Página 8
+
+
+       buscar a convergência da Estratégia BIM BR com os programas, os projetos
+       e as iniciativas dos órgãos e das entidades públicas que apoiam ﬁnanceiramente,
+       contratam e executam obras públicas em BIM;
+
+       compartilhar informações e analisar o impacto das iniciativas setoriais
+       relacionadas ao BIM;
+
+       acompanhar e avaliar os resultados da Estratégia BIM BR;
+
+       deliberar sobre a atualização da Estratégia;
+
+       articular-se com instâncias similares, inclusive de outros países.
+
+Compete ao Grupo de Assessoramento Técnico:
+
+       subsidiar tecnicamente a atuação do Comitê Gestor; e
+
+       analisar, discutir e recomendar ao Comitê Gestor o encaminhamento de
+       assuntos constantes das pautas das reuniões ordinárias e extraordinárias com
+       vistas ao atingimento dos objetivos previstos.
+
+Ainda, o Comitê Gestor poderá instituir grupos de trabalho especíﬁcos para subsidiar o
+exercício das competências.
+
+A governança pública para a efetiva implementação, demanda alinhamento estratégico
+e operacional. Nesse sentido, o Decreto nº 11.888/2024 também estabelece a realização de
+reuniões periódicas entre as instâncias. São previstas no mínimo a realização de três
+reuniões anuais do Comitê Gestor e seis reuniões anuais do Grupo de Assessoramento
+Técnico.
+
+Nesse sentido, para o monitoramento da condução do trabalho é fundamental promover
+o acompanhamento dos avanços com métricas que avaliem a efetividade das ações ao
+longo do tempo. Essa abordagem permite monitorar o impacto concreto das reuniões
+sobre a estratégia, incentivando a execução das deliberações e promovendo o
+aprimoramento contínuo dos processos.
+
+Ademais, a participação em redes BIM internacionais é essencial para fortalecer a
+governança pública da Nova BIM BR, permitindo o aprendizado com melhores práticas
+globais, o alinhamento estratégico com padrões internacionais e a deﬁnição de métricas
+mais eﬁcazes para monitorar os avanços. Esse envolvimento amplia a capacidade
+técnica, promove a inovação e a sustentabilidade, além de posicionar o Brasil de forma
+competitiva no cenário global. Integrar-se a essas redes potencializa o impacto das
+deliberações e reuniões nacionais, promovendo o aprimoramento contínuo dos processos
+e consolidando o BIM como uma ferramenta estratégica para a eﬁciência e
+sustentabilidade do setor da construção. Entre essas iniciativas, destaca-se a Rede BIM de
+Governos Latino-americanos, além de outras parcerias que possam ser estabelecidas no
+futuro.
+
+
+
+
+                                                                                   MINISTÉRIO DO
+                                                                          D E S E N V O LV I M E N T O ,
+                                                                        INDÚSTRIA, COMÉRCIO
+                                                                                      E SERVIÇOS
+      Página 9
+
+
+
+4. Objetivos estratégicos da Nova BIM BR
+Segundo o Artigo 2º do Decreto 11.888/2024 são objetivos da Estratégia BIM BR:
+
+      I - difundir o BIM e os seus benefícios;
+      II - coordenar e apoiar a estruturação da administração pública federal para a
+      adoção do BIM;
+      III - apoiar as administrações públicas estaduais, distrital e municipais para a
+      adoção do BIM;
+      IV - criar condições favoráveis para o investimento público e privado
+      em BIM;
+      V - estimular a capacitação e a formação proﬁssional em BIM;
+      VI - propor atos normativos que estabeleçam parâmetros para as compras e as
+      contratações públicas com uso do BIM;
+      VII - orientar o desenvolvimento de normas técnicas e apoiar a elaboração de
+      guias e protocolos especíﬁcos para adoção do BIM;
+      VIII - deﬁnir diretrizes para o aperfeiçoamento da Plataforma e da Biblioteca
+      Nacional BIM e incentivar o seu uso;
+      IX - estimular o desenvolvimento e a aplicação de novas tecnologias relacionadas
+      ao BIM;
+      X - incentivar o uso de especiﬁcações técnicas abertas para a interoperabilidade
+      em BIM com o propósito de:
+
+             a)estimular a concorrência no mercado;
+             b) aumentar a participação e o acesso dos proﬁssionais de projetos e
+             obras ao mercado; e
+
+             c) estimular o desenvolvimento da documentação digital de ativos de
+             projetos e obras da União, dos Estados, do Distrito Federal e dos Municípios
+             e ampliar suas possibilidades de uso; e
+
+      XI - estimular o uso do BIM para o fomento da construção industrializada e da
+      sustentabilidade na construção.
+
+
+5. Eixos e temas adotados
+Com o intuito de ordenar as ações públicas e privadas orientadas pelos objetivos
+estratégicos, o presente Plano de Trabalho foi estruturado conforme os três eixos
+principais (aqui denominados de Eixos Temáticos):
+
+      EIXO A - Estruturação do Setor Público para uso do BIM;
+
+      EIXO B - Capacitação e Formação Profissional em BIM; e,
+      EIXO C - Apoio à pesquisa, desenvolvimento, inovação (PD&I) e sustentabilidade
+      na construção por meio do BIM.
+
+
+                                                                                 MINISTÉRIO DO
+                                                                        D E S E N V O LV I M E N T O ,
+                                                                      INDÚSTRIA, COMÉRCIO
+                                                                                    E SERVIÇOS
+       Página 10
+
+
+
+6. Construção do Plano de Trabalho
+Para o desenvolvimento dos trabalhos que culminou neste documento, foi lançado um
+edital, por meio da Cooperação Técnica entre o Programa das Nações Unidas para o
+Desenvolvimento (PNUD) e o MDIC, visando à contratação de consultoria especializada
+com o objetivo de promover uma proposta de Plano de Trabalho para a Nova BIM BR
+(Edital Nº 01 de 16 de fevereiro de 2024, do Projeto de Cooperação Técnica
+PNUD/BRA/18/023).
+
+A reunião inaugural do Grupo de Assessoramento Técnico da Estratégia BIM BR – GAT BIM
+foi realizada no dia 9 de maio de 2024, ocasião em que o método de condução proposto
+pela consultoria foi aprovado.
+
+A metodologia para a elaboração do Plano de Trabalho envolveu duas etapas: uma
+preparatória e outra decisória.
+
+Dentre os produtos estabelecidos na contratação, deﬁniu-se pela realização de oﬁcinas
+colaborativas online para a construção de um conjunto de mapas mentais, produzidos de
+forma coletiva e enriquecidos por meio de comentários na plataforma online. Esses
+mapas reﬂetiram as contribuições dos participantes, mais de 100 pessoas representando
+36 organismos como ministérios, órgãos federais e outras organizações e entidades.
+
+Para cada um dos três Eixos Temáticos, foram conduzidas três oﬁcinas colaborativas de
+trabalho remoto, nas quais foram realizadas as seguintes atividades: no primeiro
+encontro, ocorreu a revisão dos objetivos estratégicos da Nova BIM BR e a elaboração da
+primeira rodada de construção da Matriz SWOT; o segundo encontro teve foco na análise
+da matriz SWOT elaborada e complementada pela equipe no intervalo entre oﬁcinas, e na
+construção da análise cruzada das dimensões SWOT com levantamento de potenciais
+macroestratégias; por ﬁm, no terceiro encontro, foi realizada a           conversão de
+macroestratégias em objetivos para cada Eixo, com deﬁnição dos principais indicadores
+e metas com horizonte temporal até 2027.
+
+A proposta de Plano de Trabalho passou por uma nova análise técnica conduzida pelo
+Grupo de Assessoramento Técnico em três reuniões, realizadas nos dias 8, 15 e 22 de
+outubro de 2024, sendo posteriormente encaminhada e deliberada pelo Comitê Gestor da
+Nova BIM BR no dia 13 de novembro de 2024.
+
+Importante destacar que, ao longo dessa trajetória foram conduzidas reuniões extras para
+esclarecer tendências, colher sugestões e percepções.
+
+Todas essas informações e experiências somam-se ao esforço coletivo, coordenado pela
+Secretaria-executiva da BIM BR, para produzir um Plano de Trabalho para a indústria da
+arquitetura, engenharia, construção e operação (AECO) que contribua para a efetiva
+transformação digital e para o desenvolvimento econômico e sustentável do Brasil.
+
+
+
+
+                                                                                 MINISTÉRIO DO
+                                                                        D E S E N V O LV I M E N T O ,
+                                                                      INDÚSTRIA, COMÉRCIO
+                                                                                    E SERVIÇOS
+       Página 11
+
+
+
+7. Identidade estratégica institucional
+A Nova BIM BR tem sua identidade institucional expressa em um conjunto de atributos
+estratégicos com os seguintes elementos:
+
+Propósito (Por que existimos?):
+
+Promover um ambiente adequado ao investimento em BIM e a sua difusão no país a partir
+do cumprimento dos Objetivos Estratégicos e Eixos Temáticos estabelecidos.
+
+Visão (Onde queremos chegar?):
+
+Ser reconhecida como instrumento de coordenação harmônica e de indução ao uso do
+BIM, atuando com excelência na coordenação de políticas públicas para disseminação
+do BIM e levando à transformação do setor da construção civil brasileiro pela inovação
+e eficiência nos processos, consolidando o BIM como um elemento indispensável nos
+projetos de engenharia, obras e infraestrutura pública e privada.
+
+Missão (O que devemos fazer? Razão de ser.):
+
+Promover a transformação digital da indústria da arquitetura, engenharia, construção
+e operação (AECO) no Brasil. A missão envolve fomentar a inovação, melhorar a eﬁciência
+e a produtividade nas obras e projetos de engenharia, além de fortalecer a
+competitividade da indústria nacional por meio da adoção e implementação do BIM.
+
+Valores (Em que acreditamos? Princípios orientadores.):
+
+Colaboração,    integridade,   sustentabilidade,   inovação,   diversidade,                eficiência,
+capacitação.
+
+Princípios (O que nos norteia?):
+
+Harmonia entre poderes, compromisso com o interesse público, visão de longo prazo,
+transparência e comunicação.
+
+
+
+
+                                                                                 MINISTÉRIO DO
+                                                                        D E S E N V O LV I M E N T O ,
+                                                                      INDÚSTRIA, COMÉRCIO
+                                                                                    E SERVIÇOS
+         Página 12
+
+
+
+8. Elementos de composição do plano
+Os elementos de composição do Plano de Trabalho são preconizados em:
+
+
+                       Quadro - Convenções - Siglas
+
+
+OBJETIVO ESTRATÉGICO da Nova BIM BR (art.2 do Decreto n°11.888/2024);
+
+EIXO TEMÁTICO: Eixos A, B e C, como estipulado para a realização deste trabalho;
+
+DIRETRIZ: para organizar os objetivos para cada eixo;
+
+OBJETIVO: são entendidas como objetivos temáticos;
+
+INDICADOR: é uma métrica de desempenho que compara medidas, é o indicador a ser
+usado para permitir acompanhar e monitorar o sucesso da meta estabelecida;
+
+META: um objetivo quantiﬁcado para horizontes 2025, 2026 e 2027;
+
+AÇÕES: uma ou mais ações para o alcance de resultados tangíveis para a meta
+colocada;
+
+
+
+9. Objetivos Estratégicos e eixos temáticos
+da Nova BIM BR
+Para constatar a amplitude de cada eixo temático utilizado no desenvolvimento do Plano,
+está colocada a tabela de correspondência e abrangência entre os três eixos e os onze
+objetivos estratégicos que constam do Decreto da Nova BIM BR.
+
+
+                       Objetivos estratégicos da Nova BIM BR
+
+   EIXO         I     II    III    IV     V      VI     VII   VIII   IX                   X              XI
+
+
+     A
+
+
+     B
+
+
+     C
+
+
+
+
+                                                                                 MINISTÉRIO DO
+                                                                        D E S E N V O LV I M E N T O ,
+                                                                      INDÚSTRIA, COMÉRCIO
+                                                                                    E SERVIÇOS
+               Página 13
+
+
+
+10. Portifólio de ações
+Para cada Eixo Temático estão listados as Diretrizes e os respectivos Objetivos Finalísticos
+entendidos como necessários para se alcançar os Objetivos Estratégicos da BIM BR.
+
+O desdobramento dos Objetivos Finalísticos em Indicadores, Metas e Ações é uma prática
+essencial para garantir o monitoramento estratégico. Os indicadores fornecem uma base
+objetiva para a tomada de decisões, permitindo a identiﬁcação de áreas críticas de
+melhoria e ajuste nas ações conforme necessário. A partir desses indicadores, são
+estabelecidas metas desaﬁadoras, mas alcançáveis.
+
+O próximo passo foi estruturar as ações para alcançá-las. Essas devem ser organizadas
+de forma coordenada. Com essa abordagem, o plano ganha consistência e direção,
+criando uma cultura de responsabilidade e com foco nos resultados. Ao vincular
+indicadores, metas e ações, consegue-se transformar a estratégia em resultados,
+promovendo uma execução mais eﬁcaz e consistente.
+
+Para todas os Objetivos Finalísticos foram discriminados indicadores de desempenho e
+metas temporais para os horizontes de 2025, 2026 e 2027. A partir desses elementos
+foram levantadas ações para confeccionar um Portfólio de Ações.
+
+Assim, para cada Eixo Temático e cada Diretriz são apresentados os Objetivos e seus
+indicadores e metas seguidos pelos itens do portfólio na forma de um conjunto de ações.
+
+Essa estrutura pode ser representada conforme o esquema abaixo:
+
+
+                                                                       BIM BR
+
+
+                                Eixo A                                  Eixo B                           Eixo C
+
+
+
+                      A.I         A.II           ...           B.I        B.II      ...                          ...
+                    Diretriz    Diretriz                    Diretriz    Diretriz
+
+
+
+
+    A I.I             A I.II
+ Objetivos,        Objetivos,
+Indicadores       Indicadores         ...
+  e metas           e metas
+
+
+                                                B I.I         B I.II
+  1, 2, 3...        Ações                    Objetivos,    Objetivos,
+  Ações                                     Indicadores   Indicadores         ...
+                                              e metas       e metas
+
+
+
+                                              Ações         Ações
+
+
+
+
+                                                                                                     MINISTÉRIO DO
+                                                                                            D E S E N V O LV I M E N T O ,
+                                                                                          INDÚSTRIA, COMÉRCIO
+                                                                                                        E SERVIÇOS
+            Página 14
+
+
+
+Eixo A
+ESTRUTURAÇÃO DA ADMINISTRAÇÃO PÚBLICA PARA USO DO BIM
+
+     DIRETRIZ
+     A. I - Fomentar o uso do BIM em contratações públicas de obras e serviços
+     de engenharia
+
+     OBJETIVO
+     A. I.I - Promover o uso prioritário do BIM em contratações públicas de obras e serviços de
+     engenharia conforme a Nova Lei de Licitações e Contratos Administrativos (NLLC).
+
+     INDICADOR - META
+     Atingir o número de órgãos e entidades da administração federal direta e indireta que
+     implementaram o BIM e/ou realizaram contratações em BIM, em:
+     - 24 em 2025;
+     - 49 em 2026;
+     - 99 em 2027
+
+     DESCRIÇÃO DO INDICADOR
+     Conforme o Sistema de Organização e Inovação Institucional do Governo Federal – SIORG 7, atualmente
+     o poder executivo federal apresenta 210 órgãos e entidades da administração federal direta e indireta.
+     O indicador quantitativo visa contabilizar órgãos e entidades com suas diferentes competências em
+     relação aos usos do BIM. A partir da condução das ações propostas, espera-se o aprimoramento do
+     indicador,
+            7   visando uma avaliação da maturidade BIM. Para a linha de base da meta, consideram-se 12
+     órgãos e entidades que já divulgaram seus avanços na adoção do BIM, inclusive com a publicação de
+     documentos, manuais, guias.
+
+                                                             AÇÕES
+
+    1 - Propor minuta de regulamentação do Art. 19 da Lei nº 14.133/2021, nova Lei de Licitações e
+    Contratos Administrativos, que estabelece o uso prioritário do BIM.
+
+    2 - Aplicar diagnóstico sobre o uso do BIM nos órgãos e entidades da administração pública
+    federal e promover sua aplicação para entes subfederais
+
+    3 - Implementar política de monitoramento de editais de licitação relacionados com BIM.
+
+    4 - Propor a revisão do Decreto nº 10.306/2020.
+
+    5 - Elaborar Guia com diretrizes quanto a regulamentação prevista na Lei de Licitações e
+    Contratos Administrativos sobre o uso prioritário do BIM.
+
+    6 - Elaborar Guia com diretrizes para implementação do BIM na administração pública,
+    inclusive como apoio para estratégias dos entes subfederais.
+
+    7 - Elaborar manual orientativo de requisitos mínimos de informação para empreendimentos
+    da administração pública em todo o ciclo de vida (projetos, obras, manutenção e operação)
+
+    8 - Fomentar a utilização e adequação necessárias nos sistemas de custos SINAPI e SICRO para
+    adoção do BIM por órgãos e entidades da administração pública.
+
+    9 - Apoiar a atualização dos manuais e guias da administração federal que tratam de obras
+    públicas e seus processos de manutenção e operação.
+
+
+
+7
+    https://www.gov.br/gestao/pt-br/assuntos/estruturas-organizacionais
+
+
+
+
+                                                                                                   MINISTÉRIO DO
+                                                                                          D E S E N V O LV I M E N T O ,
+                                                                                        INDÚSTRIA, COMÉRCIO
+                                                                                                      E SERVIÇOS
+      Página 15
+
+
+ DIRETRIZ
+ A. I - Fomentar o uso do BIM em contratações públicas de obras e serviços de engenharia
+
+ OBJETIVO
+ A. I.II - Impulsionar e fomentar o uso do BIM na administração pública federal, distrital, estadual e
+ municipal direta e indireta, inclusive em projetos do Novo PAC.
+
+ INDICADOR - META
+ Ampliar o percentual de contratos de análise e monitoramento de obras da administração pública,
+ direta e indireta, com projetos em BIM, em pelo menos
+ - 20% em 2025;
+ - 30% em 2026;
+ - 40% em 2027
+
+ DESCRIÇÃO DO INDICADOR
+ O indicador visa monitorar o avanço da adoção do BIM em obras públicas em todos os poderes.
+ Atualmente, a CAIXA é a principal mandatária da União para analisar e monitorar obras públicas.
+ O monitoramento contempla contratos efetuados que possuem projetos em BIM. O Cadastro Integrado
+ de Projeto de Investimento - Obrasgov.br, também visa monitorar registro de informações referentes a
+ projetos básicos, executivos, estudos e obras de projetos de investimentos em infraestrutura
+ ﬁnanciados com recursos públicos. Para a linha de base da meta, considera-se a média anual dos
+ últimos 4 anos, equivalente a 16 contratos com projetos em BIM. O monitoramento, por meio dos
+ sistemas referidos, possibilitará a identiﬁcação de informações sobre os projetos em BIM do Novo PAC.
+
+                                                AÇÕES
+10 - Apoiar o desenvolvimento de diretrizes para a utilização e monitoramento do uso do BIM nos projetos
+e obras, inclusive em projetos do Novo PAC.
+
+11 - Apoiar o desenvolvimento de banco de projetos de referência em BIM para contratações com
+recursos públicos, inclusive em projetos do Novo PAC.
+
+12 - Fomentar a adoção do BIM em projetos, obras e serviços de engenharia de instituições públicas de
+ensino superior e técnico (IES), especialmente no eixo Educação, Ciência e Tecnologia do Novo PAC.
+
+
+
+ DIRETRIZ
+ A. I - Fomentar o uso do BIM em contratações públicas de obras e serviços de engenharia
+ OBJETIVO
+ A. I.III - Impulsionar e fomentar o uso do BIM no Programa Minha Casa, Minha Vida (MCMV).
+
+ INDICADOR - META
+ Atingir o número de análises de engenharia concluídas em empreendimentos de mercado do MCMV
+ (origem de recursos do FGTS) com o uso do BIM, sendo no mínimo:
+ - 5 em 2025;
+ - 10 em 2026;
+ - 20 em 2027
+
+ DESCRIÇÃO DO INDICADOR
+ A integração do BIM no MCMV traz benefícios como maior precisão nas propostas, eﬁciência no
+ planejamento e execução das obras, e otimização dos recursos públicos.
+ Visa melhorar a qualidade dos projetos habitacionais no Brasil e dar mais velocidade ao processo de
+ análise de propostas no âmbito do MCMV. A CAIXA iniciou, em 2024, um projeto piloto de promoção de
+ análise de engenharia para 3 empreendimentos de mercado MCMV (origem de recursos do FGTS)
+ com o uso do BIM. Portanto, essa foi a linha de base considerada.
+
+                                                AÇÕES
+13 - Apoiar o desenvolvimento de procedimentos e ﬂuxos para utilização do BIM no processo de análise
+de engenharia das propostas no âmbito do Programa Minha Casa, Minha Vida (MCMV).
+
+14 - Apoiar o Ministério das Cidades quanto ao estabelecimento de requisitos para o uso do BIM no
+Programa Minha Casa, Minha Vida (MCMV), considerando a PORTARIA MCID Nº 725/2023
+
+
+                                                                                               MINISTÉRIO DO
+                                                                                      D E S E N V O LV I M E N T O ,
+                                                                                    INDÚSTRIA, COMÉRCIO
+                                                                                                  E SERVIÇOS
+      Página 16
+
+
+
+
+ DIRETRIZ
+ A. I - Fomentar o uso do BIM em contratações públicas de obras e serviços de engenharia
+
+ OBJETIVO
+ A. I.IV - Fomentar o uso do BIM para a gestão de ativos.
+
+ INDICADOR - META
+ Mapear o percentual de ativos em uso pela administração pública federal em todo o território nacional,
+ com modelos em BIM em 2025.
+
+ DESCRIÇÃO DO INDICADOR
+ A metodologia BIM proporciona melhoria na gestão dos ativos construídos, permitindo maior controle,
+ eﬁciência e transparência na gestão pública. Com isso, processos de operação e manutenção são
+ otimizados por meio de modelos digitais detalhados que facilitam auditorias e mantém um repositório
+ do histórico de operações.
+ O total de ativos em uso pela administração pública federal é monitorado nos sistemas da Secretaria
+ de Patrimônio da União (SPU), do MGI. O indicador, inicialmente, visa estabelecer o quantitativo de
+ ativos que possuem modelos em BIM para a construção de uma linha de base que possibilite o
+ estabelecimento de metas mais abrangentes no futuro.
+
+                                                 AÇÕES
+15 - Promover o desenvolvimento de plano de gestão de ativos em BIM para operação e manutenção de
+ediﬁcações públicas visando estabelecer gêmeos digitais.
+
+
+
+
+ DIRETRIZ
+ A. II - Promover sensibilização e disseminação do BIM para a administração pública
+ OBJETIVO
+ A. II.I - Disseminar iniciativas da BIM BR por meio da Plataforma Nacional BIM BR como portal
+ centralizado de informações, guias, planos, oportunidades de capacitações sobre a temática BIM.
+
+ INDICADOR - META
+ Atingir o número de órgãos e entidades da administração pública com documentação de referência
+ disponibilizadas na Plataforma BIM BR até 2027, sendo:
+ - 5 em 2025;
+ - 12 em 2026;
+ - 20 em 2027.
+
+ DESCRIÇÃO DO INDICADOR
+ A reestruturação prevista na Plataforma BIM BR, gerida pela Agência Brasileira de Desenvolvimento
+ Industrial (ABDI), é fundamental para consolidá-la como o portal centralizado nacional da Nova BIM
+ BR. O indicador quantitativo, inicialmente, visa contabilizar órgãos e entidades que irão disponibilizar
+ documentação de referência na Plataforma BIM BR após sua reestruturação. A partir da condução das
+ ações propostas, espera-se o aprimoramento do indicador, visando uma avaliação do alcance,
+ relevância e utilização efetiva da documentação disponibilizada. A linha de base desta meta é zero
+ (0).
+
+                                                 AÇÕES
+16 - Apoiar a adequação da Plataforma Nacional BIM BR como portal centralizador e disseminá-lo entre
+os órgãos e entidades da administração pública.
+
+17 - Publicar ato normativo que estabeleça o uso da Plataforma Nacional BIM BR pelos órgãos e entidades
+da administração pública federal.
+
+18 - Promover estratégia de comunicação via portal centralizado para orientar/apoiar os órgãos da
+administração pública federal que prestam assistência técnica aos entes subnacionais, na disseminação
+do BIM.
+
+
+
+
+                                                                                                 MINISTÉRIO DO
+                                                                                        D E S E N V O LV I M E N T O ,
+                                                                                      INDÚSTRIA, COMÉRCIO
+                                                                                                    E SERVIÇOS
+      Página 17
+
+
+
+
+ DIRETRIZ
+ A. II - Promover sensibilização e disseminação do BIM para a administração pública
+ OBJETIVO
+ A. II.II - Apoiar e implementar ações de disseminação da Nova BIM BR para a administração pública,
+ inclusive com a realização de eventos pelo território nacional.
+
+ INDICADOR - META
+ Apoiar a realização de eventos que disseminem as ações da Nova BIM BR, em território nacional, em
+ pelo menos 15 eventos até 2027.
+
+ DESCRIÇÃO DO INDICADOR
+ Iniciativa visa expandir o conhecimento e a adoção do BIM em diferentes regiões do Brasil. O indicador
+ quantitativo, inicialmente, visa contabilizar o número de ações de disseminação realizadas. Para o
+ monitoramento do impacto das ações, é necessário o estabelecimento de critérios qualitativos que
+ avaliem o alcance dos objetivos de disseminação, como qualidade das ações, relevância,
+ engajamento e aplicação prática das ações da Nova BIM BR. A linha de base dessa meta é zero (0).
+
+
+                                                AÇÕES
+19 - Apoiar o MGI na implementação de Área Temática de obras e serviços de engenharia em BIM na
+Rede de Parcerias.
+
+20 - Apoiar a realização de Caravanas para disseminação do BIM pelo território nacional.
+
+21 - Apoiar e participar de eventos, seminários e workshops promovidos por entidades do setor.
+
+
+
+
+ DIRETRIZ
+ A. III - Fomentar a infraestrutura para adoção sistêmica do BIM na administração pública
+ OBJETIVO
+ A. III.I - Apoiar a estruturação e contratação de ferramentas e softwares BIM pelos órgãos e entidades
+ da administração pública em alinhamento com políticas de compras padronizadas e centralizadas.
+
+ INDICADOR - META
+ Alcançar o percentual de órgãos e entidades da administração pública federal com infraestrutura
+ técnica satisfatória para a adoção do BIM:
+ - 5% em 2026;
+ - 10% em 2027.
+
+ DESCRIÇÃO DO INDICADOR
+ O indicador visa a avaliação da infraestrutura técnica, como a estruturação e contratação de
+ ferramentas e softwares BIM, nos órgãos e entidades da administração pública federal. Para a
+ avaliação considerou-se a aplicação da metodologia estabelecida na Planilha de Diagnóstico BIM
+ para o Setor Público do Projeto Construa Brasil. No contexto da Nova BIM BR, em 2025 é prevista a
+ aplicação do diagnóstico nos órgãos e entidades mapeados. A infraestrutura técnica satisfatória será
+ considerada igual ou superior a 50% segundo a informação resultante do diagnóstico. Do exposto, para
+ o presente plano, a linha de base da meta foi considerada zero (0).
+
+                                                AÇÕES
+22 - Apoiar a estruturação, contratação e utilização de Ambiente Comum de Dados (CDE) pelos órgãos
+e entidades da administração pública federal.
+
+23 - Apoiar a estruturação, contratação e utilização de ferramentas e softwares BIM em alinhamento
+com ações da Central de Compras (MGI) do Governo Federal.
+
+24 - Disseminar o uso de especiﬁcações técnicas abertas e padrões neutros para a interoperabilidade
+em BIM na administração pública.
+
+
+
+
+                                                                                               MINISTÉRIO DO
+                                                                                      D E S E N V O LV I M E N T O ,
+                                                                                    INDÚSTRIA, COMÉRCIO
+                                                                                                  E SERVIÇOS
+       Página 18
+
+
+
+
+ DIRETRIZ
+ A. III - Fomentar a infraestrutura para adoção sistêmica do BIM na administração pública
+ OBJETIVO
+ A. III.II - Apoiar e fomentar a implementação do BIM nos sistemas estruturantes de gestão e
+ transferências de recursos da União para contratações de obras e serviços de engenharia.
+
+ INDICADOR - META
+ Implementar interface BIM nos sistemas estruturantes de transferências da União até 2027.
+
+ DESCRIÇÃO DO INDICADOR
+ O sistema estruturante da União, Transferegov.br é a solução tecnológica que possui dados abertos e
+ operacionaliza de forma informatizada as transferências de recursos oriundos do Orçamento Fiscal e
+ da Seguridade Social da União. O objetivo da Nova BIM BR é apoiar a implementação da interface BIM
+ até 2027. Nesse sentido, considerando a estruturação proposta, para o presente plano, a linha de base
+ da meta foi considerada zero (0).
+
+                                                AÇÕES
+25 - Apoiar o MGI na estruturação de interface BIM nos atuais sistemas estruturantes de gestão e
+transferências de recursos da União, ampliando suas funcionalidades.
+
+
+
+
+Eixo B
+CAPACITAÇÃO E FORMAÇÃO PROFISSIONAL EM BIM
+
+ DIRETRIZ
+ B. I - Fomentar o Ensino Superior e Técnico em BIM
+ OBJETIVO
+ B. I.I - Incentivar que instituições de ensino públicas promovam a atualização das matrizes
+ curriculares no ensino de Arquitetura, Engenharia e Técnico em Ediﬁcações.
+
+ INDICADOR - META
+ Alcançar a atualização das matrizes curriculares em IES públicas nos cursos de Arquitetura,
+ Engenharias e Técnico em Ediﬁcações, incluindo BIM, em pelo menos:
+ - 14 em 2025;
+ - 28 em 2026;
+ - 42 em 2027.
+
+ DESCRIÇÃO DO INDICADOR
+ A iniciativa visa superar a predominância da adoção do BIM em iniciativas e disciplinas isoladas. Para
+ o estabelecimento da meta foi considerado o quantitativo de cursos de instituições públicas, da área
+ geral de Arquitetura, Engenharia, Produção e Construção, obtidos no Portal e-MEC. A partir da
+ condução das ações propostas, espera-se o aprimoramento do indicador. Do exposto, a linha de base
+ dessa meta foi considerada zero (0).
+
+                                                AÇÕES
+26 - Elaborar diretrizes para uma política de incentivo para a renovação de currículos e atualização
+do ensino, com inserção da metodologia BIM.
+
+27 - Promover diagnóstico sobre Maturidade BIM em Instituições de Ensino.
+
+28 - Apoiar proposta de criação de selo para cursos que promovam a transformação digital curricular.
+
+
+
+
+                                                                                                MINISTÉRIO DO
+                                                                                       D E S E N V O LV I M E N T O ,
+                                                                                     INDÚSTRIA, COMÉRCIO
+                                                                                                   E SERVIÇOS
+      Página 19
+
+
+
+
+ DIRETRIZ
+ B. I - Fomentar o Ensino Superior e Técnico em BIM
+ OBJETIVO
+ B. I.II - Apoiar a criação de novas Células BIM e/ou Laboratórios de ensino/pesquisa em BIM em
+ instituições públicas.
+
+ INDICADOR - META
+ Atingir o número de Células BIM e/ou Laboratórios de ensino e pesquisa em BIM em instituições
+ públicas, em pelo menos:
+ - 5 em 2025;
+ - 10 em 2026;
+ - 15 em 2027.
+
+ DESCRIÇÃO DO INDICADOR
+ Iniciativa visa impulsionar o estabelecimento de espaços físicos, promovendo um ambiente técnico
+ adequado e equipado para desenvolvimento de atividades computacionais e trabalho colaborativo,
+ com o objetivo de realizar ações acadêmicas voltadas para a transformação digital. Para o
+ estabelecimento da meta, foi considerado o quantitativo de instituições públicas com cursos na área
+ geral de Arquitetura, Engenharia, Produção e Construção, conforme dados obtidos no Portal e-MEC.
+ A partir da condução das ações propostas, espera-se o aprimoramento do indicador.
+ Diante do exposto, para a deﬁnição da linha de base dessa meta, foram consideradas duas Células
+ BIM promovidas pelo Projeto Construa Brasil.
+
+                                               AÇÕES
+29 - Incentivar o estabelecimento de Programa Células BIM e/ou de Laboratórios de ensino/pesquisa em
+BIM, promovendo a articulação junto aos órgãos, entidades, fundações e outros grupos de interesse para
+fomento do BIM.
+
+30 - Disseminar Células BIM para ensino em parceria com políticas do MEC e outras parcerias.
+
+
+
+
+ DIRETRIZ
+ B. I - Fomentar o Ensino Superior e Técnico em BIM
+ OBJETIVO
+ B. I.III - Incentivar o estabelecimento de instrumentos de cooperação técnica ou congêneres entre
+ instituições de ensino superior e a administração pública federal para a adoção do BIM.
+
+ INDICADOR - META
+ Atingir o número de instrumentos de cooperação técnica ou congêneres entre IES e a administração
+ pública federal, pelo menos em:
+ - 3 em 2025;
+ - 5 em 2026;
+ - 5 em 2027.
+
+ DESCRIÇÃO DO INDICADOR
+ O estabelecimento de instrumentos e cooperação visa uma contribuição mútua entre academia e
+ aplicações práticas da administração pública federal, além de suprir a demanda de pessoal da
+ administração pública federal e incentivar a transferência de conhecimento para os servidores. O
+ indicador é relacionado ao número de instrumentos ﬁrmados ou em curso durante o período
+ estabelecido. Para o estabelecimento da meta, considerou-se a linha de base zero (0).
+
+                                               AÇÕES
+31 - Incentivar cooperação entre IES para fomentar a produção de guias, documentos de referência e
+estudos para a adoção e desenvolvimento de práticas relacionadas ao BIM.
+
+
+
+
+                                                                                              MINISTÉRIO DO
+                                                                                     D E S E N V O LV I M E N T O ,
+                                                                                   INDÚSTRIA, COMÉRCIO
+                                                                                                 E SERVIÇOS
+       Página 20
+
+
+ DIRETRIZ
+ B. II - Capacitar agentes públicos em BIM
+ OBJETIVO
+ B. II.I - Promover a capacitação em BIM para agentes da administração pública federal e apoiar as
+ administrações públicas distrital, estaduais e municipais.
+
+ INDICADOR - META
+ Atingir o número de agentes públicos concludentes dos cursos de capacitação disponibilizados pelo
+ governo federal, em pelo menos:
+ - 1000 em 2025;
+ - 1500 em 2026;
+ - 2000 em 2027.
+
+ DESCRIÇÃO DO INDICADOR
+ Para o estabelecimento da meta do indicador foi considerada a linha de base de 900 certiﬁcados
+ emitidos pela Escola Virtual de Governo da ENAP em cursos com temática BIM, baseada na média
+ anual dos últimos três anos. A partir da condução das ações propostas, espera-se o aprimoramento
+ desse indicador, como o monitoramento do progresso relativo da capacitação em comparação ao
+ número total de agentes públicos envolvidos em funções de planejamento, contratação ou execução
+ de obras e serviços de engenharia da administração pública federal. Dessa forma, será possível a
+ aferição do alcance das ações de capacitação e priorização dos esforços para incluir agentes ainda
+ não contemplados.
+
+                                                AÇÕES
+32 - Desenvolver Plano de Capacitação em BIM para agentes públicos, em diversos níveis de atuação.
+
+33 - Promover cursos com temáticas especíﬁcas, dentre elas: Adoção do BIM; Planos de execução BIM;
+Gestão da Informação em BIM (ISO 19650); Ferramentas e softwares; Usos do BIM; infraestrutura e
+habitação, entre outras.
+
+34 - Promover a inclusão de capacitação em BIM no Plano de Desenvolvimento de Pessoas (PDP) do
+Poder Executivo.
+
+
+
+
+ DIRETRIZ
+ B. II - Capacitar agentes públicos em BIM
+ OBJETIVO
+ B. II.II - Estimular a capacitação em BIM para servidores da administração pública federal mediante
+ pós-graduações latu sensu e stricto sensu.
+
+ INDICADOR - META
+  Número de cursos de pós-graduação para agentes públicos promovidos, em pelo menos 4 turmas até
+ 2027.
+
+ DESCRIÇÃO DO INDICADOR
+ Iniciativa visa estimular a capacitação em BIM por meio de cursos de extensão e de aperfeiçoamento
+ oferecidos por instituições reconhecidas é uma estratégia eﬁcaz para promover o desenvolvimento
+ proﬁssional dos servidores públicos e fortalecer a implementação do BIM no setor público. A Secretaria
+ Nacional de Aviação Civil/MPOR promoveu iniciativa em parceria com UNB em anos anteriores. Para a
+ presente meta, 1 iniciativa foi considerada como linha de base.
+
+
+
+35 - Apoiar a estruturação de propostas para curso de pós-graduação para agentes públicos.
+
+36 - Incentivar instrumentos de parcerias institucionais para a realização de cursos de pós-graduação
+para órgãos e entidades públicas.
+       Página 21
+
+
+
+ DIRETRIZ
+ B. III - Apoiar a capacitação e formação continuada de profissionais em BIM
+
+
+ OBJETIVO
+ B. III.I - Ampliar o número de proﬁssionais capacitados em BIM.
+
+
+ INDICADOR - META
+  Alcançar o percentual de engenheiros(as) e arquitetos(as) com experiência de trabalho em BIM,
+ em pelo menos:
+ - 35% dos(as) proﬁssionais de engenharias e 45% de arquitetura e urbanismo, até 2027.
+
+
+ DESCRIÇÃO DO INDICADOR
+ Para o presente indicador foi considerado como linha de base a Pesquisa sobre a Digitalização da
+ Indústria da Construção promovida pelas entidades do setor (ABDI, BIM Fórum Brasil, CAU, CONFEA). Em
+ 2022, 26% dos engenheiros(as) respondentes e 36% de arquitetos(as), aﬁrmaram possuir experiência
+ de trabalho em BIM.
+
+                                                AÇÕES
+
+37 - Apoiar plano para ampliar o número de proﬁssionais capacitados em BIM.
+
+38 - Fomentar Plano para Certiﬁcação Proﬁssional em BIM.
+
+39 - Estabelecer diretrizes/requisitos mínimos adequados para cursos de capacitação e formação
+continuada em BIM.
+
+40 - Disseminar Cursos de BIM promovidos por entidades parceiras.
+
+41 - Disseminar Cursos de BIM e tecnologias correlatas para proﬁssionais de nível operacional de
+canteiros de obras e de operação e manutenção de ativos públicos.
+       Página 22
+
+
+
+Eixo C
+APOIO À PESQUISA, DESENVOLVIMENTO, INOVAÇÃO (PD&I) E SUSTENTABILIDADE
+NA CONSTRUÇÃO POR MEIO DO BIM.
+
+  DIRETRIZ
+  C. I - Apoiar PD&I para o desenvolvimento econômico e sustentável da construção por
+  meio do BIM e tecnologias correlatas
+
+
+  OBJETIVO
+  C. I.I - Apoiar a implantação e disseminação de iniciativas de fomento para empresas que
+  promovem PD&I em BIM e tecnologias correlatas.
+
+
+  INDICADOR - META
+  Alcançar o número de iniciativas de fomento para empresas que promovem PD&I em BIM e
+  tecnologias correlatas, em pelo menos:
+  -   3 em 2025;
+  -   4 em 2026;
+  -   6 em 2027.
+
+
+  DESCRIÇÃO DO INDICADOR
+  A disseminação de iniciativas sobre oportunidade de fomento de PD&I, promove a transparência e
+  acesso a informações a partir de um único local, facilitando a busca e o acesso. O ecossistema federal
+  de inovação envolve, principalmente o MCTI e instituições vinculadas como FINEP, Emprapii, CNPQ. Para
+  a presente meta, considerou-se a linha de base zero (0).
+
+                                                 AÇÕES
+
+ 42 - Disseminar, em conjunto com MCTI a Lei das TICs e Lei do BEM para promoção de
+ incentivos à PD&I para empresas que promovem PD&I em BIM e tecnologias correlatas.
+
+ 43 - Impulsionar ações de fomento para empresas que promovem PD&I em BIM e tecnologias
+ correlatas, inclusive desenvolvedoras nacionais de soluções inovadoras em construção
+ industrializada e mais sustentável.
+
+ 44 - Apoiar empresas desenvolvedoras nacionais de softwares/ferramentas e/ou soluções
+ inovadoras em BIM no âmbito das compras públicas do governo federal.
+
+
+ 45 - Apoiar desenvolvimento de estudo de Avaliação de Necessidades Tecnológicas para o
+ setor quanto ao uso do BIM, industrialização e sustentabilidade.
+
+ 46 - Estabelecer parcerias com associações técnico-cientíﬁca para disseminação de
+ pesquisas cientíﬁcas que promovam o uso do BIM em soluções inovadoras e/ou para
+ construção industrializada e sustentável.
+
+ 47 - Impulsionar o intercâmbio com iniciativas internacionais relacionadas ao tema para a
+ transformação digital, industrialização e sustentabilidade da construção.
+
+
+
+
+                                                                                                MINISTÉRIO DO
+                                                                                       D E S E N V O LV I M E N T O ,
+                                                                                     INDÚSTRIA, COMÉRCIO
+                                                                                                   E SERVIÇOS
+      Página 23
+
+
+
+ DIRETRIZ
+ C. I - Apoiar PD&I para o desenvolvimento econômico e sustentável da construção por
+ meio do BIM e tecnologias correlatas
+
+ OBJETIVO
+ C. I.II - Impulsionar parcerias e políticas de incentivo às MPMEs para adoção do BIM e
+ tecnologias correlatas.
+
+ INDICADOR - META
+  Alcançar o número de parcerias e/ou políticas, em curso na administração pública, que
+ promovam o incentivo às MPMEs para a adoção do BIM e de tecnologias correlatas, em pelo
+ menos:
+ -   3 até 2027.
+
+ DESCRIÇÃO DO INDICADOR
+ A iniciativa visa estabelecer instrumentos de cooperação técnica com entidades e parceiros
+ estratégicos para apoiar serviços de suporte que ajudem as MPMEs a implementar o BIM em seus
+ processos. Como linha de base, considerou-se um instrumento (ACT) já ﬁrmado entre o MDIC e o
+ Sebrae Nacional.
+
+                                            AÇÕES
+48 - Promover plano de incentivo à MPMEs do setor da construção para adoção do BIM
+e tecnologias correlatas.
+
+
+
+
+ DIRETRIZ
+ C. I - Apoiar PD&I para o desenvolvimento econômico e sustentável da construção por
+ meio do BIM e tecnologias correlatas
+
+ OBJETIVO
+ C. I.III - Impulsionar parcerias e políticas de incentivo à startups, parques tecnológicos e/ou
+ centro de incubação/aceleração que promovam a transformação digital e sustentável da
+ construção.
+
+ INDICADOR - META
+ Celebrar parcerias e/ou políticas da administração pública para fomento de startups,
+ parques tecnológicos e/ou centros de incubação e aceleração que promovam a
+ transformação digital e sustentável da construção, pelo menos:
+ -    4 até 2027.
+
+ DESCRIÇÃO DO INDICADOR
+ Para o estabelecimento do indicador, foram consideradas políticas já existentes que poderão
+ promover o desenvolvimento de tecnologias BIM junto ao público alvo. Para a presente meta,
+ considerou-se a linha de base zero (0).
+
+                                            AÇÕES
+49 - Apoiar o MCTI e entidades na promoção de editais de fomento para parques tecnológicos
+e/ou incubadoras e aceleradoras de empresas de inovação que promovam aplicações BIM e
+tecnologias correlatas.
+
+50 - Disseminar editais e chamamentos de incubadoras e aceleradoras para apoio às startups
+e à inovação relacionadas ao setor de construção.
+
+51 - Identiﬁcar e disseminar políticas existentes de apoio às startups e à inovação para o setor
+de construção.
+
+52 - Apoiar eventos de engajamento como BIM Hackathons com premiação para fomento ao
+empreendedorismo e inovação.
+
+
+                                                                                         MINISTÉRIO DO
+                                                                                D E S E N V O LV I M E N T O ,
+                                                                              INDÚSTRIA, COMÉRCIO
+                                                                                            E SERVIÇOS
+      Página 24
+
+
+
+
+ DIRETRIZ
+ C. I - Apoiar PD&I para o desenvolvimento econômico e sustentável da construção por
+ meio do BIM e tecnologias correlatas
+
+ OBJETIVO
+ C. I.IV - Promover o desenvolvimento e ampliação da Biblioteca Nacional BIM BR.
+
+ INDICADOR - META
+ Atingir o número de novos objetos disponibilizados na Biblioteca Nacional BIM BR, em pelo
+ menos:
+ - 400 em 2025;
+ - 500 em 2026;
+ - 600 em 2027.
+
+ DESCRIÇÃO DO INDICADOR
+ A biblioteca Nacional BIM, administrada pela ABDI, disponibiliza objetos que podem ser utilizados em
+ projetos modelados em BIM. Como linha de base, considerou-se o quantitativo de 300 novos objetos
+ disponibilizados em 2024.
+
+                                               AÇÕES
+53 - Criar plano para o desenvolvimento e ampliação do uso da Biblioteca Nacional BIM BR.
+
+54 - Impulsionar a publicação de objetos BIM que contenham atributos/requisitos de
+sustentabilidade para fomentar a contabilização das pegadas de carbono e energia
+embutida.
+
+55 - Impulsionar a publicação de objetos BIM de componentes da construção industrializada.
+
+
+
+
+ DIRETRIZ
+ C. II - Incentivar a interoperabilidade em BIM
+
+ OBJETIVO
+ C. II.I - Promover o uso de especiﬁcações técnicas abertas para a interoperabilidade em BIM.
+
+
+ INDICADOR - META
+  Promover iniciativas para impulsionar a interoperabilidade em BIM, pelo menos:
+ - 5 ações até 2027.
+
+ DESCRIÇÃO DO INDICADOR
+ Para o estabelecimento do indicador foi considerada uma primeira etapa de priorização de acordo
+ com as duas ações propostas. Para a meta, propõe-se a implementação de uma ação por semestre.
+ Para a presente meta, considerou-se a linha de base zero (0).
+
+                                               AÇÕES
+
+56 - Estabelecer plano para incentivar o uso de especiﬁcações técnicas abertas para
+promover a interoperabilidade em BIM.
+
+57 - Apoiar e disseminar o uso de software livre e visualizadores gratuitos, por meio de
+ferramentas de visualização e edição nativa de modelos BIM em IFC (Industry Foundation
+Classes).
+
+
+
+
+                                                                                              MINISTÉRIO DO
+                                                                                     D E S E N V O LV I M E N T O ,
+                                                                                   INDÚSTRIA, COMÉRCIO
+                                                                                                 E SERVIÇOS
+      Página 25
+
+
+
+
+ DIRETRIZ
+ C. III - Estimular o uso do BIM para o fomento da construção mais sustentável
+
+ OBJETIVO
+ C. III.I - Apoiar ações transversais em conjunto com programas e/ou políticas públicas com
+ foco na digitalização, industrialização e descarbonização da AECO.
+
+ INDICADOR - META
+ Atingir ações transversais realizadas com foco na digitalização, industrialização e
+ descarbonização, pelo menos:
+ -    5 ações até 2027.
+
+ DESCRIÇÃO DO INDICADOR
+ Para o estabelecimento do indicador, foram consideradas diversas políticas já existentes e transversais
+ do governo federal que promovem a construção mais sustentável. Dentre elas: EdInova (MCTI),
+ Programa Cidades Verdes Resilientes (MMA), Sidac e PBEdiﬁca (MME). A meta foi considerada a partir
+ da identiﬁcação de sinergias entre as políticas e a Nova BIM BR. Para a presente meta, considerou-se
+ a linha de base zero (0).
+                                                AÇÕES
+58 - Identiﬁcar e disseminar políticas existentes/relacionadas ao uso do BIM com foco na
+industrialização e descarbonização da construção em todo o ciclo de vida do ativo.
+
+59 - Apoiar o desenvolvimento de projetos urbanos sustentáveis e cidades resilientes com uso
+integrado de BIM, GIS e tecnologias correlatas.
+
+
+
+
+ DIRETRIZ
+ C. IV - Estimular o uso do BIM para o fomento da construção industrializada
+
+ OBJETIVO
+ C. IV.I - Impulsionar a construção industrializada, em alinhamento com programas de
+ governo, facilitada pela adoção de soluções em BIM
+
+ INDICADOR - META
+ Alcançar a implementação do Roadmap/passo a passo para construção industrializada em
+ alinhamento com projetos de referência de obras públicas até 2027.
+
+ DESCRIÇÃO DO INDICADOR
+ A iniciativa visa a implementação de etapas para impulsionamento da construção industrializada,
+ com análise do potencial de uso de coordenação modular e do BIM. Promover projetos demonstrativos
+ (projetos de referência), abrangendo tipos de ativos de construção, servindo como modelos para
+ futuras obras. Para a presente meta, considerou-se a linha de base zero (0).
+
+                                                AÇÕES
+
+60 - Estruturar um Roadmap/passo a passo para a disseminação da construção
+industrializada facilitada com o uso do BIM em alinhamento com projetos de referência de
+obras públicas.
+
+
+
+
+                                                                                                MINISTÉRIO DO
+                                                                                       D E S E N V O LV I M E N T O ,
+                                                                                     INDÚSTRIA, COMÉRCIO
+                                                                                                   E SERVIÇOS
+      Página 26
+
+
+
+Anexo I - Tabelas resumo
+EIXO - DIRETRIZES - OBJETIVOS
+Eixo A
+ESTRUTURAÇÃO DA ADMINISTRAÇÃO PÚBLICA PARA USO DO BIM
+
+ DIRETRIZ
+ A. I - Fomentar o uso do BIM em contratações públicas de obras e serviços de engenharia
+ OBJETIVOS
+ A. I.I - Promover o uso prioritário do BIM em contratações públicas de obras e serviços de engenharia
+ conforme a Nova Lei de Licitações e Contratos Administrativos (NLLC).
+
+ A. I.II - Impulsionar e fomentar o uso do BIM na administração pública federal, distrital, estadual e
+ municipal direta e indireta, inclusive em projetos do Novo PAC.
+
+ A. I.III - Impulsionar e fomentar o uso do BIM no Programa Minha Casa, Minha Vida (MCMV).
+
+ A. I.IV - Fomentar o uso do BIM para a gestão de ativos.
+
+
+
+ DIRETRIZ
+ A. II - Promover sensibilização e disseminação do BIM para a administração pública
+ OBJETIVOS
+ A. II.I - Disseminar iniciativas da BIM BR por meio da Plataforma Nacional BIM BR como portal
+ centralizado de informações, guias, planos, oportunidades de capacitações sobre a temática BIM.
+
+ A. II.II - Apoiar e implementar ações de disseminação da Nova BIM BR para a administração pública,
+ inclusive com a realização de eventos pelo território nacional.
+
+
+ DIRETRIZ
+ A. III - Fomentar a infraestrutura para adoção sistêmica do BIM na administração pública
+ OBJETIVOS
+ A. III.I - Apoiar a estruturação e contratação de ferramentas e softwares BIM pelos órgãos e entidades
+ da administração pública em alinhamento com políticas de compras padronizadas e centralizadas.
+
+ A. III.II - Apoiar e fomentar a implementação do BIM nos sistemas estruturantes de gestão e
+ transferências de recursos da União para contratações de obras e serviços de engenharia.
+
+
+
+
+Eixo B
+CAPACITAÇÃO E FORMAÇÃO PROFISSIONAL EM BIM
+
+ DIRETRIZ
+ B. I - Fomentar o Ensino Superior e Técnico em BIM
+ OBJETIVOS
+ B. I.I - Incentivar que instituições de ensino públicas promovam a atualização das matrizes curriculares
+ no ensino de Arquitetura, Engenharia e Técnico em Ediﬁcações.
+
+ B. I.II - Apoiar a criação de novas Células BIM e/ou Laboratórios de ensino/pesquisa em BIM em
+ instituições públicas.
+
+ B. I.III - Incentivar o estabelecimento de instrumentos de cooperação técnica ou congêneres entre
+ instituições de ensino superior e a administração pública federal para a adoção do BIM.
+
+
+
+                                                                                                 MINISTÉRIO DO
+                                                                                        D E S E N V O LV I M E N T O ,
+                                                                                      INDÚSTRIA, COMÉRCIO
+                                                                                                    E SERVIÇOS
+      Página 27
+
+
+
+ DIRETRIZ
+ B. II - Capacitar agentes públicos em BIM
+ OBJETIVOS
+ B. II.I - Promover a capacitação em BIM para agentes da administração pública federal e apoiar as
+ administrações públicas distrital, estaduais e municipais.
+
+ B. II.II - Estimular a capacitação em BIM para servidores da administração pública federal mediante
+ pós-graduações latu sensu e stricto sensu.
+
+
+
+ DIRETRIZ
+ B. III - Apoiar a capacitação e formação continuada de profissionais em BIM
+ OBJETIVO
+ B. III.I - Ampliar o número de proﬁssionais capacitados em BIM.
+
+
+
+
+Eixo C
+APOIO À PESQUISA, DESENVOLVIMENTO, INOVAÇÃO (PD&I) E SUSTENTABILIDADE
+NA CONSTRUÇÃO POR MEIO DO BIM.
+
+ DIRETRIZ
+ C. I - Apoiar PD&I para o desenvolvimento econômico e sustentável da construção
+ por meio do BIM e tecnologias correlatas
+ OBJETIVOS
+ C. I.I - Apoiar a implantação e disseminação de iniciativas de fomento para empresas que promovem
+ PD&I em BIM e tecnologias correlatas.
+
+ C. I.II - Impulsionar parcerias e políticas de incentivo às MPMEs para adoção do BIM e tecnologias
+ correlatas.
+
+ C. I.III - Impulsionar parcerias e políticas de incentivo à startups, parques tecnológicos e/ou centro de
+ incubação/aceleração que promovam a transformação digital e sustentável da construção.
+
+ C. I.IV - Promover o desenvolvimento e ampliação da Biblioteca Nacional BIM BR.
+
+
+ DIRETRIZ
+ C. II - Incentivar a interoperabilidade em BIM
+ OBJETIVOS
+ C. II.I - Promover o uso de especiﬁcações técnicas abertas para a interoperabilidade em BIM.
+
+
+ DIRETRIZ
+ C. III - Estimular o uso do BIM para o fomento da construção mais sustentável
+ OBJETIVOS
+ C. III.I - Apoiar ações transversais em conjunto com programas e/ou políticas públicas com foco na
+ digitalização, industrialização e descarbonização da AECO.
+
+
+ DIRETRIZ
+ C. IV - Estimular o uso do BIM para o fomento da construção industrializada
+ OBJETIVOS
+ C. IV.I - Impulsionar a construção industrializada, em alinhamento com programas de governo,
+ facilitada pela adoção de soluções em BIM
+
+
+
+
+                                                                                                  MINISTÉRIO DO
+                                                                                         D E S E N V O LV I M E N T O ,
+                                                                                       INDÚSTRIA, COMÉRCIO
+                                                                                                     E SERVIÇOS
+      Página 28
+
+
+
+
+Objetivos - indicadores
+Eixo A
+ESTRUTURAÇÃO DA ADMINISTRAÇÃO PÚBLICA PARA USO DO BIM
+
+ OBJETIVO
+ A. I.I - Promover o uso prioritário do BIM em contratações públicas de obras e serviços de engenharia
+ conforme a Nova Lei de Licitações e Contratos Administrativos (NLLC).
+
+ INDICADOR - META
+ Atingir o número de órgãos e entidades da administração federal direta e indireta que implementaram
+ o BIM e/ou realizaram contratações em BIM, em:
+ - 24 em 2025;
+ - 49 em 2026;
+ - 99 em 2027.
+
+
+
+ OBJETIVO
+ A. I.II - Impulsionar e fomentar o uso do BIM na administração pública federal, distrital, estadual e
+ municipal direta e indireta, inclusive em projetos do Novo PAC.
+
+ INDICADOR - META
+ Ampliar o percentual de contratos de análise e monitoramento de obras da administração pública,
+ direta e indireta, com projetos em BIM, em pelo menos:
+ - 20% em 2025;
+ - 30% em 2026;
+ - 40% em 2027.
+
+
+
+ OBJETIVO
+ A. I.III - Impulsionar e fomentar o uso do BIM no Programa Minha Casa, Minha Vida (MCMV).
+
+ INDICADOR - META
+ Atingir o número de análises de engenharia concluídas em empreendimentos de mercado do MCMV
+ (origem de recursos do FGTS) com o uso do BIM, sendo no mínimo:
+ - 5 em 2025;
+ - 10 em 2026;
+ - 20 em 2027.
+
+
+ OBJETIVO
+ A. I.IV - Fomentar o uso do BIM para a gestão de ativos.
+
+ INDICADOR - META
+ Mapear o percentual de ativos em uso pela administração pública federal em todo o território nacional,
+ com modelos em BIM em 2025.
+
+
+ OBJETIVO
+ A. II.I - Disseminar iniciativas da BIM BR por meio da Plataforma Nacional BIM BR como portal
+ centralizado de informações, guias, planos, oportunidades de capacitações sobre a temática BIM.
+
+ INDICADOR - META
+ Atingir o número de órgãos e entidades da administração pública com documentação de referência
+ disponibilizadas na Plataforma BIM BR até 2027, sendo:
+ - 5 em 2025;
+ - 12 em 2026;
+ - 20 em 2027.
+
+
+
+                                                                                               MINISTÉRIO DO
+                                                                                      D E S E N V O LV I M E N T O ,
+                                                                                    INDÚSTRIA, COMÉRCIO
+                                                                                                  E SERVIÇOS
+      Página 29
+
+
+ OBJETIVO
+ A. II.II - Apoiar e implementar ações de disseminação da Nova BIM BR para a administração pública,
+ inclusive com a realização de eventos pelo território nacional.
+
+ INDICADOR - META
+ Apoiar a realização de eventos que disseminem as ações da Nova BIM BR, em território nacional, em
+ pelo menos 15 eventos até 2027.
+
+
+
+
+ OBJETIVO
+ A. III.I - Apoiar a estruturação e contratação de ferramentas e softwares BIM pelos órgãos e entidades
+ da administração pública em alinhamento com políticas de compras padronizadas e centralizadas
+
+ INDICADOR - META
+ Alcançar o percentual de órgãos e entidades da administração pública federal com infraestrutura
+ técnica satisfatória para a adoção do BIM:
+ - 5% em 2026;
+ - 10% em 2027.
+
+
+
+
+ OBJETIVO
+ A. III.II - Apoiar e fomentar a implementação do BIM nos sistemas estruturantes de gestão e
+ transferências de recursos da União para contratações de obras e serviços de engenharia.
+
+ INDICADOR - META
+ Implementar interface BIM nos sistemas estruturantes de transferências da União até 2027.
+
+
+
+
+Eixo B
+CAPACITAÇÃO E FORMAÇÃO PROFISSIONAL EM BIM
+
+ OBJETIVO
+ B. I.I - Incentivar que instituições de ensino públicas promovam a atualização das matrizes curriculares
+ no ensino de Arquitetura, Engenharia e Técnico em Ediﬁcações.
+
+ INDICADOR - META
+ Alcançar a atualização das matrizes curriculares em IES públicas nos cursos de Arquitetura,
+ Engenharias e Técnico em Ediﬁcações, incluindo BIM, em pelo menos:
+ - 14 em 2025;
+ - 28 em 2026;
+ - 42 em 2027.
+
+
+
+
+ OBJETIVO
+ B. I.II - Apoiar a criação de novas Células BIM e/ou Laboratórios de ensino/pesquisa em BIM em
+ instituições públicas.
+
+ INDICADOR - META
+ Atingir o número de Células BIM e/ou Laboratórios de ensino e pesquisa em BIM em instituições
+ públicas, em pelo menos:
+ - 5 em 2025;
+ - 10 em 2026;
+ - 15 em 2027.
+
+
+
+
+                                                                                                 MINISTÉRIO DO
+                                                                                        D E S E N V O LV I M E N T O ,
+                                                                                      INDÚSTRIA, COMÉRCIO
+                                                                                                    E SERVIÇOS
+      Página 30
+
+
+ OBJETIVO
+ B. I.III - Incentivar o estabelecimento de instrumentos de cooperação técnica ou congêneres entre
+ instituições de ensino superior e a administração pública federal para a adoção do BIM.
+
+ INDICADOR - META
+ Atingir o número de instrumentos de cooperação técnica ou congêneres entre IES e a administração
+ pública federal, pelo menos em:
+ - 3 em 2025;
+ - 5 em 2026;
+ - 5 em 2027.
+
+
+
+ OBJETIVO
+ B. II.I - Promover a capacitação em BIM para agentes da administração pública federal e apoiar as
+ administrações públicas distrital, estaduais e municipais.
+
+ INDICADOR - META
+ Atingir o número de agentes públicos concludentes dos cursos de capacitação disponibilizados pelo
+ governo federal, em pelo menos:
+ - 1000 em 2025;
+ - 1500 em 2026;
+ - 2000 em 2027.
+
+
+
+ OBJETIVO
+ B. II.II - Estimular a capacitação em BIM para servidores da administração pública federal mediante
+ pós-graduações latu sensu e stricto sensu.
+
+ INDICADOR                                       -                                       META
+ Número de cursos de pós-graduação para agentes públicos promovidos, em pelo menos 4 turmas até
+ 2027.
+
+
+
+
+ OBJETIVO
+ B. III.I - Ampliar o número de proﬁssionais capacitados em BIM.
+
+ INDICADOR - META
+ Alcançar o percentual de engenheiros(as) e arquitetos(as) com experiência de trabalho em BIM, em
+ pelo menos:
+ - 35% dos(as) proﬁssionais de engenharias e 45% de arquitetura e urbanismo, até 2027.
+
+
+
+
+Eixo C
+APOIO À PESQUISA, DESENVOLVIMENTO, INOVAÇÃO (PD&I) E SUSTENTABILIDADE
+NA CONSTRUÇÃO POR MEIO DO BIM.
+
+ OBJETIVO
+ C. I.I - Apoiar a implantação e disseminação de iniciativas de fomento para empresas que promovem
+ PD&I em BIM e tecnologias correlatas.
+
+ INDICADOR - META
+ Alcançar o número de iniciativas de fomento para empresas que promovem PD&I em BIM e tecnologias
+ correlatas, em pelo menos:
+ - 3 em 2025;
+ - 4 em 2026;
+ - 6 em 2027.
+
+
+
+
+                                                                                             MINISTÉRIO DO
+                                                                                    D E S E N V O LV I M E N T O ,
+                                                                                  INDÚSTRIA, COMÉRCIO
+                                                                                                E SERVIÇOS
+     Página 31
+
+
+OBJETIVO
+C. I.II - Impulsionar parcerias e políticas de incentivo às MPMEs para adoção do BIM e tecnologias
+correlatas.
+
+INDICADOR - META
+Alcançar o número de parcerias e/ou políticas, em curso na administração pública, que promovam o
+incentivo às MPMEs para a adoção do BIM e de tecnologias correlatas, em pelo menos:
+-   3 até 2027.
+
+
+
+
+OBJETIVO
+C. I.III - Impulsionar parcerias e políticas de incentivo à startups, parques tecnológicos e/ou centro de
+incubação/aceleração que promovam a transformação digital e sustentável da construção.
+
+INDICADOR - META
+Celebrar parcerias e/ou políticas da administração pública para fomento de startups, parques
+tecnológicos e/ou centros de incubação e aceleração que promovam a transformação digital e
+sustentável da construção, pelo menos:
+-    4 até 2027.
+
+
+
+
+OBJETIVO
+C. I.IV - Promover o desenvolvimento e ampliação da Biblioteca Nacional BIM BR.
+
+INDICADOR - META
+Atingir o número de novos objetos disponibilizados na Biblioteca Nacional BIM BR, em pelo menos:
+- 400 em 2025;
+- 500 em 2026;
+- 600 em 2027.
+
+
+
+
+OBJETIVO
+C. II.I - Promover o uso de especiﬁcações técnicas abertas para a interoperabilidade em BIM.
+
+INDICADOR - META
+Promover iniciativas para impulsionar a interoperabilidade em BIM, pelo menos:
+- 5 ações até 2027.
+
+
+
+
+OBJETIVO
+C. III.I - Apoiar ações transversais em conjunto com programas e/ou políticas públicas com foco na
+digitalização, industrialização e descarbonização da AECO.
+
+INDICADOR - META
+Atingir ações transversais realizadas com foco na digitalização, industrialização e descarbonização,
+pelo menos:
+-    5 ações até 2027.
+
+
+
+
+OBJETIVO
+C. IV.I - Impulsionar a construção industrializada, em alinhamento com programas de governo,
+facilitada pela adoção de soluções em BIM
+
+INDICADOR - META
+Alcançar a implementação do Roadmap/passo a passo para construção industrializada em
+alinhamento com projetos de referência de obras públicas até 2027.
+
+
+
+
+                                                                                                 MINISTÉRIO DO
+                                                                                        D E S E N V O LV I M E N T O ,
+                                                                                      INDÚSTRIA, COMÉRCIO
+                                                                                                    E SERVIÇOS
+      Página 32
+
+
+
+
+Anexo II
+Elaboração do Plano de Trabalho
+COMITÊ GESTOR DA ESTRATÉGIA BIM BR
+Presidente e Secretário-Executivo do Comitê Gestor da Estratégia BIM BR
+Secretaria de Desenvolvimento Industrial, Inovação, Comércio e Serviços
+Uallace Moreira Lima
+
+Ministério do Desenvolvimento, Indústria, Comércio e Serviços;
+Rafael Ramos Codeço
+Thaise Pereira Pessoa Dutra
+
+Casa Civil da Presidência da República;
+Adailton Cardoso Dias
+Alisson Jobim Pereira Nascimento
+
+Ministério das Cidades
+André Pedro Sobreiro Martins
+Daniel Sigelmann
+
+Ministério da Ciência, Tecnologia e Inovação
+Hamilton José Mendes da Silva
+Rubens Caetano Barbosa de Souza
+
+Ministério da Defesa
+Gen Bda Guilherme Louro Braga
+Marcio Alekssander Granzotto Kuntza
+
+Ministério da Educação
+Tânia Mara Francisco
+Adilson Santana de Carvalho
+
+Ministério da Gestão e da Inovação em Serviços Públicos
+Everton Batista Dos Santos
+Leila Szczecinski Cotica
+
+Ministério de Portos e Aeroportos
+Luiza de Amorim Motta Deusdará
+Fábio Lavor Teixeira
+
+Ministério dos Transportes
+Diogo da Fonseca Tabalipa
+Hélio Carneiro Fernandes
+
+                                                                              MINISTÉRIO DO
+                                                                     D E S E N V O LV I M E N T O ,
+                                                                   INDÚSTRIA, COMÉRCIO
+                                                                                 E SERVIÇOS
+       Página 33
+
+
+
+Grupo de Assessoramento Técnico
+Ministério do Desenvolvimento,            Fundação Oswaldo Cruz – Fiocruz
+Indústria, Comércio e Serviços;           Luiz Fernando da Silva
+Alessandra Teixeira
+Katia Helena de Oliveira Lima
+                                          Fundo Nacional de Saúde – FNS
+
+Casa Civil da Presidência da República;   Sheila Cristiane Pacheco de Carvalho
+
+Adailton Cardoso Dias
+Alisson Jobim Pereira Nascimento          Fundo Nacional de Desenvolvimento
+                                          da Educação – FNDE
+                                          Talita Dal Bosco
+Ministério das Cidades
+Andiara Guerreiro Machado Campanhoni      Caixa Econômica Federal – CAIXA
+                                          Bruno Rezende Martins
+Ministério da Ciência, Tecnologia         Rodrigo Moura Vieira
+e Inovação
+Fábio Franscisco Costa dos Santos
+
+Ministério da Defesa
+
+Ministério da Educação
+Aldous Pereira Albuquerque
+Márcio Gabriel Marques Júnior
+
+
+Ministério da Gestão e da Inovação
+em Serviços Públicos
+Regina Lemos de Andrade
+Leila Szczecinski Cótica
+
+
+Ministério de Portos e Aeroportos
+Marcio Mafﬁli Fernandes
+Adriana Lima Rolim
+
+
+Ministério dos Transportes
+Anderson Alvarenga Ferreira (DNIT)
+Allan Magalhães Machado
+
+
+Agência Brasileira de Desenvolvimento
+Industrial – ABDI
+Leonardo Dias Santana
+
+Departamento Nacional de
+Infraestrutura de Transportes – DNIT
+Thiago Davi Rosa
+
+
+                                                                              MINISTÉRIO DO
+                                                                     D E S E N V O LV I M E N T O ,
+                                                                   INDÚSTRIA, COMÉRCIO
+                                                                                 E SERVIÇOS
+       Página 34
+
+
+
+Oﬁcinas de Trabalho
+Orgãos e Entidades colaboradoras
+
+Ministério da Integração e Desenvolvimento Regional;
+
+Ministério de Minas e Energia;
+
+Ministério da Saúde;
+
+Receita Federal;
+
+Tribunal de Contas da União;
+
+Infraero Aeroportos;
+
+Consórcio de Integração Sul e Sudeste – COSUD / Governo do Paraná;
+
+Serviço Brasileiro de Apoio às Micro e Pequenas Empresas – SEBRAE;
+
+Serviço Nacional de Aprendizagem Industrial – SENAI;
+
+Associação Brasileira da Indústria de Materiais de Construção – ABRAMAT;
+
+Associação Nacional de Tecnologia do Ambiente Construído – ANTAC;
+
+BIM Fórum Brasil – BFB;
+
+Câmara Brasileira da Indústria da Construção – CBIC;
+
+Conselho Brasileiro de Construção Sustentável – CBCS;
+
+Conselho de Arquitetura e Urbanismo – CAU;
+
+Conselho Federal de Engenharia e Agronomia – CONFEA;
+
+Softwares Li vres para Arquitetura e Engenharia – SOLARE;
+
+Consultor
+Sergio Scheer
+
+Edital: nº 01/2024 - Projeto BRA/18/023, ﬁrmado entre MDIC, o Programa das Nações
+Unidas para o Desenvolvimento (PNUD) e a Agência Brasileira de Cooperação do
+Ministério das Relações Exteriores (ABC/MRE).
+
+
+
+
+                                                                                MINISTÉRIO DO
+                                                                       D E S E N V O LV I M E N T O ,
+                                                                     INDÚSTRIA, COMÉRCIO
+                                                                                   E SERVIÇOS
+           MINISTÉRIO DO
+  D E S E N V O LV I M E N T O ,
+INDÚSTRIA, COMÉRCIO
+              E SERVIÇOS
+

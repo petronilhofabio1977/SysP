@@ -1,0 +1,218 @@
+Related Roadmaps                                                                       Find the detailed version of this roadmap
+                                                                                       along with other similar roadmaps
+  Backend Development
+  DevOps Engineering
+                                                                                                       roadmap.sh
+  System Design
+  Software Architect
+                                       Engineering Manager
+
+
+
+    EM vs Tech Lead vs IC               What is Engineering Management?                    People         Product           Process
+
+
+                                                                                                      Key Focus Areas
+
+
+
+        Quality and Process               Technical Leadership
+
+ System Monitoring & Performance
+
+
+      CI/CD Implementation                         Technical Strategy
+
+                                                Technical Roadmapping                           Foundational Knowledge
+ Development / Release Workflow
+
+                                             Architectural Decision-Making                 Software Engineering Background
+        Testing Strategies
+
+    Technical Standards Setting                 Build vs Buy Evaluation                     System Design and Architecture
+
+
+      Security Best Practices                 Technical Risk Assessment                    Technical Debt and Management
+
+
+      Incident Management                        Scaling Infrastructure                       Code Review Best Practices
+
+
+                                              Legacy System Retirement                         Technical Documentation
+
+
+
+   People Management
+
+                                                    Leadership Skills
+
+
+        Team Development                                 Delegation
+                                                                                                      Communication
+                                                   Conflict Resolution                            One-on-One Meetings
+      Hiring and Recruitment
+
+                                                   Feedback Delivery                                  Team Meetings
+    Team Structure and Design
+
+                                                    Team Motivation                                  Status Reporting
+     Performance Evaluations
+
+                                                Trust / Influence Building                      Stakeholder Management
+  Career Development Planning
+
+
+     Mentoring and Coaching                      Emotional Intelligence                       Cross-functional Collaboration
+
+
+
+
+                Execution                            Project Planning
+
+          Agile methodologies                      Resource Allocation
+
+            Project Tracking                         Sprint Planning
+                                                                                              Project Management
+        Milestone Management                      Release Management
+
+          Scope Management                          Risk Management
+                                                                                                      Strategic Thinking
+           Timeline Estimation                  Dependency management
+                                                                                                 Product strategy alignment
+
+
+                                                                                                Business Case Development
+
+
+              Measurement                      Business Acumen                                           ROI analysis
+
+
+              KPI Definition                                                                          Market awareness
+
+
+            Velocity Tracking                                                                        Competitive Analysis
+
+
+             Quality Metrics                                                                         Competitive Analysis
+
+                                                    Budget Planning
+          Team Health Metrics
+
+                                                  Resource forecasting
+          Project Postmortems
+
+                                                    Cost Optimization                                 Company Culture
+
+
+                                                  Vendor Management                                 Change management
+       Culture Building
+                                                 Financial Management                               Organization structure
+
+
+                                                                                                      Politics navigation
+
+            Team Culture
+                                                                                               Cross-department collaboration
+
+    Defining and Enforcing Values                                                                 Organizational Awareness
+                                                    Engineering Culture
+   Inclusive environment creation
+                                                   Innovation fostering
+
+     Team Traditions and Rituals
+                                              Learning culture development
+                                                                                                 Crisis Management
+        Recognition programs
+                                               Knowledge sharing practices
+
+         Social connections
+                                               Technical excellence mindset
+
+    Bias Recognition / Mitigation
+                                                 Blameless Post-mortems
+
+
+
+
+                                                         Risk Mitigation                              Incident Response
+            Team Support
+
+                                                   Contingency planning                              Emergency protocols
+        Contingency planning
+
+                                                     Disaster recovery                              War Room Management
+          Disaster recovery
+
+                                                    Business continuity                          Stakeholder Communication
+         Business continuity
+
+                                                 Security incident handling                            Service Recovery
+      Security incident handling
+
+                                              Production issues management                           Post-incident analysis
+   Production issues management
+
+
+
+
+                                                    Partner Management
+ Stakeholder Management                                                                              Customer Relations
+
+
+                                                    Vendor relationships                       Customer feedback integration
+
+                                                  Technology partnerships                        Technical customer support
+         Documentation
+                                                  Integration management                        Customer success alignment
+    Architecture documentation
+                                                          API strategy                               Feature prioritization
+      Process documentation
+                                                   External collaboration                           Technical partnerships
+         Decision records
+
+
+           Best Practices
+
+
+         Lessons Learned                Knowledge Management                                      Executive Communication
+
+
+                                                                                                     Board presentations
+
+
+                                                                                                    Executive summaries
+         Knowledge Transfer
+                                           Change Management                                         Strategic proposals
+        Mentoring Programs
+                                                                                                       Budget requests
+         Knowledge bases
+                                                  Technical Change                                     Vision alignment
+             Tech Talks
+                                                 Migration planning
+            Brown Bags
+                                             Legacy system retirement                               Organizational Change
+
+
+                                                Technology adoption                                    Change strategy
+            Team Change
+                                                  Tool transitions                                   Impact assessment
+          Reorganizations
+                                                                                                  Stakeholder management
+                                                 Process changes
+           Team mergers
+                                                                                                  Communication planning
+           Role transitions
+                                                                                                  Resistance management
+         Responsibility shifts
+
+
+          Culture evolution
+
+
+
+
+                                       Visit the following relevant tracks about system design and architecture
+
+
+                                    Software Architect           System Design       Software Design & Architecture
+

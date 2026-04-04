@@ -1,6 +1,3 @@
-; SysP Compiler Output
-; Source: ../../language/tests/valid/hello.sp
-
 
 section .data
     str_0 db 79, 108, 195, 161, 44, 32, 83, 121, 115, 80, 33, 10

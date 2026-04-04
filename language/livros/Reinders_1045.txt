@@ -1,0 +1,901 @@
+ ATPESC
+ (Argonne Training Program on Extreme-Scale Computing)
+
+
+
+
+Structured Parallel Programming
+James Reinders
+August 1, 2016, Pheasant Run, St Charles, IL
+10:45-12:00
+
+
+© 2016, James Reinders. All rights reserved. Intel, the Intel logo, Intel Inside, Cilk, VTune, Xeon, and Xeon Phi are trademarks of Intel Corporation in the U.S. and/or other countries.
+*Other names and brands may be claimed as the property of others.
+                                                                                                                                                                               Knights Landing Clustering
+                                                                                                                                                                               and Memory Modes, use and
+                                                                                                                                                                               implications on the future of
+                                                                                                                                                                               architecture and memory
+                                                                                                                                                                               configurations.
+
+                                                                                                                                                                               Vectorization, current state of
+                                                                                                                                                                               the art thinking, use and
+                                                                                                                                                                               implications on the future of
+                                                                                                                                                                               data parallelism through
+                                                                                                                                                                               threading + SIMD instructions.
+
+
+
+
+© 2016, James Reinders. All rights reserved. Intel, the Intel logo, Intel Inside, Cilk, VTune, Xeon, and Xeon Phi are trademarks of Intel Corporation in the U.S. and/or other countries.
+*Other names and brands may be claimed as the property of others.
+                                                                            KEEP
+                                                                            CALM
+                                                                                           AND
+                                                            THINK
+                                                          PARALLEL
+© 2016, James Reinders. All rights reserved. Intel, the Intel logo, Intel Inside, Cilk, VTune, Xeon, and Xeon Phi are trademarks of Intel Corporation in the U.S. and/or other countries.   3
+*Other names and brands may be claimed as the property of others.
+                For More Information
+Structured Parallel Programming
+§ Michael McCool
+§ Arch Robison
+§ James Reinders
+
+Uses Cilk Plus and TBB as primary frameworks for
+examples.
+Appendices concisely summarize Cilk Plus
+and TBB.
+www.parallelbook.com
+(pointers to teaching materials, ours and others!)
+
+© 2016, James Reinders. All rights reserved. Intel, the Intel logo, Intel Inside, Cilk, VTune, Xeon, and Xeon Phi are trademarks of Intel Corporation in the U.S. and/or other countries.
+*Other names and brands may be claimed as the property of others.
+Parallel Patterns: Overview
+
+
+
+
+  © 2016, James Reinders. All rights reserved. Intel, the Intel logo, Intel Inside, Cilk, VTune, Xeon, and Xeon Phi are trademarks of Intel Corporation in the U.S. and/or other countries.
+  *Other names and brands may be claimed as the property of others.
+Structured Programming with Patterns
+ •        Patterns are “best practices” for solving specific problems.
+ •        Patterns can be used to organize your code, leading to
+          algorithms that are more scalable and maintainable.
+ •        A pattern supports a particular “algorithmic structure”
+          with an efficient implementation.
+ •        Good parallel programming models support a set of useful
+          parallel patterns with low-overhead implementations.
+
+
+ © 2016, James Reinders. All rights reserved. Intel, the Intel logo, Intel Inside, Cilk, VTune, Xeon, and Xeon Phi are trademarks of Intel Corporation in the U.S. and/or other countries.   6
+ *Other names and brands may be claimed as the property of others.                                                                                                                               6
+Some Basic Patterns
+Serial: Sequence
+à Parallel: Superscalar Sequence
+Serial: Iteration
+à Parallel: Map, Reduction, Scan, Recurrence…
+
+
+
+
+© 2016, James Reinders. All rights reserved. Intel, the Intel logo, Intel Inside, Cilk, VTune, Xeon, and Xeon Phi are trademarks of Intel Corporation in the U.S. and/or other countries.
+*Other names and brands may be claimed as the property of others.
+(Serial) Sequence
+                           A                                                           A serial sequence is executed in the
+                                                                                       exact order given:
+                             f                                                                   F = f(A);
+                                                                                                 G = g(F);
+                           g
+                                                                                                 B = h(G);
+                           h
+                          B
+
+© 2016, James Reinders. All rights reserved. Intel, the Intel logo, Intel Inside, Cilk, VTune, Xeon, and Xeon Phi are trademarks of Intel Corporation in the U.S. and/or other countries.   8
+*Other names and brands may be claimed as the property of others.                                                                                                                               8
+Superscalar Sequence
+                                                                                                              Developer writes “serial” code:
+                                                                                                                                F = f(A);
+          A                                                                 A
+                                                                                                                                G = g(F);
+           f                                                                 f
+                                                                                                                                H = h(B,G);
+B         g                                                     B           g               p            q                      R = r(G);
+    h                                                                 h            r                                            P = p(F);
+                                                                                                                                Q = q(F);
+                r                                                           s
+                                                                                                                                S = s(H,R);
+                          p                                                        t                                            C = t(S,P,Q);
+                                      q                                           C
+                                                                                                                • Tasks ordered only by data
+          s
+                                                                                                                  dependencies
+                t                                                                                               • Tasks can run whenever input data is
+                C                                                                                                 ready
+© 2016, James Reinders. All rights reserved. Intel, the Intel logo, Intel Inside, Cilk, VTune, Xeon, and Xeon Phi are trademarks of Intel Corporation in the U.S. and/or other countries.   9
+*Other names and brands may be claimed as the property of others.                                                                                                                               9
+(Serial) Iteration
+                                                                                       The iteration pattern repeats some section of
+                                                                                       code as long as a condition holds
+
+                                                                                                           while (c) {
+                                                                                                              f();
+                                                                                                           }
+                                                                                       Each iteration can depend on values computed in
+                                                                                       any earlier iteration.
+
+                                                                                       The loop can be terminated at any point based on
+                                                                                       computations in any iteration
+© 2016, James Reinders. All rights reserved. Intel, the Intel logo, Intel Inside, Cilk, VTune, Xeon, and Xeon Phi are trademarks of Intel Corporation in the U.S. and/or other countries.   10
+*Other names and brands may be claimed as the property of others.                                                                                                                                10
+(Serial) Countable Iteration
+                                                                                       The iteration pattern repeats some section of
+                                                                                       code a specific number of times
+                                                                                              for (i = 0; i<n; ++i) {
+                                                                                                  f();
+                                                                                              }
+
+                                                                                       This is the same as
+                                                                                          i = 0;
+                                                                                          while (i<n) {
+                                                                                                 f();
+                                                                                                 ++i;
+                                                                                          }
+© 2016, James Reinders. All rights reserved. Intel, the Intel logo, Intel Inside, Cilk, VTune, Xeon, and Xeon Phi are trademarks of Intel Corporation in the U.S. and/or other countries.   11
+*Other names and brands may be claimed as the property of others.                                                                                                                                11
+Parallel “Iteration”
+The serial iteration pattern actually maps to several different parallel patterns
+It depends on whether and how iterations depend on each other…
+Most parallel patterns arising from iteration require a fixed number of
+invocations of the body, known in advance
+
+
+
+
+© 2016, James Reinders. All rights reserved. Intel, the Intel logo, Intel Inside, Cilk, VTune, Xeon, and Xeon Phi are trademarks of Intel Corporation in the U.S. and/or other countries.
+*Other names and brands may be claimed as the property of others.
+ Map                                                                                                                 • Map invokes a function on
+                                                                                                                       every element of an index set.
+
+                                                                                                                     • The index set may be abstract
+                                                                                                                       or associated with the
+                                                                                                                       elements of an array.
+
+                                                                                                                     • Corresponds to “parallel
+Examples: gamma correction and
+ thresholding in images; color space                                                                                   loop” where iterations are
+ conversions; Monte Carlo sampling; ray                                                                                independent.
+ tracing.
+
+  © 2016, James Reinders. All rights reserved. Intel, the Intel logo, Intel Inside, Cilk, VTune, Xeon, and Xeon Phi are trademarks of Intel Corporation in the U.S. and/or other countries.
+  *Other names and brands may be claimed as the property of others.
+ Reduction                                                                                                          • Reduce combines every element in
+                                                                                                                      a collection into one using an
+                                                                                                                      associative operator:
+                                                                                                                         x+(y+z) = (x+y)+z
+
+                                                                                                                    • For example: reduce can be used to
+                                                                                                                      find the sum or maximum of an
+                                                                                                                      array.
+
+                                                                                                                    • Vectorization may require that the
+                                                                                                                      operator also be commutative:
+Examples: averaging of Monte Carlo
+ samples; convergence testing; image
+                                                                                                                        x+y = y+x
+ comparison metrics; matrix operations.
+
+
+  © 2016, James Reinders. All rights reserved. Intel, the Intel logo, Intel Inside, Cilk, VTune, Xeon, and Xeon Phi are trademarks of Intel Corporation in the U.S. and/or other countries.
+  *Other names and brands may be claimed as the property of others.
+  Scan
+                                                                                                                    • Scan computes all partial reductions of
+                                                                                                                      a collection
+
+                                                                                                                      A[0] = B[0] + init;
+                                                                                                                      for (i=1; i<n; ++i) {
+                                                                                                                        A[i] = B[i] + A[i-1];
+                                                                                                                      }
+                                                                                                                    • Operator must be (at least) associative.
+                                                                                                                    • Diagram shows one possible parallel
+                                                                                                                      implementation using three-phase
+                                                                                                                      strategy
+Examples: random number generation, pack,
+  tabulated integration, time series analysis
+   © 2016, James Reinders. All rights reserved. Intel, the Intel logo, Intel Inside, Cilk, VTune, Xeon, and Xeon Phi are trademarks of Intel Corporation in the U.S. and/or other countries.
+                                                                                                                                                                                               15
+   *Other names and brands may be claimed as the property of others.
+Geometric Decomposition/Partition
+                                                                                                                      • Geometric decomposition breaks an
+                                                                                                                        input collection into sub-collections
+                                                                                                                      • Partition is a special case where
+                                                                                                                        sub-collections do not overlap
+                                                                                                                      • Does not move data, it just provides
+                                                                                                                        an alternative “view” of its
+                                                                                                                        organization
+
+Examples: JPG and other macroblock compression;
+  divide-and-conquer matrix multiplication;
+  coherency optimization for
+  cone-beam recon.
+
+  © 2016, James Reinders. All rights reserved. Intel, the Intel logo, Intel Inside, Cilk, VTune, Xeon, and Xeon Phi are trademarks of Intel Corporation in the U.S. and/or other countries.   16
+  *Other names and brands may be claimed as the property of others.
+
+
+
+                                                                                                                                                                                                   16
+ Stencil                                                                                                                             • Stencil applies a function to
+                                                                                                                                       neighbourhoods of an array.
+
+                                                                                                                                     • Neighbourhoods are given
+                                                                                                                                       by set of relative offsets.
+
+                                                                                                                                     • Boundary conditions need
+                                                                                                                                       to be considered.
+
+
+Examples: image filtering including
+ convolution, median, anisotropic
+ diffusion
+
+
+  © 2016, James Reinders. All rights reserved. Intel, the Intel logo, Intel Inside, Cilk, VTune, Xeon, and Xeon Phi are trademarks of Intel Corporation in the U.S. and/or other countries.
+  *Other names and brands may be claimed as the property of others.
+Implementing Stencil
+
+
+                                                                                                                                 Vectorization can include
+                                                                                                                                 converting regular reads into
+                                                                                                                                 a set of shifts.
+
+                                                                                                                                 Strip-mining reuses
+                                                                                                                                 previously read inputs within
+                                                                                                                                 serialized chunks.
+
+
+© 2016, James Reinders. All rights reserved. Intel, the Intel logo, Intel Inside, Cilk, VTune, Xeon, and Xeon Phi are trademarks of Intel Corporation in the U.S. and/or other countries.
+                                                                                                                                                                                            18
+*Other names and brands may be claimed as the property of others.
+nD Stencil
+                                                                                                             • nD Stencil applies a function to
+                                                                                                               neighbourhoods of an nD array
+                                                                                                             • Neighbourhoods are given by set of
+                                                                                                               relative offsets
+                                                                                                             • Boundary conditions need to be
+                                                                                                               considered
+
+
+                                                                                                             Examples: image filtering including convolution,
+                                                                                                              median, anisotropic diffusion; simulation
+                                                                                                              including fluid flow, electromagnetic, and
+                                                                                                              financial PDE solvers, lattice QCD
+
+
+© 2016, James Reinders. All rights reserved. Intel, the Intel logo, Intel Inside, Cilk, VTune, Xeon, and Xeon Phi are trademarks of Intel Corporation in the U.S. and/or other countries.   19
+*Other names and brands may be claimed as the property of others.                                                                                                                                19
+Pipeline                                                                                       • Pipeline uses a sequence of stages
+                                                                                                 that transform a flow of data
+
+                                                                                               • Some stages may retain state
+
+                                                                                               • Data can be consumed and
+                                                                                                 produced incrementally: “online”
+
+                                                                                                        Examples: image filtering, data
+                                                                                                         compression and decompression,
+                                                                                                         signal processing
+
+© 2016, James Reinders. All rights reserved. Intel, the Intel logo, Intel Inside, Cilk, VTune, Xeon, and Xeon Phi are trademarks of Intel Corporation in the U.S. and/or other countries.
+*Other names and brands may be claimed as the property of others.
+Fork-Join: Efficient Nesting
+                                                                                                        • Fork-join can be nested
+                                                                                                        • Spreads cost of work distribution and
+                                                                                                          synchronization.
+                                                                                                        • This is how cilk_for, and
+                                                                                                          tbb::parallel_for are implemented.
+
+
+
+                                                                                                                      Recursive fork-join enables high
+                                                                                                                                parallelism.
+
+
+© 2016, James Reinders. All rights reserved. Intel, the Intel logo, Intel Inside, Cilk, VTune, Xeon, and Xeon Phi are trademarks of Intel Corporation in the U.S. and/or other countries.
+                                                                                                                                                                                            21
+*Other names and brands may be claimed as the property of others.
+Parallel Patterns: Overview
+
+
+
+
+© 2016, James Reinders. All rights reserved. Intel, the Intel logo, Intel Inside, Cilk, VTune, Xeon, and Xeon Phi are trademarks of Intel Corporation in the U.S. and/or other countries.   22
+*Other names and brands may be claimed as the property of others.                                                                                                                                22
+                                                                            KEEP
+                                                                            CALM
+                                                                                            USE
+                                                                           TASKS
+                                                                                      AVOID
+                                                              THREADS
+© 2016, James Reinders. All rights reserved. Intel, the Intel logo, Intel Inside, Cilk, VTune, Xeon, and Xeon Phi are trademarks of Intel Corporation in the U.S. and/or other countries.   23
+*Other names and brands may be claimed as the property of others.
+Choosing a non-proprietary parallel abstraction
+
+
+
+                        Use abstractions !!!
+                        Avoid direct programming to the low level interfaces (like pthreads).
+
+                        PROGRAM IN TASKS, NOT THREADS
+
+                        Is OpenCL* low level? For HPC – YES.
+
+© 2016, James Reinders. All rights reserved. Intel, the Intel logo, Intel Inside, Cilk, VTune, Xeon, and Xeon Phi are trademarks of Intel Corporation in the U.S. and/or other countries.
+*Other names and brands may be claimed as the property of others.
+Choosing a non-proprietary parallel abstraction
+
+
+
+
+       Choose First
+    (limited functions)
+
+
+
+
+© 2016, James Reinders. All rights reserved. Intel, the Intel logo, Intel Inside, Cilk, VTune, Xeon, and Xeon Phi are trademarks of Intel Corporation in the U.S. and/or other countries.
+*Other names and brands may be claimed as the property of others.
+Choosing a non-proprietary parallel abstraction
+
+
+
+
+       Choose First                                         Cluster
+    (limited functions)                                   (distributed
+                                                           memory)
+
+
+
+
+© 2016, James Reinders. All rights reserved. Intel, the Intel logo, Intel Inside, Cilk, VTune, Xeon, and Xeon Phi are trademarks of Intel Corporation in the U.S. and/or other countries.
+*Other names and brands may be claimed as the property of others.
+Choosing a non-proprietary parallel abstraction
+
+
+
+
+       Choose First                                         Cluster                                              Node
+    (limited functions)                                   (distributed                                          (shared
+                                                           memory)                                              memory)
+
+
+
+© 2016, James Reinders. All rights reserved. Intel, the Intel logo, Intel Inside, Cilk, VTune, Xeon, and Xeon Phi are trademarks of Intel Corporation in the U.S. and/or other countries.
+*Other names and brands may be claimed as the property of others.
+Choosing a non-proprietary parallel abstraction
+
+                                                                                                                                                                                            Up and coming
+                                                                                                                                                                                               for C++
+                                                                                                                                                                                             (keywords,
+                                                                                                                                                                                             compilers)
+
+       Choose First                                         Cluster                                              Node                                                                       Because… you
+                                                                                                                                                                                             just have to
+    (limited functions)                                   (distributed                                          (shared                                                                     expect “more”
+                                                           memory)                                              memory)
+                                                                                                                                                                                             Affect future
+                                                                                                                                                                                            C++ standards?
+                                                                                                                                                                                               (2021?)
+
+© 2016, James Reinders. All rights reserved. Intel, the Intel logo, Intel Inside, Cilk, VTune, Xeon, and Xeon Phi are trademarks of Intel Corporation in the U.S. and/or other countries.
+*Other names and brands may be claimed as the property of others.
+Choosing a non-proprietary parallel abstraction
+
+
+
+
+      Compare...
+                                                                              *
+
+
+
+
+                                                                                  *
+
+
+© 2016, James Reinders. All rights reserved. Intel, the Intel logo, Intel Inside, Cilk, VTune, Xeon, and Xeon Phi are trademarks of Intel Corporation in the U.S. and/or other countries.
+*Other names and brands may be claimed as the property of others.
+Choosing a non-proprietary parallel abstraction
+
+
+
+
+      Compare...
+
+
+
+
+© 2016, James Reinders. All rights reserved. Intel, the Intel logo, Intel Inside, Cilk, VTune, Xeon, and Xeon Phi are trademarks of Intel Corporation in the U.S. and/or other countries.
+*Other names and brands may be claimed as the property of others.
+Choosing a non-proprietary parallel abstraction
+
+
+
+
+                                Best options for Performance and Performance Portability
+© 2016, James Reinders. All rights reserved. Intel, the Intel logo, Intel Inside, Cilk, VTune, Xeon, and Xeon Phi are trademarks of Intel Corporation in the U.S. and/or other countries.
+*Other names and brands may be claimed as the property of others.
+            Intel Threading Building Blocks
+ For TBB - we asked ourselves:
+                        §              How should C++ be extended?
+                                          §              “templates / generic programming”
+                        §              What do we want to solve?
+                                          §              Abstraction with good performance (scalability)
+                                          §              Abstraction that steers toward easier (less)
+                                                         debugging
+                                          §              Abstraction that is readable
+
+© 2016, James Reinders. All rights reserved. Intel, the Intel logo, Intel Inside, Cilk, VTune, Xeon, and Xeon Phi are trademarks of Intel Corporation in the U.S. and/or other countries.
+*Other names and brands may be claimed as the property of others.
+Intel® Threading Building Blocks (Intel® TBB)
+С++ Library for parallel programming
+• Takes care of managing multitasking
+
+Runtime library
+• Scalability to available number of threads
+
+Cross-platform
+• Windows*, Linux*, Mac OS* and others
+
+
+
+http://threadingbuildingblocks.org/
+
+
+ © 2016, James Reinders. All rights reserved. Intel, the Intel logo, Intel Inside, Cilk, VTune, Xeon, and Xeon Phi are trademarks of Intel Corporation in the U.S. and/or other countries.
+ *Other names and brands may be claimed as the property of others.
+                                                                                                                                                           Parallel algorithms and data structures
+
+Rich Feature Set for Parallelism                                                                                                                           Threads and synchronization
+
+                                                                                                                                                           Memory allocation and task scheduling
+
+
+          Generic Parallel                                    Flow Graph                                                             Concurrent Containers
+            Algorithms
+                                                                                                          Concurrent access, and a scalable alternative to serial
+     Efficient scalable way                             A set of classes to                                        containers with external locking
+     to exploit the power of                          express parallelism as
+       multi-core without                              a graph of compute
+       having to start from                                                                                                          Synchronization Primitives
+                                                       dependencies and/or
+             scratch.                                       data flow                                            Atomic operations, a variety of mutexes with different
+                                                                                                                           properties, condition variables
+
+
+                                   Task Scheduler                                                         Thread Local Storage                          Threads                    Miscellaneous
+
+          Sophisticated work scheduling engine that                                                        Unlimited number of                          OS API                  Thread-safe timers
+          empowers parallel algorithms and the flow                                                        thread-local variables                       wrappers                  and exception
+                                                                                                                                                                                     classes
+                           graph
+
+
+                                                                                        Memory Allocation
+                                                    Scalable memory manager and false-sharing free allocators
+   © 2016, James Reinders. All rights reserved. Intel, the Intel logo, Intel Inside, Cilk, VTune, Xeon, and Xeon Phi are trademarks of Intel Corporation in the U.S. and/or other countries.         34
+   *Other names and brands may be claimed as the property of others.
+                                                                                                                                                           Parallel algorithms and data structures
+
+Rich Feature Set for Parallelism                                                                                                                           Threads and synchronization
+
+                                                                                                                                                           Memory allocation and task scheduling
+
+
+          Generic Parallel                                    Flow Graph                                                             Concurrent Containers
+            Algorithms
+                                                                                                          Concurrent access, and a scalable alternative to serial
+     Efficient scalable way                             A set of classes to                                        containers with external locking
+     to exploit the power of                          express parallelism as
+       multi-core without                              a graph of compute
+       having to start from                                                                                                          Synchronization Primitives
+                                                       dependencies and/or
+             scratch.                                       data flow                                            Atomic operations, a variety of mutexes with different
+                                                                                                                           properties, condition variables
+
+
+                                   Task Scheduler                                                         Thread Local Storage                          Threads                    Miscellaneous
+
+          Sophisticated work scheduling engine that                                                        Unlimited number of                          OS API                  Thread-safe timers
+          empowers parallel algorithms and the flow                                                        thread-local variables                       wrappers                  and exception
+                                                                                                                                                                                     classes
+                           graph
+
+
+                                                                                        Memory Allocation
+                                                    Scalable memory manager and false-sharing free allocators
+   © 2016, James Reinders. All rights reserved. Intel, the Intel logo, Intel Inside, Cilk, VTune, Xeon, and Xeon Phi are trademarks of Intel Corporation in the U.S. and/or other countries.         35
+   *Other names and brands may be claimed as the property of others.
+Generic Algorithms
+                                             Loop parallelization                                                    Parallel Algorithms for Streams
+
+                          parallel_for                                                                  parallel_do
+
+                          parallel_reduce                                                               - Use for unstructured stream or pile of work
+
+                          -     load balanced parallel execution                                        - Can add additional work to pile while running
+
+                          -     fixed number of independent iterations                                  parallel_for_each
+
+                          parallel_scan                                                                 - parallel_do without an additional work feeder
+
+                          -     computes parallel prefix                                                pipeline / parallel_pipeline
+
+                                   y[i] = y[i-1] op x[i]                                                -     Linear pipeline of stages
+                                                                                                        -     Each stage can be parallel or serial in-order or
+                                              Parallel sorting                                                serial out-of-order.
+                                      parallel_sort                                                     -     Uses cache efficiently
+                                                                                                                              Computational graph
+                                       Parallel function invocation                                            flow::graph
+                              parallel_invoke                                                                  -     Implements dependencies between
+                              - Parallel execution of a number of user-                                              nodes
+                              specified functions                                                              -     Pass messages between nodes
+
+ © 2016, James Reinders. All rights reserved. Intel, the Intel logo, Intel Inside, Cilk, VTune, Xeon, and Xeon Phi are trademarks of Intel Corporation in the U.S. and/or other countries.
+ *Other names and brands may be claimed as the property of others.
+Parallel For
+
+
+
+
+  © 2016, James Reinders. All rights reserved. Intel, the Intel logo, Intel Inside, Cilk, VTune, Xeon, and Xeon Phi are trademarks of Intel Corporation in the U.S. and/or other countries.   37
+  *Other names and brands may be claimed as the property of others.
+tbb::parallel_for                                                                                                               Map
+
+ Has several forms.
+         Execute functor(i) for all i Î [lower,upper)
+
+         parallel_for( lower, upper, functor );
+
+         Execute functor(i) for all i Î {lower,lower+stride,lower+2*stride,...}
+
+         parallel_for( lower, upper, stride, functor );
+
+
+         Execute functor(subrange) for all subrange in range
+
+         parallel_for( range, functor );
+
+ © 2016, James Reinders. All rights reserved. Intel, the Intel logo, Intel Inside, Cilk, VTune, Xeon, and Xeon Phi are trademarks of Intel Corporation in the U.S. and/or other countries.   38
+ *Other names and brands may be claimed as the property of others.
+tbb::parallel_for
+   #include <tbb/blocked_range.h>
+   #include <tbb/parallel_for.h>
+   #define N 10
+
+   inline int Prime(int & x) {
+      int limit, factor = 3;
+      limit = (long)(sqrtf((float)x)+0.5f);
+      while( (factor <= limit) && (x % factor))
+         factor ++;
+      x = (factor > limit ? x : 0);
+   }
+
+   int main (){
+      int a[N];
+      // initialize array here…                                                                                   A call to a template function
+      tbb::parallel_for (0, N, 1,                                                                                 parallel_for (lower, upper, stride, functor)
+         [&](int i){
+             Prime (a[i]);
+                                                                                         Task: loop body as C++ lambda expression
+         });
+      return 0;
+   }
+
+ © 2016, James Reinders. All rights reserved. Intel, the Intel logo, Intel Inside, Cilk, VTune, Xeon, and Xeon Phi are trademarks of Intel Corporation in the U.S. and/or other countries.   39
+ *Other names and brands may be claimed as the property of others.
+   Recursive parallelism
+                                                                                                                                              [Data, Data+N)
+   Split range...
+                                          [Data, Data+N/2)                                                                                     [Data+N/2, Data+N)
+
+
+  .. recursively...
+
+                           [Data, Data+N/k)
+
+...until £ GrainSize
+                                                                                                                                      tasks available to thieves
+
+    [Data, Data+GrainSize)
+   © 2016, James Reinders. All rights reserved. Intel, the Intel logo, Intel Inside, Cilk, VTune, Xeon, and Xeon Phi are trademarks of Intel Corporation in the U.S. and/or other countries.   40
+   *Other names and brands may be claimed as the property of others.
+                                                                                                                                                           Parallel algorithms and data structures
+
+Rich Feature Set for Parallelism                                                                                                                           Threads and synchronization
+
+                                                                                                                                                           Memory allocation and task scheduling
+
+
+          Generic Parallel                                    Flow Graph                                                             Concurrent Containers
+            Algorithms
+                                                                                                          Concurrent access, and a scalable alternative to serial
+     Efficient scalable way                             A set of classes to                                        containers with external locking
+     to exploit the power of                          express parallelism as
+       multi-core without                              a graph of compute
+       having to start from                                                                                                          Synchronization Primitives
+                                                       dependencies and/or
+             scratch.                                       data flow                                            Atomic operations, a variety of mutexes with different
+                                                                                                                           properties, condition variables
+
+
+                                   Task Scheduler                                                         Thread Local Storage                          Threads                    Miscellaneous
+
+          Sophisticated work scheduling engine that                                                        Unlimited number of                          OS API                  Thread-safe timers
+          empowers parallel algorithms and the flow                                                        thread-local variables                       wrappers                  and exception
+                                                                                                                                                                                     classes
+                           graph
+
+
+                                                                                        Memory Allocation
+                                                    Scalable memory manager and false-sharing free allocators
+   © 2016, James Reinders. All rights reserved. Intel, the Intel logo, Intel Inside, Cilk, VTune, Xeon, and Xeon Phi are trademarks of Intel Corporation in the U.S. and/or other countries.         41
+   *Other names and brands may be claimed as the property of others.
+                                                                                                        The MOST popular
+                                                                                                        abstract parallelism
+                                                                                                        model for C++
+
+
+
+
+© 2016, James Reinders. All rights reserved. Intel, the Intel logo, Intel Inside, Cilk, VTune, Xeon, and Xeon Phi are trademarks of Intel Corporation in the U.S. and/or other countries.
+*Other names and brands may be claimed as the property of others.
+                                                                                                        The MOST popular
+                                                                                                        abstract parallelism
+                                                                                                        model for C++
+
+
+
+
+© 2016, James Reinders. All rights reserved. Intel, the Intel logo, Intel Inside, Cilk, VTune, Xeon, and Xeon Phi are trademarks of Intel Corporation in the U.S. and/or other countries.
+*Other names and brands may be claimed as the property of others.
+                                                              Sorry OpenMP
+
+                                           You just do not cut it.
+
+                                                                              (for C++)
+© 2016, James Reinders. All rights reserved. Intel, the Intel logo, Intel Inside, Cilk, VTune, Xeon, and Xeon Phi are trademarks of Intel Corporation in the U.S. and/or other countries.
+*Other names and brands may be claimed as the property of others.
+                                                              Sorry OpenMP
+
+                                           You just do not cut it.
+
+                                                                              (for C++)
+© 2016, James Reinders. All rights reserved. Intel, the Intel logo, Intel Inside, Cilk, VTune, Xeon, and Xeon Phi are trademarks of Intel Corporation in the U.S. and/or other countries.
+*Other names and brands may be claimed as the property of others.
+ The next few slides are based on
+following paper from WHPCF’14:
+
+
+
+
+© 2016, James Reinders. All rights reserved. Intel, the Intel logo, Intel Inside, Cilk, VTune, Xeon, and Xeon Phi are trademarks of Intel Corporation in the U.S. and/or other countries.   46
+*Other names and brands may be claimed as the property of others.
+STAC-A2 overview (https://stacresearch.com/)
+       • A vendor independent market risk analysis benchmark
+       • Defined by Securities Technology Analysis Center (STAC*)
+       • Calculate “Greeks” – sensitivity of the option price to changes in
+         parameters of the underlying market
+       • Heston option pricing model & Least Squares Monte Carlo of
+         Longstaff & Schwartz
+       • Benchmark Metrics
+        • Speed (GREEKS.TIME.COLD/WARM)
+        • Workload scalability ( MAX_ASSETS, MAX_PATHS)
+        • Power & Space efficiency
+        • Quality
+ © 2016, James Reinders. All rights reserved. Intel, the Intel logo, Intel Inside, Cilk, VTune, Xeon, and Xeon Phi are trademarks of Intel Corporation in the U.S. and/or other countries.   47
+ *Other names and brands may be claimed as the property of others.
+TBB used on STAC-A2 Benchmark – beat OpenMP
+
+ 130829 and 140507 use                                                                                                    10
+                                                                                                                                                  Higher is Better
+                                                                                                                                                                               TBB
+
+
+
+
+                                                                              Performance normalised to Jun26 2013 (SNB
+ identical hardware                                                                                                        9                             TBB
+                                                                                                                                                                                on
+                                                                                                                                                                              Haswell
+                                                                                                                           8                              on
+ 140507 and 140814 use                                                                                                     7                          Ivy Bridge                               1/TIME.MEAN
+
+ identical source code                                                                                                     6                                                                   MAX_ASSETS
+                                                                                                                           5
+ This is portable code:                                                                                                    4
+                                                                                                                                     OpenMP
+                                                                                                                                                                                               MAX_PATHS
+
+
+
+
+                                                                                OpenMP) INTC130607 Bigger is better.
+                                                                                                                                        on
+ no “intrinsics”                                                                                                           3        Ivy Bridge
+                                                                                                                           2
+ ~1.45x from each HW                                                                                                       1
+ generation, SW change worth                                                                                               0
+                                                                                                                               September 19, 2013 May 15, 2014 IVB September 8, 2014
+ at least 2 HW generations                                                                                                        IVB OpenMP          Intel TBB         HSW Intel TBB
+                                                                                                                                 (INTC130829)       (INTC140507)         (INTC140814)
+                                                                                                                                          Configuration details in STAC vault
+
+
+
+                                                                                                                                       Parallelization choices matter
+   © 2016, James Reinders. All rights reserved. Intel, the Intel logo, Intel Inside, Cilk, VTune, Xeon, and Xeon Phi are trademarks of Intel Corporation in the U.S. and/or other countries.                 48
+   *Other names and brands may be claimed as the property of others.
+Hold on!!!
+          Who is the invited
+          keynote speaker
+          for OpenMP conference
+          in September 2015?
+
+
+
+
+ © 2016, James Reinders. All rights reserved. Intel, the Intel logo, Intel Inside, Cilk, VTune, Xeon, and Xeon Phi are trademarks of Intel Corporation in the U.S. and/or other countries.   49
+ *Other names and brands may be claimed as the property of others.
+How did Intel TBB beat OpenMP
+annotations on STAC-A2?
+       OpenMP annotations work well when
+       § You control the whole machine
+       § You have one level of parallelism
+       § You want to take low level control of scheduling, placement,…
+
+       Intel TBB tends to out perform OpenMP when…
+       § You don’t know about the machine you’ll run on
+       § You have many levels of parallelism (recursive, or in libraries)
+       § You’re happy to let the runtime handle things
+
+       Both are portable: Intel TBB does not require compiler support.
+       Both are reasonably performance portable in practice, although
+       TBB is composable – which can be a significant advantage in perf. port.
+
+© 2016, James Reinders. All rights reserved. Intel, the Intel logo, Intel Inside, Cilk, VTune, Xeon, and Xeon Phi are trademarks of Intel Corporation in the U.S. and/or other countries.   50
+*Other names and brands may be claimed as the property of others.
+OpenMP is very popular – and works very well on technical
+applications (like HPC) with C and Fortran.
+But, for C++… TBB is better.
+
+I was having a little fun… to make a point.
+
+
+
+
+ © 2016, James Reinders. All rights reserved. Intel, the Intel logo, Intel Inside, Cilk, VTune, Xeon, and Xeon Phi are trademarks of Intel Corporation in the U.S. and/or other countries.   51
+ *Other names and brands may be claimed as the property of others.
+Nested parallelism is
+important to exploit.
+
+Trending: more and more so.
+
+
+© 2016, James Reinders. All rights reserved. Intel, the Intel logo, Intel Inside, Cilk, VTune, Xeon, and Xeon Phi are trademarks of Intel Corporation in the U.S. and/or other countries.   52
+*Other names and brands may be claimed as the property of others.
+OpenMP Nested Parallelism: HOT TEAMS
+                                                                                                                     OpenMP worker threads –
+                                                                                                                     created ONCE PER PROGRAM
+
+
+                                                                             NESTED PARALLEL:
+
+                                                                             By DEFAULT, any parallel worker that
+                                                                             executes a parallel construct does that
+                                                                             work inside the same worker thread.
+
+                                                                             PRO: controlled memory footprint (including stack space)
+
+                                                                             CON: no load balancing
+
+
+
+© 2016, James Reinders. All rights reserved. Intel, the Intel logo, Intel Inside, Cilk, VTune, Xeon, and Xeon Phi are trademarks of Intel Corporation in the U.S. and/or other countries.   53
+*Other names and brands may be claimed as the property of others.
+OpenMP Nested Parallelism: HOT TEAMS
+                                                                                                                     OpenMP worker threads –
+                                                                                                                     created ONCE PER PROGRAM
+
+                                                                                                                                                               Additional level(s)
+                                                                                                                                                                      created and
+                                                                                                                                                              released repeatedly
+                                                                              NESTED PARALLEL:
+
+                                                                              TURN ON NESTING (no code changes – done with
+                                                                                                             environment variables)
+
+                                                                              PRO: load balancing
+
+                                                                              CON: high overhead, potential oversubscription (runaway
+                                                                                  memory/stack usage being the key issue)
+
+© 2016, James Reinders. All rights reserved. Intel, the Intel logo, Intel Inside, Cilk, VTune, Xeon, and Xeon Phi are trademarks of Intel Corporation in the U.S. and/or other countries.   54
+*Other names and brands may be claimed as the property of others.
+                                                                                                                                           Table of Contents…
+                                                                                                              Foreword
+                                                                                                              Introduction
+                                                                                                              Numerical Weather Prediction Optimization
+http:// lotsofcores.com                                                                                       WRF Goddard Microphysics Scheme Optimization
+                                                                                                              Pairwise DNA Sequence Alignment Optimization
+                                                                                                              Accelerated Structural Bioinformatics for Drug Discovery
+                                                                                                              Amber PME Molecular Dynamics Optimization
+                                                       “High                                                  Low Latency Solutions for Financial Services
+                                                       Performance                                            Parallel Numerical Methods in Finance
+                                                                                                              Wilson Dslash Kernel From Lattice QCD Optimization
+                                                       Parallelism
+                                                       Pearls                                                 Cosmic Microwave Background Analysis: Nested Parallelism In Practice
+                                                                                                              Visual Search Optimization
+                                                       Volume 2”                                              Radio Frequency Ray Tracing
+                                                                                                              Exploring Use of the Reserved Core
+                                                                                                              High Performance Python Offloading
+                                                                                                              Fast Matrix Computations on Asynchronous Streams
+                                                                                                              MPI-3 Shared Memory Programming Introduction
+                                                            73 expert contributors
+                                                                                                              Coarse-Grain OpenMP for Scalable Hybrid Parallelism
+                                                            23 affiliations
+                                                                                                              Exploiting Multilevel Parallelism with OpenMP
+                                                            10 countries
+                                                                                                              OpenCL: There and Back Again
+                                                            24 contributed chapters
+                                                                                                              OpenMP vs. OpenCL: Difference in Performance?
+                                                                                                              Prefetch Tuning Optimizations
+Volume 2: August 2015                                                                                         SIMD functions via OpenMP
+                                                                                                              Vectorization Advice
+                                                                                                              Portable Explicit Vectorization Intrinsics
+                                                                                                              Power Analysis for Applications and Data Centers
+
+
+   © 2016, James Reinders. All rights reserved. Intel, the Intel logo, Intel Inside, Cilk, VTune, Xeon, and Xeon Phi are trademarks of Intel Corporation in the U.S. and/or other countries.   55
+   *Other names and brands may be claimed as the property of others.
+18 OpenMP Nested Parallelism: HOT TEAMS
+                         Chapter 18: Exploiting Multilevel Parallelism with OpenMP
+
+
+
+
+  © 2016, James Reinders. All rights reserved. Intel, the Intel logo, Intel Inside, Cilk, VTune, Xeon, and Xeon Phi are trademarks of Intel Corporation in the U.S. and/or other countries.   56
+  *Other names and brands may be claimed as the property of others.
+10 OpenMP Nested Parallelism: HOT TEAMS
+      Chapter 10: Cosmic Microwave Background Analysis: Nested Parallelism In Practice
+
+
+
+
+  © 2016, James Reinders. All rights reserved. Intel, the Intel logo, Intel Inside, Cilk, VTune, Xeon, and Xeon Phi are trademarks of Intel Corporation in the U.S. and/or other countries.   57
+  *Other names and brands may be claimed as the property of others.
+                                                                            KEEP
+                                                                            CALM
+                                                                                           AND
+                                                      ASK SOME
+                                                      QUESTIONS
+© 2016, James Reinders. All rights reserved. Intel, the Intel logo, Intel Inside, Cilk, VTune, Xeon, and Xeon Phi are trademarks of Intel Corporation in the U.S. and/or other countries.   58
+*Other names and brands may be claimed as the property of others.
+James Reinders. Parallel Programming Enthusiast
+James has been involved in multiple engineering, research and educational efforts to increase use of parallel
+programming throughout the industry. James worked 10,001 days as an Intel employee 1989-2016, and
+contributed to numerous projects including the world's first TeraFLOP/s supercomputer (ASCI Red), first 3
+TeraFLOP/s supercomputer (ASCI Red upgrade), the world's first TeraFLOP/s microprocessor (Intel® Xeon
+Phi™ coprocessor) and the world's first 3 TeraFLOP/s microprocessor (Intel® Xeon Phi™ Processor).
+James been an author on numerous technical books, including VTune™ Performance Analyzer Essentials
+(Intel Press, 2005),
+Intel® Threading Building Blocks (O'Reilly Media, 2007), Structured Parallel Programming (Morgan
+Kaufmann, 2012), Intel® Xeon Phi™ Coprocessor High Performance Programming (Morgan Kaufmann,
+2013), Multithreading for Visual Effects (A K Peters/CRC Press, 2014),
+High Performance Parallelism Pearls Volume 1 (Morgan Kaufmann, Nov. 2014), High Performance
+Parallelism Pearls Volume 2 (Morgan Kaufmann, Aug. 2015), and Intel® Xeon Phi™ Processor High
+Performance Programming - Knights Landing Edition (Morgan Kaufmann, 2016).
+
+ © 2016, James Reinders. All rights reserved. Intel, the Intel logo, Intel Inside, Cilk, VTune, Xeon, and Xeon Phi are trademarks of Intel Corporation in the U.S. and/or other countries.
+ *Other names and brands may be claimed as the property of others.
+

@@ -1,0 +1,228 @@
+ESTUDO AVANÇADO DE ALGORITMO COM LINGUAGEM C++ (20/23)
+
+
+Nível 1: O Programador Diferenciado (Estruturas Base)
+1. Lista Ligada (Inserção)
++2
+
+C++
+struct Node {
+    int key;
+    Node *next, *prev;
+};
+
+void list_insert(Node** head, Node* x) {
+    x->next = *head; // [cite: 13]
+    if (*head != nullptr) {
+        (*head)->prev = x; // [cite: 17]
+    }
+    *head = x; // [cite: 18]
+    x->prev = nullptr; // [cite: 19]
+}
+
+2. Árvore Binária de Busca (BST - Inserção)
++2
+
+C++
+void tree_insert(Tree& T, Node* z) {
+    Node* y = nullptr; // [cite: 31]
+    Node* x = T.root; // [cite: 33]
+    while (x != nullptr) { // [cite: 29]
+        y = x; // [cite: 35]
+        if (z->key < x->key) x = x->left; // [cite: 37, 39]
+        else x = x->right; // [cite: 41]
+    }
+    z->p = y; // [cite: 42]
+    if (y == nullptr) T.root = z; // [cite: 44, 49]
+    else if (z->key < y->key) y->left = z; // [cite: 50, 51]
+    else y->right = z; // [cite: 52]
+}
+
+3. Max-Heap (Heapify)
++2
+
+C++
+void max_heapify(int A[], int i, int heap_size) {
+    int l = 2 * i + 1; // LEFT(i) [cite: 61]
+    int r = 2 * i + 2; // RIGHT(i) [cite: 65]
+    int maior;
+    if (l < heap_size && A[l] > A[i]) maior = l; // [cite: 62, 63]
+      else maior = i; // [cite: 69]
+      if (r < heap_size && A[r] > A[maior]) maior = r; // [cite: 77, 78]
+      if (maior != i) { // [cite: 74]
+          std::swap(A[i], A[maior]); // [cite: 80]
+          max_heapify(A, maior, heap_size); // [cite: 81]
+      }
+}
+
+4. Grafos (Lista de Adjacência)
++1
+
+C++
+#include <vector>
+#include <list>
+// Um vetor de listas para representar conexões [cite: 85]
+std::vector<std::list<int>> adj(V);
+
+5. Busca em Largura (BFS)
++3
+
+C++
+void bfs(Graph& G, int s) {
+    for (int u : G.V) { // [cite: 89, 177]
+        color[u] = BRANCO; d[u] = INF; p[u] = -1; // [cite: 90, 178]
+    }
+    color[s] = CINZA; d[s] = 0; // [cite: 93, 181]
+    std::queue<int> Q; Q.push(s); // [cite: 95, 96, 183]
+    while (!Q.empty()) { // [cite: 97, 184]
+        int u = Q.front(); Q.pop(); // [cite: 98, 186]
+        for (int v : G.adj[u]) { // [cite: 99, 190]
+            if (color[v] == BRANCO) { // [cite: 100, 191]
+                color[v] = CINZA; d[v] = d[u] + 1; p[v] = u; // [cite: 108, 192]
+                Q.push(v); // [cite: 109, 194]
+            }
+        }
+        color[u] = PRETO; // [cite: 110, 197]
+    }
+}
+
+6. Tabela Hash (Chained Search)
++1
+
+C++
+Node* chained_hash_search(List T[], int k) {
+    // Procura k na lista da posição h(k) [cite: 157]
+    return search_in_list(T[h(k)], k);
+}
+Nível 2: O Engenheiro de Software (Otimização)
+7. Merge Sort
++1
+
+C++
+void merge_sort(int A[], int p, int r) {
+    if (p < r) { // [cite: 131]
+        int q = (p + r) / 2; // [cite: 133]
+        merge_sort(A, p, q); // [cite: 135]
+        merge_sort(A, q + 1, r); // [cite: 137]
+        merge(A, p, q, r); // [cite: 139]
+    }
+}
+
+8. Quick Sort
++1
+
+C++
+void quicksort(int A[], int p, int r) {
+    if (p < r) { // [cite: 146]
+        int q = partition(A, p, r); // [cite: 144]
+        quicksort(A, p, q - 1); // [cite: 150]
+        quicksort(A, q + 1, r); // [cite: 151]
+    }
+}
+
+9. Algoritmo de Kruskal (MST)
++2
+
+C++
+void mst_kruskal(Graph& G) {
+    A = {}; // [cite: 248]
+    for (auto v : G.V) make_set(v); // [cite: 249, 251]
+    sort_edges_by_weight(G.E); // [cite: 252]
+    for (auto (u, v) : G.E) { // [cite: 253]
+        if (find_set(u) != find_set(v)) { // [cite: 255]
+            A.push_back({u, v}); // [cite: 258]
+            union_sets(u, v); // [cite: 259]
+        }
+    }
+}
+
+10. Bellman-Ford
++2
+
+C++
+bool bellman_ford(Graph& G, int s) {
+      initialize_single_source(G, s); // [cite: 267]
+      for (int i = 1; i <= G.V.size() - 1; ++i) { // [cite: 268, 269]
+          for (auto (u, v) : G.E) relax(u, v, w); // [cite: 271, 273]
+      }
+      for (auto (u, v) : G.E) { // [cite: 274]
+          if (d[v] > d[u] + w(u, v)) return false; // [cite: 276, 278]
+      }
+      return true; // [cite: 279]
+}
+
+11. Knuth-Morris-Pratt (KMP)
++2
+
+C++
+void kmp_matcher(string T, string P) {
+    int n = T.length(), m = P.length(); // [cite: 286, 287]
+    auto pi = compute_prefix_function(P); // [cite: 288]
+    int q = 0; // [cite: 289]
+    for (int i = 0; i < n; ++i) { // [cite: 290]
+        while (q > 0 && P[q] != T[i]) q = pi[q-1]; // [cite: 291, 294]
+        if (P[q] == T[i]) q++; // [cite: 296, 298]
+        if (q == m) { // [cite: 299]
+            cout << "Ocorre em: " << i - m + 1 << endl; // [cite: 300]
+            q = pi[q-1]; // [cite: 303]
+        }
+    }
+}
+
+12. Ford-Fulkerson (Fluxo Máximo)
++2
+
+C++
+void ford_fulkerson(Graph& G, int s, int t) {
+    for (auto (u, v) : G.E) f[u][v] = 0; // [cite: 309, 310]
+    while (exists_path_p_in_Gf) { // [cite: 311]
+        int cp = find_min_capacity(p); // [cite: 312]
+        for (auto (u, v) : p) { // [cite: 313]
+            if (edge_exists) f[u][v] += cp; // [cite: 317, 320]
+            else f[v][u] -= cp; // [cite: 321]
+        }
+    }
+}
+
+
+
+
+Nível 3: O Arquiteto de Sistemas (Nível Deus)
+13. Árvore B (Busca)
++2
+C++
+pair<Node*, int> b_tree_search(Node* x, int k) {
+    int i = 0; //
+    while (i < x->n && k > x->keys[i]) i++; //
+    if (i < x->n && k == x->keys[i]) return {x, i}; //
+    if (x->folha) return {nullptr, -1}; //
+    else {
+        disk_read(x->c[i]); //
+        return b_tree_search(x->c[i], k); //
+    }
+}
+
+14. RSA (Criptografia)
++2
+
+C++
+// Baseado no conceito matemático do Cormen [cite: 401, 402]
+long long encrypt(long long m, long long e, long long n) {
+    return modular_pow(m, e, n); // m^e mod n
+}
+
+15. Graham Scan (Fecho Convexo)
++2
+
+C++
+void graham_scan(vector<Point>& Q) {
+    Point p0 = find_min_y(Q); //
+    sort_by_polar_angle(Q, p0); //
+    stack<Point> S;
+    S.push(p0); S.push(Q[0]); S.push(Q[1]); //
+    for (int i = 2; i < Q.size(); ++i) { //
+        while (not_left_turn(next_to_top(S), S.top(), Q[i])) S.pop(); //
+        S.push(Q[i]); //
+    }
+}
+

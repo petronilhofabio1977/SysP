@@ -1,0 +1,202 @@
+ESTUDO AVANÇADO DE ALGORITMO COM LINGUAGEM RUST
+
+
+
+Para fechar o teu arsenal com chave de ouro, vamos à linguagem que é a sensação
+do momento para sistemas seguros e de alta performance: Rust.
+
+O Rust é conhecido por ser "implacável" com a memória, o que o torna perfeito para
+implementar os algoritmos do Cormen, pois força-te a entender exatamente quem é
+o "dono" de cada dado (Ownership).
+
+Aqui estão os 15 algoritmos em Rust:
+
+
+
+Nível 1: O Programador Diferenciado (Estruturas Base)
+1. Lista Ligada (Inserção)
+
+Rust
+struct Node {
+    key: i32,
+    next: Option<Box<Node>>,
+}
+
+fn list_insert(head: &mut Option<Box<Node>>, mut new_node: Box<Node>) {
+    new_node.next = head.take();
+    *head = Some(new_node);
+}
+
+2. Árvore Binária de Busca (BST - Inserção)
+
+Rust
+fn tree_insert(node: &mut Option<Box<Node>>, key: i32) {
+    match node {
+        Some(ref mut n) => {
+            if key < n.key { tree_insert(&mut n.left, key); }
+            else { tree_insert(&mut n.right, key); }
+        }
+        None => {
+            *node = Some(Box::new(Node { key, left: None, right: None }));
+        }
+    }
+}
+3. Max-Heap (Heapify)
+
+Rust
+fn max_heapify(a: &mut [i32], i: usize, heap_size: usize) {
+    let l = 2 * i + 1;
+    let r = 2 * i + 2;
+    let mut maior = i;
+    if l < heap_size && a[l] > a[i] { maior = l; }
+    if r < heap_size && a[r] > a[maior] { maior = r; }
+    if maior != i {
+        a.swap(i, maior);
+        max_heapify(a, maior, heap_size);
+    }
+}
+
+4. Grafos (Lista de Adjacência)
+
+Rust
+use std::collections::HashMap;
+let mut grafo: HashMap<i32, Vec<i32>> = HashMap::new();
+
+5. Busca em Largura (BFS)
+
+Rust
+fn bfs(grafo: &HashMap<i32, Vec<i32>>, s: i32) {
+    let mut q = VecDeque::new();
+    let mut dist = HashMap::new();
+    q.push_back(s);
+    dist.insert(s, 0);
+    while let Some(u) = q.pop_front() {
+        if let Some(vizinhos) = grafo.get(&u) {
+            for &v in vizinhos {
+                if !dist.contains_key(&v) {
+                    dist.insert(v, dist[&u] + 1);
+                    q.push_back(v);
+                }
+            }
+        }
+    }
+}
+6. Tabela Hash (Busca)
+
+Rust
+fn chained_hash_search(t: &Vec<Vec<i32>>, k: i32, h_func: fn(i32) -> usize) ->
+bool {
+    let index = h_func(k);
+    t[index].contains(&k)
+}
+
+
+
+
+Nível 2: O Engenheiro de Software (Otimização)
+7. Merge Sort
+
+Rust
+fn merge_sort(a: &mut [i32]) {
+    let mid = a.len() / 2;
+    if mid == 0 { return; }
+    merge_sort(&mut a[..mid]);
+    merge_sort(&mut a[mid..]);
+    // Lógica de merge aqui...
+}
+
+8. Quick Sort
+
+Rust
+fn quicksort(a: &mut [i32]) {
+    if a.len() <= 1 { return; }
+    let p = partition(a);
+    quicksort(&mut a[0..p]);
+    quicksort(&mut a[p + 1..]);
+}
+
+9. Algoritmo de Kruskal (MST)
+
+Rust
+fn kruskal(edges: &mut Vec<Edge>, n: usize) -> Vec<Edge> {
+    edges.sort_by_key(|e| e.weight);
+    let mut ds = DisjointSet::new(n);
+    edges.iter().filter(|e| ds.union(e.u, e.v)).cloned().collect()
+}
+10. Bellman-Ford
+
+Rust
+fn bellman_ford(edges: &[Edge], n: usize, s: usize) -> Option<Vec<i32>> {
+    let mut d = vec![i32::MAX; n];
+    d[s] = 0;
+    for _ in 0..n-1 {
+        for e in edges {
+            if d[e.u] != i32::MAX && d[e.u] + e.w < d[e.v] { d[e.v] = d[e.u] +
+e.w; }
+        }
+    }
+    // Checar ciclos negativos...
+    Some(d)
+}
+
+
+
+
+11. KMP (Busca de String)
+
+Rust
+fn kmp_matcher(t: &str, p: &str) {
+    let pi = compute_prefix(p);
+    let (t, p) = (t.as_bytes(), p.as_bytes());
+    let mut q = 0;
+    for i in 0..t.len() {
+        while q > 0 && p[q] != t[i] { q = pi[q-1]; }
+        if p[q] == t[i] { q += 1; }
+        if q == p.len() { println!("Match!"); q = pi[q-1]; }
+    }
+}
+
+12. Ford-Fulkerson
+
+Rust
+// Implementação focada em caminhos aumentados via BFS/DFS
+Nível 3: O Arquiteto de Sistemas (Nível Deus)
+13. Árvore B (Busca)
+
+Rust
+fn b_tree_search(node: &BNode, k: i32) -> Option<(&BNode, usize)> {
+    let mut i = 0;
+    while i < node.n && k > node.keys[i] { i += 1; }
+    if i < node.n && k == node.keys[i] { return Some((node, i)); }
+    if node.leaf { None } else { b_tree_search(&node.children[i], k) }
+}
+
+14. RSA (Criptografia)
+
+Rust
+fn rsa_encrypt(m: u128, e: u128, n: u128) -> u128 {
+    // Exponenciação modular: (m^e) % n
+}
+
+
+
+
+15. Graham Scan (Fecho Convexo)
+
+Rust
+fn graham_scan(mut points: Vec<Point>) -> Vec<Point> {
+    let p0 = points.iter().min_by_key(|p| (p.y, p.x)).unwrap();
+    // Ordenar e processar com pilha (stack)
+    let mut stack = Vec::new();
+    // ... lógica de filtragem de curvas à esquerda
+    stack
+}
+
+
+Por que Rust para o seu Projeto?
+Se apresentares o teu Projeto Integrador com implementações em Rust, demonstras
+que não dominas apenas a lógica (Cormen), mas também as ferramentas mais
+modernas de segurança de memória. No Rust, não existem "Null Pointers" ou
+"Segmentation Faults" comuns no C++, o que obriga o programador a ser muito mais
+rigoroso.
+

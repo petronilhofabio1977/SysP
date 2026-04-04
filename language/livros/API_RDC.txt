@@ -1,0 +1,138 @@
+      API Mínima da Estrutura de Dados Diamante
+           Reconvergente Controlada (RDC)
+                                  Projeto RDC
+                              December 15, 2025
+
+
+1     Introdução
+Este documento define a API mínima obrigatória da Estrutura de Dados Diamante
+Reconvergente Controlada (RDC). A API aqui descrita estabelece os contratos formais
+entre arquitetura e implementação.
+   Nenhuma função adicional pode violar as invariantes definidas em SPEC_RDC.md e
+INVARIANTS_RDC.tex.
+
+
+2     Princípios da API
+ • A API deve ser mínima e suficiente
+
+ • Todas as operações devem ser determinísticas
+
+ • Nenhuma função pode expor estados internos inconsistentes
+
+ • A API deve permitir testes de propriedades
+
+
+3     Tipos Fundamentais
+ • Core
+
+ • Split
+
+ • NodoTransistor
+
+ • Merge
+
+ • DiamanteRDC
+
+
+4     Funções da API
+4.1   create_core
+Assinatura conceitual:
+
+
+
+                                        1
+  Core create_core(Data payload)
+
+
+  Contrato:
+
+  • Cria exatamente um Core
+
+  • O Core é imutável após a criação
+
+4.2   split
+Assinatura conceitual:
+
+  Split split(Core core)
+
+
+  Contrato:
+
+  • Deriva visões do Core
+
+  • Não modifica o Core
+
+4.3   evaluate_node
+Assinatura conceitual:
+
+  State evaluate_node(NodoTransistor node)
+
+
+  Contrato:
+
+  • Executa o gate matemático
+
+  • Atualiza o estado do nó
+
+  • Não produz efeitos colaterais externos
+
+4.4   step
+Assinatura conceitual:
+
+  void step(DiamanteRDC d)
+
+
+  Contrato:
+
+  • Executa um ciclo completo da RDC
+
+  • Avalia nós ativos
+
+  • Não viola invariantes
+
+
+
+                                         2
+4.5     merge
+Assinatura conceitual:
+    Result merge(DiamanteRDC d)
+
+
+    Contrato:
+    • Realiza reconvergência determinística
+    • Independe da ordem de avaliação
+
+4.6     collapse_node
+Assinatura conceitual:
+    void collapse_node(NodoTransistor node)
+
+
+    Contrato:
+    • Reduz o nó ao estado COLLAPSE
+    • Libera recursos
+
+4.7     reset
+Assinatura conceitual:
+    void reset(DiamanteRDC d)
+
+
+    Contrato:
+    • Retorna a RDC ao estado inicial
+    • Não altera a SPEC
+
+
+5     Garantias da API
+A API garante:
+ • Determinismo
+ • Reconvergência obrigatória
+ • Controle matemático local
+ • Previsibilidade de memória
+
+
+6     Conclusão
+Esta API constitui o limite formal entre arquitetura e implementação. Qualquer código
+que respeite estes contratos e as invariantes associadas pode ser considerado uma imple-
+mentação válida da RDC.
+
+                                              3
+

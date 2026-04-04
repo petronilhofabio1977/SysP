@@ -108,6 +108,7 @@ namespace sysp::parser {
         sysp::ast::ExprPtr parse_lambda();
         sysp::ast::ExprPtr parse_tuple_or_grouped();
         sysp::ast::ExprPtr parse_interpolated_string();
+        sysp::ast::ExprPtr parse_struct_init();
 
         // Argument list
         std::vector<sysp::ast::ExprPtr> parse_argument_list();

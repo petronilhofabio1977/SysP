@@ -1,0 +1,257 @@
+ESTUDO AVANÇADO DE ALGORITMO COM LINGUAGEM PYTHON
+
+Aqui está o seu guia prático em sequência:
+
+
+
+Nível 1: O Programador Diferenciado (Estruturas Base)
+1. Lista Ligada (Inserção)
++2
+
+Python
+class Node:
+    def __init__(self, data):
+        self.key = data
+        self.next = None
+        self.prev = None
+
+def list_insert(L_head, x):
+    x.next = L_head
+    if L_head is not None:
+        L_head.prev = x
+    return x # Novo Head
+
+2. Árvore Binária de Busca (Inserção)
++2
+
+Python
+def tree_insert(T, z):
+    y = None
+    x = T.root
+    while x is not None:
+        y = x
+        if z.key < x.key:
+             x = x.left
+        else:
+             x = x.right
+    z.p = y
+    if y is None:
+        T.root = z
+    elif z.key < y.key:
+        y.left = z
+    else:
+        y.right = z
+
+3. Max-Heap (Heapify)
++2
+
+Python
+def max_heapify(A, i, heap_size):
+    l = 2 * i + 1
+    r = 2 * i + 2
+    if l < heap_size and A[l] > A[i]:
+        maior = l
+    else:
+        maior = i
+    if r < heap_size and A[r] > A[maior]:
+        maior = r
+    if maior != i:
+        A[i], A[maior] = A[maior], A[i]
+        max_heapify(A, maior, heap_size)
+
+4. Grafos (Lista de Adjacência)
++1
+
+Python
+# Em Python, usamos um dicionário de listas
+grafo = {
+    'A': ['B', 'C'],
+    'B': ['D'],
+    'C': ['D'],
+    'D': []
+}
+
+5. Busca em Largura (BFS)
++2
+
+Python
+from collections import deque
+
+def bfs(G, s):
+    visited = {u: 'BRANCO' for u in G}
+    dist = {u: float('inf') for u in G}
+    visited[s], dist[s] = 'CINZA', 0
+    Q = deque([s])
+    while Q:
+        u = Q.popleft()
+        for v in G[u]:
+             if visited[v] == 'BRANCO':
+                 visited[v], dist[v] = 'CINZA', dist[u] + 1
+                 Q.append(v)
+        visited[u] = 'PRETO'
+    return dist
+
+6. Tabela Hash (Busca com Encadeamento)
++1
+
+Python
+def chained_hash_search(T, k, hash_function):
+    # T é um array de listas (baldes)
+    index = hash_function(k)
+    for item in T[index]:
+        if item == k:
+            return item
+    return None
+
+
+
+
+Nível 2: O Engenheiro de Software (Otimização)
+7. Merge Sort
++1
+
+Python
+def merge_sort(A):
+    if len(A) > 1:
+        q = len(A) // 2
+        L, R = A[:q], A[q:]
+        merge_sort(L)
+        merge_sort(R)
+        i = j = k = 0
+        while i < len(L) and j < len(R):
+            if L[i] <= R[j]:
+                A[k] = L[i]; i += 1
+            else:
+                A[k] = R[j]; j += 1
+            k += 1
+        A[k:] = L[i:] if i < len(L) else R[j:]
+
+8. Quick Sort
++1
+
+Python
+def partition(A, p, r):
+    x = A[r]
+    i = p - 1
+    for j in range(p, r):
+        if A[j] <= x:
+             i += 1
+             A[i], A[j] = A[j], A[i]
+    A[i+1], A[r] = A[r], A[i+1]
+    return i + 1
+
+def quicksort(A, p, r):
+    if p < r:
+        q = partition(A, p, r)
+        quicksort(A, p, q - 1)
+        quicksort(A, q + 1, r)
+9. Algoritmo de Kruskal (MST)
++1
+
+Python
+def mst_kruskal(G_v, G_e):
+    A = []
+    parent = {v: v for v in G_v}
+    def find(i):
+        if parent[i] == i: return i
+        return find(parent[i])
+
+     G_e.sort(key=lambda x: x[2]) # Ordenar por peso
+     for u, v, w in G_e:
+         root_u, root_v = find(u), find(v)
+         if root_u != root_v:
+              A.append((u, v, w))
+              parent[root_u] = root_v
+     return A
+
+10. Bellman-Ford
++2
+
+Python
+def bellman_ford(G_v, G_e, s):
+    dist = {v: float('inf') for v in G_v}
+    dist[s] = 0
+    for _ in range(len(G_v) - 1):
+        for u, v, w in G_e:
+            if dist[u] + w < dist[v]:
+                dist[v] = dist[u] + w
+    for u, v, w in G_e:
+        if dist[u] + w < dist[v]: return False # Ciclo negativo
+    return dist
+
+11. Knuth-Morris-Pratt (KMP)
++2
+
+Python
+def kmp_matcher(T, P):
+    n, m = len(T), len(P)
+    pi = compute_prefix_function(P) # Função auxiliar
+    q = 0
+    for i in range(n):
+        while q > 0 and P[q] != T[i]: q = pi[q-1]
+        if P[q] == T[i]: q += 1
+        if q == m:
+            print(f"Padrão encontrado no índice {i - m + 1}")
+            q = pi[q-1]
+12. Ford-Fulkerson (Fluxo Máximo)
++2
+
+Python
+def ford_fulkerson(capacity, s, t):
+    parent = [-1] * len(capacity)
+    max_flow = 0
+    while bfs_path(capacity, s, t, parent): # Busca caminho aumentado
+        path_flow = float('inf')
+        curr = t
+        while curr != s:
+            path_flow = min(path_flow, capacity[parent[curr]][curr])
+            curr = parent[curr]
+        max_flow += path_flow
+        # Atualiza capacidades residuais...
+    return max_flow
+
+
+
+
+Nível 3: O Arquiteto de Sistemas (Nível Deus)
+13. Árvore B (Busca)
++2
+
+Python
+def b_tree_search(x, k):
+    i = 0
+    while i < x.n and k > x.keys[i]:
+        i += 1
+    if i < x.n and k == x.keys[i]:
+        return (x, i)
+    if x.folha:
+        return None
+    return b_tree_search(x.children[i], k)
+
+14. RSA (Criptografia)
++2
+
+Python
+def rsa_encrypt(m, e, n):
+    # m = mensagem, (e, n) = chave pública
+    return pow(m, e, n)
+
+def rsa_decrypt(c, d, n):
+    # c = cifrado, (d, n) = chave privada
+    return pow(c, d, n)
+
+15. Graham Scan (Fecho Convexo)
++2
+Python
+def graham_scan(points):
+    p0 = min(points, key=lambda p: (p.y, p.x))
+    # Ordenar pontos por ângulo polar em relação a p0
+    sorted_pts = sorted(points, key=lambda p: polar_angle(p0, p))
+    stack = [p0, sorted_pts[0], sorted_pts[1]]
+    for i in range(2, len(sorted_pts)):
+        while len(stack) > 1 and cross_product(stack[-2], stack[-1],
+sorted_pts[i]) <= 0:
+            stack.pop()
+        stack.append(sorted_pts[i])
+    return stack
+

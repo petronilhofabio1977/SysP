@@ -6,6 +6,7 @@
 #include <unordered_map>
 
 #include "../../frontend/ast/decl.hpp"
+#include "../../frontend/ast/expr.hpp"
 #include "../../middleend/metatron_graph/metatron_graph.hpp"
 
 // ================================================================
@@ -19,6 +20,13 @@ namespace sysp::backend::x86 {
     struct StringConstant {
         std::string label;
         std::string value;
+    };
+
+    // Struct layout: ordered list of field names/types (each field = 8 bytes)
+    struct StructLayout {
+        std::vector<std::string> field_names;
+        std::vector<std::string> field_types;
+        // field i is at [rbp - (var_offsets_[var] + i*8)]
     };
 
     class Backend {
@@ -37,9 +45,12 @@ namespace sysp::backend::x86 {
         int                         str_counter_ = 0;
 
         // ── Register / variable tracking ─────────────────────────────
-        std::unordered_map<std::string, int>         var_offsets_; // var → stack offset
-    std::unordered_map<std::string, std::string>  var_types_;   // var → type
+        std::unordered_map<std::string, int>         var_offsets_;    // var → offset of field 0 (or scalar)
+        std::unordered_map<std::string, std::string> var_types_;      // var → type name
         int stack_offset_ = 0;
+
+        // ── Struct layout table (populated once per program) ──────────
+        std::unordered_map<std::string, StructLayout> struct_layouts_;
 
         // ── Code generation ───────────────────────────────────────────
         void gen_function(const sysp::ast::FunctionDecl* fn, std::ostream& out);
@@ -62,6 +73,15 @@ namespace sysp::backend::x86 {
         void gen_binary(const sysp::ast::BinaryExpr* expr, std::ostream& out);
         void gen_call(const sysp::ast::CallExpr* expr, std::ostream& out);
         void gen_println_call(const sysp::ast::CallExpr* expr, std::ostream& out);
+        void gen_member(const sysp::ast::MemberExpr* expr, std::ostream& out);
+
+        // Struct support
+        void collect_struct_layouts(const sysp::ast::Program& program);
+        void gen_struct_init(const std::string& var_name,
+                             const sysp::ast::StructInitExpr* si,
+                             std::ostream& out);
+        void gen_assign_member(const sysp::ast::MemberExpr* mem,
+                               std::ostream& out);
 
         // Helpers
         std::string new_string_label(const std::string& value);

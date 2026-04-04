@@ -1,0 +1,592 @@
+   Structured Parallel Programming for Monte Carlo
+                       Tree Search
+                    S. Ali Mirsoleimani∗† , Aske Plaat∗ , Jaap van den Herik∗ and Jos Vermaseren†
+                                       ∗ Leiden Centre of Data Science, Leiden University
+
+                                     Niels Bohrweg 1, 2333 CA Leiden, The Netherlands
+                                                † Nikhef Theory Group, Nikhef
+
+                                   Science Park 105, 1098 XG Amsterdam, The Netherlands
+
+
+   Abstract—In this paper, we present a new algorithm for           us that the loop can actually be decomposed into separate
+parallel Monte Carlo tree search (MCTS). It is based on the         operations for parallelization. Therefore, in our new design
+pipeline pattern and allows flexible management of the control      we introduce operation-level (OL) parallelism. The main idea
+flow of the operations in parallel MCTS. The pipeline pattern
+provides for the first structured parallel programming approach     is that the 3PMCTS algorithm assigns each operation to a
+to MCTS. Moreover, we propose a new lock-free tree data             separate processing element for execution by separate proces-
+structure for parallel MCTS which removes synchronization           sors. This leads to flexibility in managing the control flow of
+overhead. The Pipeline Pattern for Parallel MCTS algorithm          operations in the MCTS algorithm.
+(called 3PMCTS), scales very well to higher numbers of cores           Our approach of applying structured parallel programming
+when compared to the existing methods.
+                                                                    focuses the attention on (1) a design issue and (2) an imple-
+                                                                    mentation issue. For the design issue, we describe how the
+                      I. I NTRODUCTION
+                                                                    pipeline pattern is used as a building block in the design
+   In recent years there has been much interest in the Monte        of 3PMCTS. It consists of a precise arrangement of tasks
+Carlo tree search (MCTS) algorithm, at that time a new,             and data dependencies in MCTS. For the implementation,
+adaptive, randomized optimization algorithm [1], [2]. In fields     it is important to measure the performance of 3PMCTS on
+as diverse as Artificial Intelligence, Operations Research, and     real machines. We present the implementation of 3PMCT
+High Energy Physics, research has established that MCTS can         by using Threading Building Blocks (TBB) [11] and we
+find valuable approximate answers without domain-dependent          measure its performance on CPU and Phi.1 This paper has
+heuristics [3]. The strength of the MCTS algorithm is that it       three contributions:
+provides answers with a random amount of error for any fixed           1) A new structured algorithm based on the pipeline pattern
+computational budget [4]. The amount of error can typically                is introduced for parallel MCTS.
+be reduced by expanding the computational budget for more              2) A new lock-free tree data structure for parallel MCTS
+running time. Much effort has been put into the development                is presented.
+of parallel algorithms for MCTS to reduce the running time.            3) A new TBB implementation based on the concept of
+The efforts have as their target a broad spectrum of parallel              token is proposed. The experimental results show that
+systems; ranging from small shared-memory multicore ma-                    our implementation scales well.
+chines (CPU) to large distributed-memory clusters. The emer-           The remainder of the paper is organized as follows. In
+gence of the Intel Xeon Phi (Phi) co-processor with a large         section II the required background information is briefly
+number (over 60) of simple cores has extended this spectrum         described. Section III provides necessary definitions and ex-
+with shared-memory manycore processors. Indeed, there is            planations for the design issue of structured parallel program-
+a full array of different parallel MCTS algorithms [5]–[10].        ming for 3PMCTS. Section IV gives the explanations for the
+However, there is still no structured parallel programming          implementation issue of the 3PMCTS algorithm. Section V
+approach, based on computation patterns, for MCTS. In this          provides the proposed lock-free tree data structure, Section
+paper, we propose a new algorithm based on the Pipeline             VI the experimental setup of the 3PMCTS, and Section VII
+Pattern for Parallel MCTS, called 3PMCTS.                           the experimental results for 3PMCTS. Section VIII discusses
+   The standard MCTS algorithm has four operations inside its       related work. Finally, in Section IX we conclude the paper.
+main loop (Figure 1). In this loop, the computation associated
+with each iteration is assumed to be independent. Existing                                      II. BACKGROUND
+parallel methods use iteration-level (IL) parallelism. They           Below we discuss in II-A MCTS, in II-B tree parallelization,
+assign each iteration to a separate processing element (thread)     and in II-C TBB.
+for execution on separate processors [5], [8], [9]. All three
+                                                                       1 We also discuss two elements related to the implementation of 3PMCTS,
+publications are facing a bottleneck in their implementation
+                                                                    including the concept of token and a new lock-free tree data structure. A lock-
+since they can not partition the iteration into constituent parts   free tree data structure plays a critical role in any parallel implementation for
+(operations) for parallel execution. Close analysis has learned     MCTS to be scalable.
+                    yes
+                                    Stop
+                                                                                                       v0
+                  Is search   no
+                   budget          Select
+                  finished?                                                                  v1        v2        v3
+
+                                   Expand    Search tree
+                                                                                                                  2
+                                                                                        v4        v5        v6        v7
+                                                                                                        1                   3
+                                   Playout
+                                                                                                  v8        v9        v10
+
+                                   Backup
+
+                                                                 Fig. 2. Tree parallelization without locks. The curly arrows represent threads.
+             Fig. 1. Flowchart of the sequential MCTS.           The rectangles are terminal leaf nodes.
+
+
+
+                                                                 B. Tree Parallelization
+A. MCTS
+                                                                    In tree parallelization, one search tree is shared among
+   Figure 1 shows a flowchart of MCTS [1]. The MCTS              several threads that are performing simultaneous searches [5].
+algorithm iteratively repeats four steps to construct a search   The main challenge in this method is the prevention of data
+tree until a predefined computational budget (i.e., time or      corruption. A lock-based method uses fine-grained locks to
+iteration constraint) is reached.                                protect shared data. However, this approach suffers from
+  1) S ELECT: Starting at the root node, a path of nodes         synchronization overhead due to thread contentions and does
+     inside the search tree is selected until a non-terminal     not scale well [5]. A lock-free implementation of addresses the
+     node with unvisited children is reached. Each of the        problem and scales better [13]. However, the method in [13]
+     nodes is selected based on a selection policy. Among        does not guarantee the computational consistency of the multi-
+     the proposed selection policies, the Upper Confidence       threaded program with the single-threaded program. Figure 2
+     Bounds for Trees (UCT) is one of the most commonly          shows the tree parallelization without locks.
+     used policies [2], [12]. A child node j is selected to
+     maximize:                                                   C. TBB
+                                      s                             TBB is a C++ template library developed by Intel for
+                                        ln(n)                    writing software programs that take advantage of a multicore
+                   U CT = X j + Cp                       (1)     processor [14]. The TBB implementation of pipelines uses
+                                          nj
+                                                                 a technique that enables greedy scheduling, but the greed
+                       w                                         must be constrained to bound memory consumption. The
+     where X j = njj is the average reward from child j,
+                                                                 user specifies the constraint as a maximum number of items
+     wj is the reward value of child j, nj is the number
+                                                                 allowed to flow simultaneously through the pipeline [14].
+     of times child j has been visited, n is the number of
+     times the current node has been visited, and Cp ≥ 0 is
+                                                                                       III. D ESIGN OF 3PMCTS
+     a constant. The first term in the UCT equation is for
+     exploitation of known parts of the tree and the second         In this section, we describe our structured parallel program-
+     term is for exploration of unknown parts [12]. The level    ming approach for MCTS. In section III-A we explain how to
+     of exploration of the UCT algorithm can be adjusted by      decompose MCTS into tasks. In section III-B we investigate
+     tuning the Cp constant.                                     what types of data dependencies exist among these tasks.
+  2) E XPAND: One of the children of the selected non-           Section III-C describes how the pipeline pattern is applied
+     terminal node is generated and added to the selected        in MCTS. Finally, section III-D provides our design for the
+     path.                                                       3PMCTS algorithm.
+  3) P LAYOUT: From the given state of the newly added
+     node, a sequence of randomly simulated actions is           A. Decomposition into Tasks
+     performed until a terminal state in the state space is         The first step towards designing our 3PMCTS algorithm is
+     reached. The terminal state is evaluated to produce a       to find concurrent tasks in MCTS. There are two levels of task
+     reward value ∆.                                             decomposition in MCTS.
+  4) BACKUP: In the selected path, each node’s visit count          1) Iteration-level (IL) tasks: In MCTS the computa-
+     n is incremented by 1 and its reward value w updated               tion associated with each S ELECT-E XPAND-P LAYOUT-
+     according to ∆ [12].                                               BACKUP-iteration is independent. Therefore, these are
+As soon as the computational budget is exhausted, the best              candidates to guide a task decomposition by mapping
+child of the root node is returned.                                     each iteration onto a task.
+   2) Operation-level (OL) tasks: The task decomposition for
+      MCTS occurs inside each iteration. Each of the four                                                                Buffer       Select
+
+      MCTS steps can be treated as a separate task.
+B. Data Dependencies                                                                                                                 Expand
+
+
+   In 3PMCTS, a search tree is shared among multiple parallel
+tasks. Therefore, there are two levels of data dependency.                           Buffer      Select
+
+   1) Iteration-level (IL) dependencies: Strictly speaking, in                                                           Playout      Buffer      Playout
+
+       MCTS, iteration j has a soft dependency to its predeces-                                 Expand       Buffer
+       sor iteration j − 1. Obviously, to select an optimal path,
+       it requires updates on the search tree from the previous
+       iteration.2 A parallel MCTS can ignore IL dependencies                        Buffer     Playout                               Buffer
+
+
+       and simply suffers from the search overhead.3
+   2) Operation-level (OL) dependencies: Each of the four                                       Backup                               Backup
+
+       operations in MCTS has a hard dependency to its pre-
+                                                                                                  (a)                                 (b)
+       decessor.4 For example, the expansion of a path cannot
+       start until the selection operation has been completed.                   Fig. 3. (3a) Flowchart of a linear pipeline for MCTS. (3b) Flowchart of a
+                                                                                 nonlinear pipeline for MCTS.
+C. Pipeline Pattern
+  In this section, we focus on the pipeline pattern in MCTS
+using OL tasks. The pipeline pattern is the most straightfor-
+ward way to enforce the required ordering among the OL tasks.
+Below we explain two possible types of pipelines for MCTS.
+  1) Linear pipeline: Figure 3a shows a linear MCTS pipeline
+      with the selected paths inside the search tree; from
+      one stage to the next stage buffers are given a path as
+      operations are completed.
+  2) Non-linear pipeline: Figure 3b shows a non-linear
+      MCTS pipeline with two parallel P LAYOUT stages. Both
+      of the P LAYOUT stages take paths produced by the                             Fig. 4. The 3PMCTS algorithm with a five-stage non-linear pipeline.
+      E XPAND stage of the pipeline.
+
+D. Parallelism of a Pipeline                                                     (random simulations plus evaluation of a terminal state) is
+                                                                                 more computationally expensive than other operations. There-
+   The existing parallel methods such as tree parallelization use
+                                                                                 fore, our 3PMCTS algorithm uses a non-linear pipeline with
+IL tasks. There are only IL dependencies when performing
+                                                                                 parallel stages. Introducing parallel stages makes 3PMCTS
+IL parallelism. The potential concurrency is exploited by
+                                                                                 more scalable. The 3PMCTS algorithm, depicted in Figure 4,
+assigning each of the IL tasks to a separate processing element
+                                                                                 has three parallel stages (i.e., EXPAND, Random Simulation,
+and having them work on separate processors. So far IL
+                                                                                 and Evaluation). It will be usable in almost any sufficiently
+parallelism is investigated quite extensively [5], [8]–[10], [13].
+                                                                                 powerful parallel programming model (e.g., TBB [14] or Cilk
+   In contrast to the existing methods, our 3PMCTS algorithm
+                                                                                 [15]).
+uses OL tasks which have both IL and OL dependencies.
+The OL tasks are assigned to the stages of a pipeline. The                                     IV. I MPLEMENTATION OF 3PMCTS
+pipeline pattern can satisfy the OL dependencies among the                         In this section, we introduce the implementation of our
+OL tasks. The potential concurrency is also exploited by                         3PMCTS algorithm. In section IV-A we present the concept
+assigning each stage of the pipeline to a separate processing                    of token (when used as type name, we write Token). Section
+element for execution on separate processors. If the pipeline is                 IV-B describes the implementation of 3PMCTS using TBB.
+linear then the scalability is limited to the number of stages.5
+However in MCTS, the operations are not equally compu-                           A. Token
+tationally intensive, e.g., generally the P LAYOUT operation                        A token represents a path inside the search tree during the
+   2 i.e., a violation of IL dependency does not impact the correctness of the
+                                                                                 search. Algorithm 1 presents definition for the type Token. It
+algorithm.                                                                       has four fields. (1) id represents a unique identifier for a token,
+   3 Occurs when a parallel implementation in a search algorithm searches        (2) v represents the current node in the tree, (3) s represents
+more nodes of the search space than the sequential version; for example,         the search state of the current node, and (4) ∆ represents the
+since the information to guide the search is not yet available.
+   4 i.e., a violation of OL dependency yields an incorrect algorithm.           reward value of the state. In our implementation for 3PMCTS,
+   5 When the operations performed by the various stages are all about equally   each stage (task) performs its operation on a token. We can
+computationally intensive.                                                       also specify the number of in-flight tokens.
+ Algorithm 1: Type definition for token.                             Algorithm 3: The functions of the MCTS algorithm.
+  1 type                                                               1 Function S ELECT(Token t) : <Token>
+  2    type id : int;                                                  2    while t.v →IsFullyExpanded() do
+                                                                                                     0
+  3    type v : Node*;                                                 3        t.v := argmax v .UCT(Cp );
+  4    type s : State*;                                                                 v 0 ∈childrenof v
+  5    type ∆ : int;                                                   4         t.s →SetMove(t.v → move);
+  6 Token;                                                             5     end
+                                                                       6     return t;
+                                                                       7 Function E XPAND(Token t) : <Token>
+ Algorithm 2: Serial implementation of MCTS, with                      8    if !(t.s →IsTerminal()) then
+ stages S ELECT, E XPAND, P LAYOUT, and BACKUP.                        9         moves := t.s →UntriedMoves();
+  1  Function UCTS EARCH(s0 )                                         10         shuffle moves uniformly at random;
+  2     v0 = create root node with state s0 ;                         11         t.v →Init(moves);
+                                                                                   0
+   3    t0 .s = s0 ;                                                  12         v := t.v →AddChild();
+                                                                                            0
+   4    t0 .v = v0 ;                                                  13         if t.v 6= v then
+   5    while within search budget do                                 14
+                                                                                              0
+                                                                                      t.v :=v ;
+   6         tl = S ELECT(t0 );                                       15
+                                                                                                     0
+                                                                                      t.s →SetMove(v → move);
+   7         tl = E XPAND(tl );                                       16         end
+   8         tl = P LAYOUT(tl );                                      17    end
+   9         BACKUP(tl );                                             18    return t;
+  10    end
+                                                                      19 Function RandomSimulation(Token t)
+                                                                      20    moves := t.s →UntriedMoves();
+B. TBB Implementation                                                 21    shuffle moves uniformly at random;
+                                                                      22    while !(t.s →IsTerminal()) do
+   The pseudocode of MCTS is shown in Algorithm 2. A data             23        choose new move ∈ moves;
+structure of type State describes the search state of the current     24        t.s →SetMove(move);
+node in the tree and a data structure of type Node shows the          25    end
+current node being searched inside the tree. The functions of         26    return t
+the MCTS algorithm are defined in Algorithm 3. Each function
+                                                                      27 Function Evaluation(Token t)
+constitutes a stage of the non-linear pipeline in 3PMCTS.
+                                                                      28    t.∆ := t.s → Evalute();
+There are two approaches for parallel implementation of a
+                                                                      29    return t
+non-linear pipeline [16]:
+  • Bind-to-stage: A processing element (e.g., thread) is             30 Function BACKUP(Token t) : void
+    bound to a stage and processes tokens as they arrive.             31    while t.v 6= null do
+    If the stage is parallel, it may have multiple processing         32        t.v → U pdate(t.∆);
+    elements bound to it.                                             33        t.v := t.v → parent;
+  • Bind-to-item: A processing element is bound to a token
+                                                                      34    end
+    and carries the token through the pipeline. When the
+    processing element completes the last stage, it goes to
+    the first stage to select another token.                        Figure 5 shows the key parts of the TBB code with the
+   Our implementation for 3PMCTS algorithm is based                 syntactic details for the 3PMCTS algorithm.
+on a bind-to-item approach. Figure 4 depicts a five-stage
+                                                                                   V. L OCK - FREE S EARCH T REE
+pipeline for 3PMCTS that can be implemented using TBB
+tbb::parallel pipeline template [14]. The five stages run the         In this section, we provide our new lock-free tree search. A
+functions S ELECT, E XPAND, RandomSimulation, Evaluation,           potential bottleneck in a parallel implementation is the race
+and BACKUP, in that order. The first (S ELECT) and last stage       condition. A race condition occurs when concurrent threads
+(BACKUP) are serial in-order; They process one token at a           perform operations on the same memory location without
+time. The three middle stages (E XPAND, RandomSimulation,           proper synchronization, and one of the memory operations is
+and Evaluation) are parallel and do the most time-consuming         a write [16]. Consider the example search tree in Figure 6a.
+part of the search. The Evaluation and RandomSimulation             Three parallel threads attempt to perform MCTS operations on
+functions are extracted out of the P LAYOUT function to             the shared search tree. There are three race condition scenarios.
+achieve more parallelism. The serial version uses a single            1) Shared Expansion (SE): Figure 6b shows two threads
+token. The 3PMCTS algorithm aims to search multiple paths                 (1 and 2) concurrently performing E XPAND(v6 ). In this
+in parallel. Therefore, it needs more than one in-flight token.           SE scenario, synchronization is required. Obviously, a
+1  v o i d 3PMCTS( t o k e n l i m i t ) {
+   ...
+ 3 / ∗ The r o u t i n e t b b : : p a r a l l e l p i p e l i n e         t a k e s two p a r a m e t e r s .
+   ( 1 ) A t o k e n l i m i t . I t i s an u p p e r bound on t h e number o f t o k e n s t h a t a r e p r o c e s s e d s i m u l t a n e o u s l y .
+ 5 ( 2 ) A p i p e l i n e . Each s t a g e i s            c r e a t e d by f u n c t i o n t b b : : m a k e f i l t e r . The t e m p l a t e a r g u m e n t s t o
+   m a k e f i l t e r i n d i c a t e t h e t y p e o f i n p u t and o u t p u t i t e m s f o r t h e f i l t e r . The f i r s t o r d i n a r y a r g u m e n t
+ 7 s p e c i f i e s whether the stage i s                   p a r a l l e l o r n o t and t h e s e c o n d o r d i n a r y a r g u m e n t s p e c i f i e s a f u n c t i o n
+   t h a t maps t h e i n p u t i t e m t o t h e o u t p u t i t e m .
+ 9 ∗/
+          tbb : : p a r a l l e l p i p e l i n e ( tokenlimit ,
+11               / ∗ The SELECT s t a g e i s s e r i a l and mapping a s p e c i a l o b j e c t o f t y p e t b b : : f l o w c o n t r o l , u s e d
+                 t o s i g n a l t h e end o f t h e s e a r c h , t o an o u t p u t t o k e n . ∗ /
+13               t b b : : m a k e f i l t e r <v o i d , Token∗>( t b b : : f i l t e r : : s e r i a l i n o r d e r , [ & ] ( t b b : : f l o w c o n t r o l & f c )−>Token ∗
+          {
+                           / ∗ A c i r c u l a r b u f f e r i s u s e d t o m i n i m i z e t h e o v e r h e a d o f a l l o c a t i n g and f r e e i n g t o k e n s
+15                         passed between p i p e l i n e s t a g e s ( i t r e d u c e s t h e communication overhead ) . ∗/
+                           Token ∗ t = t o k e n p o o l [ i n d e x ] ;
+17                         index = ( index +1) % t o k e n l i m i t ;
+                           i f ( within the search budget ) {
+19                                 / ∗ I n v o c a t i o n o f t h e method s t o p ( ) t e l l s t h e t b b : : p a r a l l e l p i p e l i n e t h a t no more
+                                   p a t h s w i l l be s e l e c t e d and t h a t t h e v a l u e r e t u r n e d from t h e f u n c t i o n s h o u l d be i g n o r e d .
+             ∗/
+21                                 fc . stop () ;
+                                   r e t u r n NULL ;
+23                         } else {
+                                   t = SELECT ( t ) ;
+25                                 return t
+                           }
+27                 }
+                   ) &
+29                  / / The EXPAND s t a g e i s p a r a l l e l and mapping an i n p u t t o k e n t o an o u t p u t t o k e n .
+                   t b b : : m a k e f i l t e r <Token ∗ , Token∗>( t b b : : f i l t e r : : p a r a l l e l , [ & ] ( Token ∗ t ) {
+31                           r e t u r n EXPAND( t ) ;
+                   }) &
+33                  / / The R a n d o m S i m u l a t i o n s t a g e i s p a r a l l e l and mapping an i n p u t t o k e n t o an o u t p u t t o k e n .
+                   t b b : : m a k e f i l t e r <Token ∗ , Token∗>( t b b : : f i l t e r : : p a r a l l e l , [ & ] ( Token ∗ t ) {
+35                           r e t u r n RandomSimulation ( t ) ;
+                   }) &
+37                  / / The E v a l u a t i o n s t a g e i s p a r a l l e l and mapping an i n p u t t o k e n t o an o u t p u t t o k e n .
+                   t b b : : m a k e f i l t e r <Token ∗ , Token∗>( t b b : : f i l t e r : : p a r a l l e l , [ & ] ( Token ∗ t ) {
+39                           retun Evaluation ( t ) ;
+                   }) &
+41                 / ∗ The BACKUP s t a g e h a s an o u t p u t t y p e o f v o i d s i n c e i t i s o n l y c o n s u m i n g t o k e n s ,
+                   n o t mapping them .
+43                 ∗/
+                   t b b : : m a k e f i l t e r <Token ∗ , v o i d >( t b b : : f i l t e r : : s e r i a l i n o r d e r , [ & ] ( Token ∗ t ) {
+45                           r e t u r n BACKUP( t ) ;
+                   })
+47        );
+   ...
+49 }
+
+
+                                                                                     .
+
+                                                  Fig. 5. An implementation of the 3PMCTS algorithm in TBB.
+
+
+
+     race condition exists if two parallel threads intend to                                   some updates; these updates will also be lost.
+     initialize the list of children in a node simultaneously. In                           2) Shared Backup(SB): Figure 6c shows two threads (1
+     such an SE race, the list of children for a selected node                                 and 3) concurrently performing BACKUP(v3 ). In the SB
+     should be created only once. Enzenberger et al. assign                                    scenario, synchronization is required because it is a race
+     to each thread an own memory array for creating a list                                    condition that parallel threads update the value of w and
+     of new children [17]. Only after the children are fully                                   n in a node simultaneously. Enzenberger et. al ignore
+     created and initialized, they are linked to the parent node.                              these race conditions. They accept the possible faulty
+     Of course, this causes memory overhead. What usually                                      updates and the inconsistency of parallel computation.
+     happens is the following. If several threads expand the                                3) Shared Backup and Selection (SBS): Figure 6d shows
+     same node, only the children created by the last thread                                   thread 2 performing BACKUP(v3 ) and thread 3 perform-
+     will be used in future simulations. It can also happen                                    ing S ELECT(v3 ). In the SBS scenario, synchronization
+     that some of the children that are lost already received                                  is required because it is a race condition in which a
+                                                                                            program. In the acquire release ordering model, load() is an
+                                                                                            acquire operation, store() is a release operation, exchange() or
+                       v0            1                             v0
+                                                                                            fetch add() or fetch sub() are either acquire, release or both
+                                     2
+                                 3                                                          (memory order acq rel). We have solved all the three above
+             v1        v2                v3              v1        v2         v3
+                                                                         1             3
+                                                                                            cases of race conditions (SE,SB, and SBS) using these two
+                                                                                  2
+                                                                                            memory models and the atomic operations.
+        v4        v5         v6               v7    v4        v5         v6           v7
+                                                                                               1) A node has an isparent flag member. This flag indicates
+                  v8                                          v8
+                                                                                                  whether the list of children is created or not. The
+                                                                                                  isparent flag is initially set to f alse. To change the
+                       (a)                                         (b)                            state of the node to be a parent, we set its isparent
+                                                                                                  to true. Before an E XPAND adds a child to a node, it
+                                                                                                  must create the list of children for the node and set the
+                       v0
+                                                                                                  isparent to true. After a node successfully becomes
+                                                                                                  a parent, one of the unexpanded children in this list
+             v1        v2                v3                        v0
+                                                                              3                   can be added to the node. It prevents the problem in
+                             1                 3
+                                                                         1
+                                                                                                  EE that the list of children is created by two threads
+        v4        v5         v6               v7         v1        v2         v3
+                                                                                                  at the same time. Thus, the key steps in the E XPAND
+                                                                                  2
+                                                                                                  operation are as follows: (A, see Algorithm 4) change
+                  v8         v9               v10   v4        v5         v6           v7
+                                                                                                  v6 .isparent to true (i.e., no other thread can enter),
+                             2
+                                                                                                  (B) create the list of children for v6 , (C) set the value of
+                             Δ                                v8         v9           v10
+                                                                                                  v6 .untriedmoves, (D) set the value of v6 .isexpandable
+                                                                                                  to true (D1) and load the value of v6 .isexpandable
+                       (c)                                         (d)
+                                                                                                  (D2), and (E) untriedmoves is used as a count of the
+Fig. 6. (6a) The initial search tree. The internal and non-terminal leaf nodes
+are circles. The terminal leaf nodes are squares. (6b) Thread 1 and 2 are
+                                                                                                  number of items in the list of children.
+expanding node v6 . (6c) Thread 1 and 2 are updating node v3 . (6d) Thread                     2) In the SB and SBS race conditions, we use atomic
+1 is selecting node v3 while thread 2 is updating this node.                                      types for variables w and n. The thread accesses to
+                                                                                                  these variables (reads (F1,F2) and writes (G1,G2)) are
+                                                                                                  sequentially consistent. This memory model preserve
+      thread reads the value of w, and before reading the                                         the order of operations in all threads. Therefore we
+      value of n, another thread updates the value of w and                                       have no faulty updates and guarantee consistency of
+      n. In this case, the first thread reads inconsistent values.                                computation.
+      Enzenberger et al. ignore these race conditions. They
+      accept the possible faulty updates and the inconsistency                                               VI. E XPERIMENTAL S ETUP
+      of parallel computation.                                                                 The performance of 3PMCTS is measured by using a High
+   Algorithm 4 shows our new lock-free tree data structure                                  Energy Physics (HEP) expression simplification problem [3].
+of type Node for MCTS. Our lock-free tree data structure                                    Our setup follows closely [3]. We discuses in VI-A the case
+uses the new multithreading-aware memory model of the                                       study, in VI-B the hardware, and in VI-C the performance
+C++11 Standard. In order to avoid the race conditions, the                                  metrics.
+ordering between the memory accesses in the threads has
+to be enforced [18]. In our lock-free implementation, we                                    A. Case Study
+use the synchronization properties of atomic operations to                                    Horner’s rule is an algorithm for polynomial computation
+enforce an ordering between the accesses. We have used                                      that reduces the number of multiplications and results in
+the atomic variants of the built-in types (i.e., atomic int                                 a computationally efficient form. For a polynomial in one
+and atomic bool); they are lock-free on most popular plat-                                  variable
+forms. The standard atomic types have different member                                                   p(x) = an xn + an−1 xn−1 + ... + a0 ,             (2)
+functions such as load(), store(), exchange(), fetch add(), and
+fetch sub(). The member function store() is a store operation,                              the rule simply factors out powers of x. Thus, the polynomial
+whereas the load() is a load operation. The exchange() member                               can be written in the form
+function replaces the stored value in the atomic variable with
+                                                                                                         p(x) = ((an x + an−1 )x + ...)x + a0 .            (3)
+a new value and automatically retrieves the original value.
+We use two memory models for the memory-ordering option                                     This representation reduces the number of multiplications to
+for all operations on atomic types: sequentially consistent                                 n and has n additions. Therefore, the total evaluation cost of
+ordering (memory order seq cst) and acquire release order-                                  the polynomial is 2n.
+ing (memory order acquire and memory order release). The                                       Horner’s rule can be generalized for multivariate polyno-
+sequentially consistent ordering implies that the behavior of                               mials. Here, Eq. 3 applies on a polynomial for each variable,
+a multithreaded program is consistent with a single threaded                                treating the other variables as constants. The order of choosing
+ Algorithm 4: Type definition for a lock-free tree data structure.
+   1 type
+   2    type move : int;
+   3    type w : atomic int;
+   4    type n : atomic int;
+   5    type isparent := f alse : atomic bool;
+   6    type untriedmoves := −1 : atomic int;
+   7    type isexpandable := f alse : atomic bool;
+   8    type isf ullyexpanded := f alse : atomic bool;
+   9    type parent : Node*;
+  10    type children : Node*[];
+  11    Function Init(moves) : <void>
+  12       int nomoves = moves.size();
+  13       if !(isparent.exchange(true));                                                                        . [see A]
+  14        then
+  15            initialize list of children using moves;                                                         . [see B]
+  16            untriedmoves.store(nomoves);                                                                     . [see C]
+  17            isexpandable.store(true,memory order release);                                                  . [see D1]
+  18       end
+  19    Function AddChild() : <Node*>
+  20       int index;
+  21       if isexpandable.load(memory order acquire);                                                          . [see D2]
+  22        then
+  23            if (index := undriedmoves.fetch sub(1)) = 0;                                                     . [see E]
+  24             then
+  25                 isf ullyexpanded.store(true);
+  26            end
+  27            if index < 0 then
+  28                 return current node;
+  29            else
+  30                 return children[index];
+  31            end
+  32       else
+  33            return current node;
+  34       end
+  35    Function IsFullyExpanded() : <bool>
+  36       return isf ullyexpanded.load();
+  37    Function UCT(Cp ) : <float>
+              0
+  38       w := w.load(memory order seq cst);                                                                   . [see F1]
+             0
+  39       n := n.load(memory order seq cst);                                                                   . [see F2]
+  40       n” := parent →q      n.load(memory order seq cst);
+                      0             ”
+  41         return wn0
+                        + Cp ln(n
+                               n0
+                                  )
+
+  42     Function Update(∆) : <void>
+  43         w.fetch add(∆,memory order seq cst);                                                               . [see G1]
+  44         n.fetch add(1,memory order seq cst);                                                               . [see G2]
+  45   Node;
+
+
+
+variables may be different, each order of the variables is called   more and replaces them inside the polynomial. Then, the
+a Horner scheme.                                                    subexpression has to be computed only once.
+   The number of operations can be reduced even more by                We are using the HEP(σ) expression with 15 variables to
+performing common subexpression elimination (CSE) after             study the results of 3PMCTS. The MCTS is used to find
+transforming a polynomial with Horner’s rule. CSE creates           an order of the variables that gives efficient Horner schemes
+new symbols for each subexpression that appears twice or            [3]. The root node has n children, with n the number of
+variables. The children of other nodes represent the remaining               In this paper, we use playout-speedup to report the perfor-
+unchosen variables in the order. Starting at the root node, a                mance.
+path of nodes (variables) inside the search tree is selected. The
+incomplete order is completed with the remaining variables                                     VII. E XPERIMENTAL R ESULTS
+added randomly (RandomSimulation). This complete order is
+then used for Horners method followed by CSE (Evaluation).                      In this section, the performance of 3PMCTS is measured.
+The number of operations in this optimized expression is                        1) Playout-speedup for CPU: The graph in Figure 7a shows
+counted (∆).                                                                       the playout-speedup for both 3PMCTS and tree paral-
+                                                                                   lelization, as a function of the number of tokens on CPU.
+B. Hardware                                                                        Both 3PMCTS and tree parallelization are doing 1024
+  Our experiments were performed on a dual socket Intel                            playouts. We see a playout-speedup for 3PMCTS close
+machine with 2 Intel Xeon E5-2596v2 CPUs running at 2.4                            to 22 for 56 tokens. A playout-speedup close to 21 is
+GHz. Each CPU has 12 cores, 24 hyperthreads, and 30 MB                             observed for tree parallelization for 47 tasks. After 48
+L3 cache. Each physical core has 256KB L2 cache. The peak                          tasks the playout-speedup for tree parallelization drops
+TurboBoost frequency is 3.2 GHz. The machine has 192GB                             (it is run on a machine with 48 hyperthreads) while
+physical memory. We compiled the code using the Intel C++                          the performance of 3PMCTS continues to grow until
+compiler with a -O3 flag.                                                          it becomes stable.
+                                                                                2) Playout-speedup for Phi: The graph in Figure 7b shows
+C. Performance Metrics                                                             the playout-speedup for both 3PMCTS and tree paral-
+   The primary goal of parallelization is performance. There                       lelization, as a function of the number of tokens on Phi.
+are two important metrics related to performance and paral-                        Both 3PMCTS and tree parallelization are doing 1024
+lelism for MCTS.                                                                   playouts. We see a playout-speedup for 3PMCTS close
+   1) Playout Speedup (PS): If we have a fixed number of                           to 42 for 128 tokens. A playout-speedup close to 36 is
+      playouts seen as the search budget, then                                     observed for tree parallelization for 128 tasks.
+                                 time in sequential                          From these results, we may provisionally conclude that the
+                         PS =                       .                 (4)    3PMCTS algorithm shows a playout-speedup as good as tree
+                                   time in parallel
+                                                                             parallelization, for a well-studied problem. It allows fine-
+  2) Search Overhead (SO): If we have to find a desired                      grained managing of the control flow of operations in MCTS
+     optimal point in the search space, then                                 in contrast to tree parallelization.
+                   required # of playouts in parallel
+          SO =                                         − 1. (5)                                     VIII. R ELATED W ORK
+                  required # of playouts in sequential
+       If the parallel MCTS algorithm expands more nodes                       Below we review related work on MCTS parallelizations.
+       (i.e., do more playouts) than the equivalent serial al-               The two major parallelization methods for MCTS are root
+       gorithm to solve a problem, then there is SO.                         parallelization and tree parallelization [5]. There exist also less
+
+
+
+
+                                 (a) CPU                                                                     (b) Phi
+Fig. 7. Playout-speedup as function of the number of tokens. Each data point is an average of 10 runs. The constant Cp is 0.1. The search budget is 1024
+playouts.
+frequently encountered techniques, such as leaf paralleliza-                                 ACKNOWLEDGMENT
+tion [5] and approaches based on transposition table driven            This work is supported in part by the ERC Advanced Grant
+work scheduling (TDS) [6], [19].                                     no. 320651, HEPGAME.
+   1) Tree parallelization: For shared memory machines, tree
+      parallelization is a suitable method. It is used in F UEGO,                                 R EFERENCES
+      a well-known open source Go program [17]. In tree               [1] R. Coulom, “Efficient Selectivity and Backup Operators in Monte-Carlo
+                                                                          Tree Search,” in Proceedings of the 5th International Conference on
+      parallelization one MCTS tree is shared among several               Computers and Games, ser. CG’06, vol. 4630. Springer-Verlag, may
+      threads that are performing simultaneous searches [5].              2006, pp. 72–83.
+      It is shown in [5] that the playout-speedup of tree             [2] L. Kocsis and C. Szepesvári, “Bandit based Monte-Carlo Planning Lev-
+                                                                          ente,” in ECML’06 Proceedings of the 17th European conference on Ma-
+      parallelization with virtual loss does not scale perfectly          chine Learning, ser. Lecture Notes in Computer Science, J. Fürnkranz,
+      up to 16 threads. The main challenge is the use of locks            T. Scheffer, and M. Spiliopoulou, Eds., vol. 4212. Springer Berlin
+      to prevent data corruption.                                         Heidelberg, sep 2006, pp. 282–293.
+                                                                      [3] J. Kuipers, A. Plaat, J. Vermaseren, and J. van den Herik, “Improving
+   2) Root parallelization: Chaslot et al. [5] report that root           Multivariate Horner Schemes with Monte Carlo Tree Search,” Computer
+      parallelization shows perfect playout-speedup up to 16              Physics Communications, vol. 184, no. 11, pp. 2391–2395, nov 2013.
+      threads. Soejima et al. [20] analyzed the performance           [4] I. Goodfellow, Y. Bengio, and A. Courville, Deep Learning, ser. Adap-
+                                                                          tive Computation and Machine Learning Series. MIT Press, 2016. [On-
+      of root parallelization in detail. They revealed that a Go          line]. Available: https://books.google.nl/books?id=Np9SDQAAQBAJ
+      program that uses lock-free tree parallelization with 4         [5] G. Chaslot, M. Winands, and J. van den Herik, “Parallel Monte-Carlo
+      to 8 threads outperformed the same program with root                Tree Search,” in the 6th Internatioal Conference on Computers and
+                                                                          Games, vol. 5131. Springer Berlin Heidelberg, 2008, pp. 60–71.
+      parallelization that utilized 64 distributed CPU cores.         [6] K. Yoshizoe, A. Kishimoto, T. Kaneko, H. Yoshimoto, and Y. Ishikawa,
+      This result suggests the superiority of tree parallelization        “Scalable Distributed Monte-Carlo Tree Search,” in Fourth Annual
+      over root parallelization in shared memory machines.                Symposium on Combinatorial Search, may 2011, pp. 180–187.
+                                                                      [7] A. Fern and P. Lewis, “Ensemble Monte-Carlo Planning: An Empirical
+      Fern and Lewis [7] thoroughly investigated an Ensemble              Study.” in ICAPS, 2011, pp. 58–65.
+      UCT approach in which multiple instances of UCT were            [8] L. Schaefers and M. Platzner, “Distributed Monte-Carlo Tree Search
+      run independently. Their root statistics were combined              : A Novel Technique and its Application to Computer Go,” IEEE
+                                                                          Transactions on Computational Intelligence and AI in Games, vol. 6,
+      to yield the final result, showing that Ensembles can               no. 3, pp. 1–15, 2014.
+      significantly improve performance per unit time in a            [9] S. A. Mirsoleimani, A. Plaat, J. van den Herik, and J. Vermaseren,
+      parallel model. This is also shown in [10].                         “Parallel Monte Carlo Tree Search from Multi-core to Many-core
+                                                                          Processors,” in ISPA 2015 : The 13th IEEE International Symposium on
+           IX. C ONCLUSION AND F UTURE W ORK                              Parallel and Distributed Processing with Applications (ISPA), Helsinki,
+                                                                          2015, pp. 77–83.
+   Monte Carlo Tree Search (MCTS) is a randomized al-                [10] ——, “Scaling Monte Carlo Tree Search on Intel Xeon Phi,” in Par-
+gorithm that is successful in a wide range of optimization                allel and Distributed Systems (ICPADS), 2015 20th IEEE International
+                                                                          Conference on, 2015, pp. 666–673.
+problems. The main loop in MCTS consists of individual               [11] “Intel threading building blocks TBB.” [Online]. Available:
+iterations, suggesting that the algorithm is well suited for              https://www.threadingbuildingblocks.org
+parallelization. The existing parallelization methods, e.g., tree    [12] C. B. Browne, E. Powley, D. Whitehouse, S. M. Lucas, P. I. Cowling,
+                                                                          P. Rohlfshagen, S. Tavener, D. Perez, S. Samothrakis, and S. Colton,
+parallelization, simply fans out the iterations over available            “A Survey of Monte Carlo Tree Search Methods,” Computational
+cores.                                                                    Intelligence and AI in Games, IEEE Transactions on, vol. 4, no. 1,
+   In this paper, a structured parallel programming approach is           pp. 1–43, 2012.
+                                                                     [13] M. Enzenberger and M. Müller, “A lock-free multithreaded Monte-Carlo
+used to develop a new parallel algorithm based on the pipeline            tree search algorithm,” Advances in Computer Games, vol. 6048, pp.
+pattern for MCTS. The idea is to break-up the iterations them-            14–20, 2010.
+selves, splitting them into individual operations, which are         [14] J. Reinders, Intel threading building blocks: outfitting C++ for multi-
+                                                                          core processor parallelism. ” O’Reilly Media, Inc.”, 2007.
+then parallelized in a pipeline. Experiments with an application     [15] C. E. Leiserson and A. Plaat, “Programming Parallel Applications in
+from High Energy Physics show that our implementation of                  Cilk,” SINEWS: SIAM News, vol. 31, no. 4, pp. 6–7, 1998.
+3PMCTS scales well. Scalability is only one issue, although          [16] M. McCool, J. Reinders, and A. Robison, Structured Parallel Program-
+                                                                          ming: Patterns for Efficient Computation. Elsevier, 2012.
+it is an important one. The second issue is flexibility of           [17] M. Enzenberger, M. Muller, B. Arneson, and R. Segal, “FuegoAn Open-
+task decomposition in parallelism. These flexibilities allow              Source Framework for Board Games and Go Engine Based on Monte
+fine-grained managing of the control flow of operations in                Carlo Tree Search,” IEEE Transactions on Computational Intelligence
+                                                                          and AI in Games, vol. 2, no. 4, pp. 259–270, dec 2010.
+MCTS. We consider the flexibility an even more important             [18] A. Williams, C++ Concurrency in Action: Practical Multithreading,
+characteristic of 3PMCTS.                                                 ser. Manning Pubs Co Series. Manning, 2012. [Online]. Available:
+   We may conclude the following. Our new method is highly                https://books.google.nl/books?id=EttPPgAACAAJ
+                                                                     [19] J. Romein, A. Plaat, H. E. Bal, and J. Schaeffer, “Transposition Table
+suitable for heterogeneous computing because it is possible               Driven Work Scheduling in Distributed Search,” in In 16th National
+that some of the MCTS operations might not be suitable                    Conference on Artificial Intelligence (AAAI’99), 1999, pp. 725–731.
+for running on a target processor, whereas others are. Our           [20] Y. Soejima, A. Kishimoto, and O. Watanabe, “Evaluating Root Paral-
+                                                                          lelization in Go,” IEEE Transactions on Computational Intelligence and
+3PMCTS algorithm gives us full flexibility for offloading a               AI in Games, vol. 2, no. 4, pp. 278–287, dec 2010.
+variety of different operations of MCTS to a target processor.
+For future work, we will study the implementation of 3PMCTS
+on a heterogeneous machine.
+

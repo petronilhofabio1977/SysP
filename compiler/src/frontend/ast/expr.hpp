@@ -177,6 +177,20 @@ namespace sysp::ast {
         ExprPtr expr;
     };
 
+    // ── Struct initializer ───────────────────────────────────────────
+
+    // One field inside a struct literal: field_name: value
+    struct StructFieldInit {
+        std::string name;
+        ExprPtr     value;
+    };
+
+    // Point { x: 1, y: 2 }
+    struct StructInitExpr : Expr {
+        std::string                   type_name;
+        std::vector<StructFieldInit>  fields;
+    };
+
     // ── Lambda ───────────────────────────────────────────────────────
 
     struct LambdaParam {

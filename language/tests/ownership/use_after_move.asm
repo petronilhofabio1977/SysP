@@ -1,6 +1,3 @@
-; SysP Compiler Output — Grammar v7.0 Final
-; Source: tests/ownership/use_after_move.sp
-
 
     sysp_str_true  db 't','r','u','e',10
     sysp_str_false db 'f','a','l','s','e',10

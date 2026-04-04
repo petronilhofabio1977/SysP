@@ -1,0 +1,182 @@
+Also visit the following roadmaps                                                                             Find the detailed version of this roadmap
+                                                                                                              along with other similar roadmaps
+    Full-stack Roadmap
+    Frontend Roadmap
+                                                                                                                                 roadmap.sh
+    Backend Roadmap
+                                                                Git and GitHub
+    DevOps Roadmap
+
+
+
+
+                                                                                                                               What is Version Control?
+
+
+ git init            git config                                                                                                Why use Version Control?
+                                                                       Learn the Basics
+
+ Local vs Global Config                                                                                                            Git vs Other VCS
+
+
+Repository Initialization                                                                                                        Installing Git Locally
+                                                                  What is a Repository
+
+   Working Directory
+
+
+       Staging Area                                Cloning Repositories
+                                                                                                                                       Branching Basics
+
+ Committing Changes                                Managing Remotes
+
+
+Intro and Git Commands                                                                                                                 Creating Branch
+                                                Pushing / Pulling Changes
+
+                                                                                              Basic Collaboration                      Renaming Branch
+            .gitignore                             Fetch without Merge
+
+                                                                                                                                        Deleting Branch
+Viewing Commit History
+                                                             Git Remotes                        GitHub Essentials
+                                                                                                                                       Checkout Branch
+
+Fast-Forward vs Non-FF
+                                                                                                                                        Merging Basics
+                                                                                                 Creating Account
+Rebase                Squash
+                                                           Merge Strategies                      GitHub Interface
+   Handling Conflicts
+                                                                                                 Setting up Profile                      Profile Readme
+Cherry Picking Commits
+                                                                                              Creating Repositories                      Private vs Public
+
+
+  Forking vs Cloning
+                                                                                                Commit Messages
+                                                                                                                                            Markdown
+            Issues
+                                                  PR from a Fork                                 Branch Naming
+                                                                                                                                         Project Readme
+     Pull Requests
+                                                   Collaborators                                  PR Guidelines
+                                                                                                                                           GitHub Wikis
+Labelling Issues / PRs
+                                                   Creating PR                                    Code Reviews
+
+    Saved Replies
+
+                                               Collaboration on GitHub                            Best Practices                         Documentation
+          Mentions
+
+
+       Reactions
+                                                                                              Contribution Guidelines
+  Commenting
+                                                                                                 Clean Git History
+                                                     Git Stash Basics
+ GitHub Discussions
+
+
+
+
+Linear vs Non-Linear                             Intermediate Git Topics                      GitHub Projects                           Working in a Team
+
+            HEAD
+
+                                                             History                          Project Planning                   Collaborators / Members
+   Detached HEAD
+
+                                                                                              Kanban Boards                        GitHub Organizations
+    git log options
+
+                                                                                                 Roadmaps                        Teams within Organization
+
+
+                                              git revert                                        Automations
+                                                                                                                                        Between Commits
+ --soft
+                                                                                                                                       Between Branches
+--hard                      git reset               Undoing Changes                             Viewing Diffs
+                                                                                                                                         Staged Changes
+--mixed
+                                                                                                                                       Unstaged Changes
+
+                                                            commit-msg
+    What and Why use?                                                                                                                  git commit --amend
+                                                            post-checkout
+    Adding / Updating                                                                                                                        git rebase
+                                                            post-update                       Rewriting History
+                                                                                                                                          git filter-branch
+                                                             pre-commit
+          Submodules                                                                                                                      git push --force
+                                                              pre-push
+
+                                                           Common Hooks
+                                                                                                                                          Managing Tags
+
+
+                                                                                                                                           Pushing Tags
+                                  Git Patch                   Git hooks                           Tagging
+                                                                                                                                          Checkout Tags
+
+
+ GitHub Workflow                                           What and Why?                     What are these?                             GitHub Releases
+
+
+                                                    Client vs Server Hooks                      Usecases
+
+                                                                                                                                         YAML Syntax
+
+       GitHub CLI                                                                            GitHub Actions                           Workflow Triggers
+
+
+                                                                                                                                    Scheduled Worfklows
+ Installation and Setup                          Git Reflog
+                                                                                                                                      Workflow Runners
+Repository management                            Git Bisect
+                                                                                                                                       Workflow Context
+  Issue Management                             Git Worktree                               Advanced Git Topics
+                                                                                                                                    Secrets and Env Vars
+      Pull Requests                            Git Attributes
+                                                                                                                                   Caching Dependencies
+   Use in Automation                              Git LFS
+                                                                                                                                       Storing Artifacts
+
+
+ GitHub Apps                                     REST API                                                                              Workflow Status
+
+
+ OAuth Apps                                    GraphQL API                                                                           Marketplace Actions
+
+
+
+
+Creating Apps                                   GitHub API                           GitHub Developer Tools                                Webhooks
+
+
+
+                                                                                                                                 Deploying Static Websites
+     GitHub Copilot                           GitHub Gists
+
+
+     GitHub Models                       GitHub Packages
+                                                                                      More GitHub Features                                  GitHub Pages
+  GitHub Marketplace                    GitHub Codespaces
+
+
+   GitHub Education                       GitHub Security
+                                                                                                                                     Custom Domains
+                                          GitHub Sponsors
+                                                                                                                                   Static Site Generators
+
+Student Developer Pack
+
+
+   GitHub Classroom
+                                                                   Continue learning with following roadmaps
+
+   Campus Program
+                                                           Frontend          Backend           DevOps             Full-stack
+

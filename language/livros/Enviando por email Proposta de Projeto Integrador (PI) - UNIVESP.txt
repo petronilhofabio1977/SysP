@@ -1,0 +1,185 @@
+Proposta de Projeto Integrador (PI) -
+UNIVESP
+Título: CommuniChain Logística: Sistema SaaS de Gestão de Estoque e Otimização de
+Rotas com Arquitetura Multilinguagem.
+
+
+1. O Conceito (O que é?)
+O projeto consiste no desenvolvimento de um SaaS (Software as a Service) voltado
+para comunidades (cooperativas, bancos de alimentos, bibliotecas comunitárias). É
+uma plataforma web onde organizações gerenciam seus inventários e otimizam
+suas rotas de entrega/coleta através de algoritmos de alta performance.
+
+
+2. Metodologia: Design Thinking (Human-Centered
+Design)
+O projeto não será apenas "código", ele nascerá da dor do usuário conforme os
+manuais da UNIVESP:
+
+   • Empatia: Mapearemos como pequenas entidades sofrem com a falta de
+      tecnologia (perda de itens no estoque e gastos excessivos com combustível).
+
+   • Ideação: O grupo propõe uma solução que democratiza algoritmos
+      complexos (Cormen) através de uma interface simples (FastAPI).
+
+   • Prototipagem: Construção de um MVP (Mínimo Produto Viável) funcional
+      que integre Python, C++ e Rust.
+
+
+
+
+3. Arquitetura Técnica (O Diferencial de Elite)
+Para atender ao tema de "Framework Web" e "Banco de Dados", utilizaremos uma
+abordagem de microserviços:
+
+A. Camada de Interface (Python + FastAPI)
+   • Função: Gerenciar o site, o cadastro de usuários e a comunicação entre as
+      partes.
+
+   • Algoritmos Chave: Tabelas Hash (Busca rápida de usuários) e Listas Ligadas
+      (Histórico de ações).
+B. Motor de Processamento Pesado (C++ 20/23)
+   • Função: Lidar com grandes volumes de dados de estoque.
+
+   • Algoritmos Chave: Árvores B (para o índice do banco de dados), Quick Sort
+      (ordenação de relatórios) e KMP (busca de termos dentro do acervo).
+
+C. Núcleo de Logística e Segurança (Rust)
+   • Função: Calcular rotas otimizadas e garantir a privacidade dos dados.
+
+   • Algoritmos Chave: Kruskal/Bellman-Ford (menor custo de transporte) e
+      RSA (criptografia dos dados dos beneficiários).
+
+
+
+
+4. Aplicação dos 15 Algoritmos Fundamentais
+O projeto demonstrará domínio total da bibliografia base (Cormen):
+
+   1. Lista Ligada: Histórico de navegação.
+
+   2. BST (Árvore Binária): Categorização de produtos.
+
+   3. Max-Heap: Fila de prioridade para entregas urgentes.
+
+   4. Grafos: Representação dos pontos de coleta na cidade.
+
+   5. BFS (Busca em Largura): Encontrar o ponto mais próximo.
+
+   6. Tabela Hash: Sistema de autenticação e cache.
+
+   7. Merge Sort: Consolidação de grandes bases de dados.
+
+   8. Quick Sort: Ordenação ágil de inventário.
+
+   9. Kruskal (MST): Planejamento da malha logística mínima.
+
+   10.Bellman-Ford: Rota mais barata considerando trânsito/custos.
+
+   11.KMP: Busca inteligente de itens no estoque.
+
+   12.Ford-Fulkerson: Análise de gargalos no fluxo de mercadorias.
+
+   13.Árvores B: Estruturação da persistência de dados (Banco de Dados).
+
+   14.RSA: Proteção e privacidade das informações.
+
+   15.Graham Scan: Definição de perímetros de atuação (Geofencing).
+5. Cronograma de Execução (Plano de Ação)
+  • Etapa 1 (Cenário): Pesquisa online e mapeamento de dores de comunidades
+    logísticas.
+
+  • Etapa 2 (Plano): Configuração do GitHub e definição das responsabilidades
+    (Quem coda em qual linguagem).
+
+  • Etapa 3 (Ideação): Levantamento bibliográfico (Cormen, Documentação
+    FastAPI/Rust/C++).
+
+  • Etapa 4 (Protótipo): Desenvolvimento do MVP inicial em Python.
+
+  • Etapa 5 (Feedback): Apresentação para a comunidade externa e coleta de
+    melhorias.
+
+  • Etapa 6 (Entrega): Finalização do sistema, relatório técnico e vídeo de
+    demonstração.
+
+
+
+
+6. Por que esse projeto é nota 10 na UNIVESP?
+  1. Complexidade Técnica: Uso de 3 linguagens de programação e algoritmos
+    avançados.
+
+  2. Rigor Metodológico: Aplicação real de Design Thinking e Human-Centered
+    Design.
+
+  3. Impacto Social: Resolve problemas reais de logística e segurança para quem
+    não tem acesso a tecnologia cara.
+
+  4. Boas Práticas: Controle de versão no Git e análise de complexidade Big O.
+CommuniChain: De Projeto Integrador a
+Startup
+"Como transformar nosso PI em uma fonte de renda escalável"
+
+1. O Problema (A Dor do Mercado)
+Existem milhares de pequenas empresas, cooperativas e ONGs que:
+
+   • Perdem dinheiro com rotas de entrega mal planejadas.
+
+   • Têm estoques bagunçados e perdem mercadoria.
+
+   • Não têm dinheiro para pagar softwares caros (como SAP ou Oracle).
+
+   • Oportunidade: Um mercado gigante que ninguém está atendendo com
+      tecnologia de elite a preço justo.
+
+2. Nossa Solução: O "Motor de Elite"
+Nosso diferencial não é apenas "um site". É a performance.
+
+   • Eficiência Bruta: Com C++ e Rust, nosso sistema roda 10x mais rápido que os
+      concorrentes baratos. Isso significa que nosso custo de servidor é menor e
+      nossa margem de lucro é maior.
+
+   • Segurança de Banco: Oferecemos criptografia RSA nativa, o que nos permite
+      cobrar mais caro por "blindagem de dados".
+
+
+
+3. Como vamos ganhar dinheiro? (Business Model)
+
+Canal de Renda Descrição                             Potencial de Lucro
+                  Cobramos R$ 199/mês por            Com 50 clientes = R$
+Assinatura SaaS
+                  cooperativa/empresa.               9.950,00/mês recorrentes.
+
+API de            Vendemos apenas o cálculo de       Cobrança por uso (Ex: R$ 0,20
+Otimização        rotas para outros sites.           por rota calculada).
+
+Consultoria       Implementação e suporte            Projetos únicos de R$ 5.000 a
+Técnica           customizado para empresas.         R$ 20.000.
+4. Viabilidade Econômica (Por que vai funcionar?)
+  • Custo de Entrada Zero: Já temos o material de estudo e as ferramentas
+    gratuitas (FastAPI, Rust, C++). Nosso único investimento é o tempo.
+
+  • Escalabilidade: Como é um SaaS, o trabalho que temos para 1 cliente é quase
+    o mesmo para 1.000. O lucro cresce exponencialmente, enquanto o trabalho
+    se mantém estável.
+
+  • Redução de Custos Real: Ao provarmos que o cliente economiza 20% de
+    combustível com nosso algoritmo, o software se vende sozinho.
+
+5. O que cada um ganha? (A Parceria)
+  • Portfólio de Peso: Mesmo que a gente não venda hoje, ter um projeto desse
+    no currículo coloca cada um de nós em vagas de R$ 8k+.
+
+  • Equity (Sociedade): Somos os fundadores. Se o projeto decolar, somos donos
+    de uma LogTech pronta para receber investimentos.
+
+
+
+6. Próximo Passo: O "Contrato" do Grupo
+   "Pessoal, meu plano é: vamos usar o PI da UNIVESP como nosso
+   laboratório de P&D (Pesquisa e Desenvolvimento). Vamos entregar o
+   melhor projeto da turma, pegar o feedback da banca e, no final do semestre,
+   teremos um produto pronto para ir ao mercado. Quem está comigo nessa?"
+
