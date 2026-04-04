@@ -32,9 +32,10 @@ void JarbesKernel::register_channel(uint32_t id)                       { get_cha
 
 // ── Full analysis ─────────────────────────────────────────────────
 void JarbesKernel::analyze(MetatronGraph& graph, const sysp::ast::Program& program) {
-    // Reset all global state — makes analyze() safe to call multiple
-    // times in the same process (e.g. compiling multiple source files).
-    reset_jarbes_state();
+    // NOTE: reset_jarbes_state() is called by the compiler pipeline BEFORE
+    // build_from_program(), so global state is already populated here.
+    // Do NOT reset here — the maps (consumed_nodes, node_types, etc.) were
+    // filled during graph construction and must remain intact for checkers.
 
     std::cout << "[JarbesKernel] Analyzing " << graph.nodes.size() << " nodes\n";
     bool ok = true;
@@ -71,7 +72,7 @@ void JarbesKernel::analyze(MetatronGraph& graph, const sysp::ast::Program& progr
 
 // ── Legacy interface (sem Program) ───────────────────────────────
 void JarbesKernel::analyze(MetatronGraph& graph) {
-    reset_jarbes_state();
+    // Same as above — caller must reset before building the graph.
     std::cout << "[JarbesKernel] Analyzing " << graph.nodes.size() << " nodes (legacy)\n";
     bool ok = true;
     if (!check_use_before_production(graph)) ok = false;
